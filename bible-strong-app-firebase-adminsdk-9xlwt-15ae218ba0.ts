@@ -4,7 +4,7 @@ export default <ServiceAccount>{
   type: 'service_account',
   project_id: 'bible-strong-app',
   private_key_id: '15ae218ba01c3e3d1081a1bed9249a91a18b263b',
-  private_key: process.env.FIREBASE_PRIVATE_KEY,
+  private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
   client_email:
     'firebase-adminsdk-9xlwt@bible-strong-app.iam.gserviceaccount.com',
   client_id: '111747950030392122008',
