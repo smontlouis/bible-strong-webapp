@@ -1,75 +1,182 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
-import { QuillDeltaToHtmlConverter } from '../../lib/quill-to-html/main'
+import { Box, Heading, Text, Divider, Flex } from '@chakra-ui/core'
 
-import firebase from '../../lib/firebase'
+import {
+  getStaticStudyProps,
+  getStaticStudyPaths,
+  FirebaseStudy,
+  Annexe as AnnexeProps,
+} from '../../helpers/study'
+import styled from '../../styled'
+import Annexe from '../../features/studies/Annexe'
+import { useEffect } from 'react'
+import InlineModals from '../../features/studies/InlineModals'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const idParam = params.id as string
-
-  const snapshot = await firebase
-    .firestore()
-    .collection('studies')
-    .doc(idParam)
-    .get()
-
-  const result = snapshot.data()
-
-  const converter = new QuillDeltaToHtmlConverter(result.content.ops, {
-    customTag: (format, op) => {
-      console.log(format)
-      if (format === 'inline-verse') {
-        return 'COUCOU'
-      }
-    },
-    customTagAttributes: (op) => {
-      console.log(op)
-      if (op.attributes['inline-verse']) {
-        return {
-          inlineV: op.attributes['inline-verse'],
-        }
-      }
-    },
-  })
-
-  converter.renderCustomWith((customOp, contextOp) => {
-    if (customOp.insert.type === 'my-blot') {
-      let val = customOp.insert.value
-      return `<span id="${val.id}">${val.text}</span>`
-    } else {
-      return 'Unmanaged custom blot!'
-    }
-  })
-
-  const html = converter.convert()
+  const result = await getStaticStudyProps(idParam)
 
   return {
     props: {
       ...result,
-      html,
     },
   }
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const snapshot = await firebase
-    .firestore()
-    .collection('studies')
-    .where('published', '==', true)
-    .get()
-
-  const paths = snapshot.docs
-    .map((x) => x.data())
-    .map((doc) => ({ params: { id: doc.id } }))
-
+  const paths = await getStaticStudyPaths()
   return {
     paths,
     fallback: false,
   }
 }
 
-const Study = (props) => {
-  // console.log(props)
-  return <div dangerouslySetInnerHTML={{ __html: props.html }} />
+const StudyContainer = styled.div(
+  ({ theme: { media, fonts, fontSizes, space, colors } }) => ({
+    fontSize: 16,
+    fontFamily: fonts.body,
+    counterReset: 'inline-counter',
+
+    [media.md]: {
+      fontSize: 21,
+    },
+
+    h2: {
+      fontSize: fontSizes['3xl'],
+    },
+
+    'ul, ol': {
+      padding: space[10],
+    },
+
+    '.divider': {
+      textAlign: 'center',
+      marginTop: '30px',
+      marginBottom: '30px',
+
+      '&::before': {
+        content: '"..."',
+        textIndent: '0.6em',
+        lineHeight: '1.4',
+        letterSpacing: '1em',
+      },
+    },
+
+    '.inline-verse, .inline-strong': {
+      color: colors.primary,
+      textDecoration: 'underline',
+      position: 'relative',
+      cursor: 'pointer',
+
+      '&::after': {
+        counterIncrement: 'inline-counter',
+        content: '"["counter(inline-counter)"]"',
+
+        top: '-0.5em',
+        fontSize: '75%',
+        lineHeight: '0',
+        position: 'relative',
+        verticalAlign: 'baseline',
+      },
+    },
+
+    '.block-strong': {
+      position: 'relative',
+      display: 'flex',
+      margin: '30px auto',
+      '&__container': {
+        flex: 1,
+      },
+      '&__title': {
+        display: 'inline-block',
+      },
+      '&__phonetique': { display: 'inline-block', fontSize: fontSizes.md },
+      '&__original': { fontSize: fontSizes['3xl'], color: colors.primary },
+      '&__definition': {
+        flex: 2,
+        fontSize: fontSizes.md,
+        ol: {
+          padding: 0,
+        },
+      },
+    },
+
+    '.block-verse': {
+      textAlign: 'center',
+      marginTop: space[8],
+      padding: space[10],
+
+      [media.md]: {
+        marginTop: space[10],
+        padding: space[16],
+      },
+
+      position: 'relative',
+
+      '&::after': {
+        content: '""',
+        top: 20,
+        [media.md]: {
+          top: 40,
+        },
+
+        left: '50%',
+        transform: 'translateX(-50%)',
+        position: 'absolute',
+        height: 4,
+        borderRadius: 20,
+        backgroundColor: colors.primary,
+        width: '80px',
+      },
+
+      '&::before': {
+        position: 'absolute',
+        content: "'“'",
+        top: 30,
+        left: 30,
+        fontSize: 200,
+        color: 'rgba(0,0,0,0.05)',
+        lineHeight: 0.8,
+      },
+
+      '&__content': {
+        marginBottom: space[4],
+      },
+
+      '&__aside': {
+        fontSize: fontSizes.md,
+        color: colors.primary,
+      },
+    },
+  })
+)
+
+interface Props extends FirebaseStudy {
+  html: string
+  annexe: AnnexeProps
+}
+
+const Study = ({ title, html, annexe = [], content }: Props) => {
+  return (
+    <Box margin="0 auto" maxWidth={700} px={5} py={20}>
+      <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
+        {title}{' '}
+      </Heading>
+      <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
+      <Divider my={10} />
+      <Box>
+        <Text fontSize="xl" mb={8}>
+          Références
+        </Text>
+        {annexe.length && (
+          <>
+            <InlineModals annexe={annexe} />
+            <Annexe annexe={annexe} />{' '}
+          </>
+        )}
+      </Box>
+    </Box>
+  )
 }
 
 export default Study
