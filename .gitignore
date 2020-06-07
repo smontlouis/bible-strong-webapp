@@ -28,5 +28,3 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
-
-bible-strong-app-firebase-adminsdk-9xlwt-15ae218ba0.json

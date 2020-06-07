@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin'
-const serviceAccount = require('../bible-strong-app-firebase-adminsdk-9xlwt-15ae218ba0.json')
+import serviceAccount from '../bible-strong-app-firebase-adminsdk-9xlwt-15ae218ba0'
 
 try {
   admin.initializeApp({

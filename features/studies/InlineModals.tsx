@@ -25,16 +25,16 @@ interface Props {
 const InlineModals = ({ annexe }: Props) => {
   return (
     <>
-      {annexe.map((inlineItem) => {
+      {annexe.map((inlineItem, i) => {
         if (inlineItem.type === 'inline-verse') {
-          return <VerseModal inlineItem={inlineItem} />
+          return <VerseModal key={i} inlineItem={inlineItem} />
         }
 
         if (inlineItem.type === 'inline-strong') {
-          return <StrongModal inlineItem={inlineItem} />
+          return <StrongModal key={i} inlineItem={inlineItem} />
         }
 
-        return <div>Error</div>
+        return <div key={i}>Error</div>
       })}
     </>
   )
