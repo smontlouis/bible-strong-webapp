@@ -9,7 +9,6 @@ import {
 } from '../../helpers/study'
 import styled from '../../styled'
 import Annexe from '../../features/studies/Annexe'
-import { useEffect } from 'react'
 import InlineModals from '../../features/studies/InlineModals'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
@@ -41,12 +40,28 @@ const StudyContainer = styled.div(
       fontSize: 21,
     },
 
+    h1: {
+      fontSize: fontSizes['2xl'],
+
+      [media.md]: {
+        fontSize: fontSizes['4xl'],
+      },
+    },
+
     h2: {
-      fontSize: fontSizes['3xl'],
+      fontSize: fontSizes['xl'],
+
+      [media.md]: {
+        fontSize: fontSizes['3xl'],
+      },
     },
 
     'ul, ol': {
-      padding: space[10],
+      padding: space[4],
+
+      [media.md]: {
+        padding: space[10],
+      },
     },
 
     '.divider': {
@@ -84,6 +99,11 @@ const StudyContainer = styled.div(
       position: 'relative',
       display: 'flex',
       margin: '30px auto',
+      flexDirection: 'column',
+
+      [media.md]: {
+        flexDirection: 'row',
+      },
       '&__container': {
         flex: 1,
       },
@@ -91,20 +111,23 @@ const StudyContainer = styled.div(
         display: 'inline-block',
       },
       '&__phonetique': { display: 'inline-block', fontSize: fontSizes.md },
-      '&__original': { fontSize: fontSizes['3xl'], color: colors.primary },
+      '&__original': {
+        fontSize: fontSizes['2xl'],
+        color: colors.primary,
+        [media.md]: {
+          fontSize: fontSizes['3xl'],
+        },
+      },
       '&__definition': {
         flex: 2,
         fontSize: fontSizes.md,
-        ol: {
-          padding: 0,
-        },
       },
     },
 
     '.block-verse': {
       textAlign: 'center',
       marginTop: space[8],
-      padding: space[10],
+      padding: space[6],
 
       [media.md]: {
         marginTop: space[10],
@@ -115,28 +138,34 @@ const StudyContainer = styled.div(
 
       '&::after': {
         content: '""',
-        top: 20,
-        [media.md]: {
-          top: 40,
-        },
-
+        top: 0,
         left: '50%',
         transform: 'translateX(-50%)',
         position: 'absolute',
         height: 4,
         borderRadius: 20,
         backgroundColor: colors.primary,
-        width: '80px',
+        width: '50px',
+
+        [media.md]: {
+          top: 40,
+          width: '80px',
+        },
       },
 
       '&::before': {
         position: 'absolute',
         content: "'“'",
-        top: 30,
-        left: 30,
+        top: 0,
+        left: 0,
         fontSize: 200,
         color: 'rgba(0,0,0,0.05)',
         lineHeight: 0.8,
+
+        [media.md]: {
+          top: 30,
+          left: 30,
+        },
       },
 
       '&__content': {
@@ -156,25 +185,52 @@ interface Props extends FirebaseStudy {
   annexe: AnnexeProps
 }
 
-const Study = ({ title, html, annexe = [], content }: Props) => {
+const getPdf = async (id: string) => {
+  const response = await fetch(`/api/export-study-pdf`, {
+    body: JSON.stringify({ studyId: id }),
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+
+  const buffer = await response.arrayBuffer()
+
+  const blob = new Blob([buffer], { type: 'application/pdf' })
+  const link = document.createElement('a')
+  link.href = window.URL.createObjectURL(blob)
+  link.download = `your-file-name.pdf`
+  link.click()
+}
+
+const Study = ({ title, html, annexe = [], content, id }: Props) => {
   return (
-    <Box margin="0 auto" maxWidth={700} px={5} py={20}>
-      <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
+    <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
+      <Heading
+        onClick={() => getPdf(id)}
+        as="h1"
+        size="2xl"
+        lineHeight="shorter"
+        mb={[10, 16]}
+      >
         {title}{' '}
       </Heading>
       <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
-      <Divider my={10} />
-      <Box>
-        <Text fontSize="xl" mb={8}>
-          Références
-        </Text>
-        {annexe.length && (
-          <>
-            <InlineModals annexe={annexe} />
-            <Annexe annexe={annexe} />{' '}
-          </>
-        )}
-      </Box>
+      {!!annexe.length && (
+        <>
+          <Divider my={10} />
+          <Box>
+            <Text fontSize="xl" mb={8}>
+              Références
+            </Text>
+            <>
+              <InlineModals annexe={annexe} />
+              <Annexe annexe={annexe} />{' '}
+            </>
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
