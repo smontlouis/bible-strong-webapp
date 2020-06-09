@@ -10,6 +10,7 @@ import {
 import styled from '../../styled'
 import Annexe from '../../features/studies/Annexe'
 import InlineModals from '../../features/studies/InlineModals'
+import Head from 'next/head'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const idParam = params.id as string
@@ -186,14 +187,17 @@ interface Props extends FirebaseStudy {
 }
 
 const getPdf = async (id: string) => {
-  const response = await fetch(`/api/export-study-pdf`, {
-    body: JSON.stringify({ studyId: id }),
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
+  const response = await fetch(
+    `https://us-central1-bible-strong-app.cloudfunctions.net/exportStudyPDF`,
+    {
+      body: JSON.stringify({ studyId: id }),
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    }
+  )
 
   const buffer = await response.arrayBuffer()
 
@@ -206,32 +210,36 @@ const getPdf = async (id: string) => {
 
 const Study = ({ title, html, annexe = [], content, id }: Props) => {
   return (
-    <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
-      <Heading
-        onClick={() => getPdf(id)}
-        as="h1"
-        size="2xl"
-        lineHeight="shorter"
-        mb={[10, 16]}
-      >
-        {title}{' '}
-      </Heading>
-      <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
-      {!!annexe.length && (
-        <>
-          <Divider my={10} />
-          <Box>
-            <Text fontSize="xl" mb={8}>
-              Références
-            </Text>
-            <>
-              <InlineModals annexe={annexe} />
-              <Annexe annexe={annexe} />{' '}
-            </>
-          </Box>
-        </>
-      )}
-    </Box>
+    <>
+      <Head>
+        <title>{title} - Bible Strong</title>
+        <meta
+          name="description"
+          content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
+        />
+        <html lang="fr" />
+      </Head>
+      <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
+        <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
+          {title}{' '}
+        </Heading>
+        <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
+        {!!annexe.length && (
+          <>
+            <Divider my={10} />
+            <Box>
+              <Text fontSize="xl" mb={8}>
+                Références
+              </Text>
+              <>
+                <InlineModals annexe={annexe} />
+                <Annexe annexe={annexe} />{' '}
+              </>
+            </Box>
+          </>
+        )}
+      </Box>
+    </>
   )
 }
 
