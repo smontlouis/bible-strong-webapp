@@ -28,8 +28,12 @@ export default function Home() {
         <html lang="fr" />
       </Head>
       <Box>
-        // @ts-ignore
-        <Box as={Logo} width={['280px', 'auto']} m="0 auto" />
+        <Box
+          // @ts-ignore
+          as={Logo}
+          width={['280px', 'auto']}
+          m="0 auto"
+        />
         <Flex
           justifyContent="center"
           alignItems="center"
