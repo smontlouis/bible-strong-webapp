@@ -212,7 +212,7 @@ const Study = ({ title, html, annexe = [], content, id }: Props) => {
   return (
     <>
       <Head>
-        <title>{title} - Bible Strong</title>
+        <title>{title} - Bible Strong App</title>
         <meta
           name="description"
           content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
