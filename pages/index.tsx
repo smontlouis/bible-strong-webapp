@@ -1,6 +1,5 @@
 import { Box, Flex } from '@chakra-ui/core'
 import Head from 'next/head'
-import imageFb from '../images/image-fb.jpg'
 import Logo from '../images/svg/logo.svg'
 
 export default function Home() {
@@ -18,15 +17,6 @@ export default function Home() {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <Head>
-        <title>Bible Strong App - Lexique Hébreu et Grec</title>
-        <meta
-          name="description"
-          content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
-        />
-        <meta name="og:image" content={imageFb} />
-        <html lang="fr" />
-      </Head>
       <Box>
         <Box
           // @ts-ignore

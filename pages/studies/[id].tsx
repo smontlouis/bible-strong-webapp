@@ -1,5 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
-import { Box, Heading, Text, Divider, Flex } from '@chakra-ui/core'
+import { Box, Heading, Text, Divider, Flex, Link } from '@chakra-ui/core'
 
 import {
   getStaticStudyProps,
@@ -11,6 +11,7 @@ import styled from '../../styled'
 import Annexe from '../../features/studies/Annexe'
 import InlineModals from '../../features/studies/InlineModals'
 import Head from 'next/head'
+import Logo from '../../images/svg/logo.svg'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const idParam = params.id as string
@@ -34,8 +35,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 const StudyContainer = styled.div(
   ({ theme: { media, fonts, fontSizes, space, colors } }) => ({
     fontSize: 16,
-    fontFamily: fonts.body,
     counterReset: 'inline-counter',
+    fontFamily: fonts.text,
 
     [media.md]: {
       fontSize: 21,
@@ -208,16 +209,16 @@ const getPdf = async (id: string) => {
   link.click()
 }
 
-const Study = ({ title, html, annexe = [], content, id }: Props) => {
+const Study = ({ title, html, annexe = [], user, id }: Props) => {
   return (
     <>
       <Head>
-        <title>{title} - Bible Strong App</title>
+        <title key="title">{title} - Bible Strong App</title>
         <meta
+          key="description"
           name="description"
-          content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
+          content={`${title} - Bible Strong App. Cette étude a été rédigée par ${user.displayName}`}
         />
-        <html lang="fr" />
       </Head>
       <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
         <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
@@ -226,7 +227,7 @@ const Study = ({ title, html, annexe = [], content, id }: Props) => {
         <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
         {!!annexe.length && (
           <>
-            <Divider my={10} />
+            <Divider my={10} className="references-divider" />
             <Box>
               <Text fontSize="xl" mb={8}>
                 Références
@@ -238,6 +239,28 @@ const Study = ({ title, html, annexe = [], content, id }: Props) => {
             </Box>
           </>
         )}
+        <Divider my={10} />
+        <Flex alignItems="center" justifyContent="center" direction="column">
+          <Text fontSize="xs" color="grey">
+            Étude rédigée par {user.displayName} avec{' '}
+            <Box
+              // @ts-ignore
+              as={Logo}
+              ml={1}
+              d="inline-block"
+              width={100}
+              height={6}
+            />
+          </Text>
+          <Link
+            mt={1}
+            fontSize="xs"
+            color="primary"
+            href="https://bible-strong.app"
+          >
+            bible-strong.app
+          </Link>
+        </Flex>
       </Box>
     </>
   )

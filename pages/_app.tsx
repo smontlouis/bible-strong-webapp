@@ -1,5 +1,6 @@
 import { AppProps } from 'next/app'
 import { ThemeProvider, CSSReset } from '@chakra-ui/core'
+import { Global, css } from '@emotion/core'
 
 import icon from '../images/icon.png'
 import { theme } from '../styled'
@@ -19,6 +20,26 @@ const App = ({ Component, pageProps }: AppProps) => {
           rel="stylesheet"
         />
       </Head>
+      <Global
+        styles={css`
+          @media print {
+            @page {
+              margin: 2cm 3cm;
+              margin-bottom: 3cm;
+            }
+
+            h1 {
+              break-before: always;
+              page-break-before: always;
+            }
+
+            .references-divider {
+              break-before: always;
+              page-break-before: always;
+            }
+          }
+        `}
+      />
       <CSSReset />
       <Component {...pageProps} />
     </ThemeProvider>

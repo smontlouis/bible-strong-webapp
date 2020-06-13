@@ -14,7 +14,8 @@ export const theme = {
   },
   fonts: {
     ...cTheme.fonts,
-    body: '"Literata", serif',
+    heading: 'Helvetica, sans-serif',
+    text: '"Literata", serif',
   },
   media: {
     sm: `@media (min-width: ${cTheme.breakpoints[0]})`,
