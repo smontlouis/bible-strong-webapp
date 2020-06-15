@@ -183,10 +183,16 @@ export const getStaticStudyProps = async (id: string) => {
 
   const html = converter.convert()
 
-  await generateMetaImage(result.id, result.title, result.user.displayName)
+  const { imageUrl, whatsappImageUrl } = await generateMetaImage(
+    result.id,
+    result.title,
+    result.user.displayName
+  )
 
   return {
     ...result,
+    imageUrl,
+    whatsappImageUrl,
     html,
     annexe,
   }

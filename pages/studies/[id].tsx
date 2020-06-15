@@ -185,6 +185,8 @@ const StudyContainer = styled.div(
 interface Props extends FirebaseStudy {
   html: string
   annexe: AnnexeProps
+  imageUrl: string
+  whatsappImageUrl: string
 }
 
 const getPdf = async (id: string) => {
@@ -209,7 +211,16 @@ const getPdf = async (id: string) => {
   link.click()
 }
 
-const Study = ({ title, html, annexe = [], user, id, modified_at }: Props) => {
+const Study = ({
+  title,
+  html,
+  annexe = [],
+  user,
+  id,
+  modified_at,
+  imageUrl,
+  whatsappImageUrl,
+}: Props) => {
   return (
     <>
       <Head>
@@ -228,18 +239,17 @@ const Study = ({ title, html, annexe = [], user, id, modified_at }: Props) => {
         <meta property="og:type" content="website" />
         <meta property="og:updated_time" content={modified_at.toString()} />
 
-        <meta property="og:image" content={`/studies/${id}.jpg`} />
+        <meta property="og:image" content={imageUrl} />
         <meta property="og:image:type" content="image/jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
 
-        <meta property="og:image" content={`/studies/${id}-whatsapp.jpg`} />
+        <meta property="og:image" content={whatsappImageUrl} />
         <meta property="og:image:type" content="image/jpg" />
         <meta property="og:image:width" content="400" />
         <meta property="og:image:height" content="400" />
       </Head>
       <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
-        <img src={`/studies/${id}.jpg`} />
         <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
           {title}{' '}
         </Heading>

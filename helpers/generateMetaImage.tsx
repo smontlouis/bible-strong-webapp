@@ -1,5 +1,6 @@
-const fs = require('fs')
+import firebase from '../lib/firebase'
 import { registerFont, createCanvas, loadImage } from 'canvas'
+import { v4 as uuidv4 } from 'uuid'
 
 const width = 1200
 const height = 630
@@ -7,6 +8,8 @@ const height = 630
 // WhatsApp
 const wWidth = 400
 const wHeight = 400
+
+const bucket = firebase.storage().bucket('bible-strong-app.appspot.com')
 
 const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
   var words = text.split(' ')
@@ -56,7 +59,15 @@ const generateMetaImage = async (
   }
 
   const buffer = canvas.toBuffer('image/jpeg', { quality: 0.5 })
-  fs.writeFileSync(`./public/studies/${id}.jpg`, buffer)
+  await bucket.file(`images/studies/${id}.jpg`).save(buffer, {
+    metadata: {
+      contentType: 'image/jpeg',
+      metadata: {
+        firebaseStorageDownloadTokens: uuidv4(),
+      },
+    },
+    resumable: false,
+  })
 
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.canvas.width = wWidth
@@ -81,7 +92,27 @@ const generateMetaImage = async (
   }
 
   const bufferW = canvas.toBuffer('image/jpeg', { quality: 0.5 })
-  fs.writeFileSync(`./public/studies/${id}-whatsapp.jpg`, bufferW)
+  await bucket.file(`images/studies/${id}-whatsapp.jpg`).save(bufferW, {
+    metadata: {
+      contentType: 'image/jpeg',
+      metadata: {
+        firebaseStorageDownloadTokens: uuidv4(),
+      },
+    },
+    resumable: false,
+  })
+
+  const imageUrl = await bucket
+    .file(`images/studies/${id}.jpg`)
+    .getSignedUrl({ action: 'read', expires: '01-01-2025' })
+  const whatsappImageUrl = await bucket
+    .file(`images/studies/${id}-whatsapp.jpg`)
+    .getSignedUrl({ action: 'read', expires: '01-01-2025' })
+
+  return {
+    imageUrl,
+    whatsappImageUrl,
+  }
 }
 
 export default generateMetaImage
