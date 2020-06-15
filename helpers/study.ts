@@ -1,5 +1,6 @@
 import { QuillDeltaToHtmlConverter } from '../lib/quill-to-html/main'
 import firebase from '../lib/firebase'
+import generateMetaImage from './generateMetaImage'
 
 export interface FirebaseStudy {
   id: string
@@ -181,6 +182,8 @@ export const getStaticStudyProps = async (id: string) => {
   })
 
   const html = converter.convert()
+
+  await generateMetaImage(result.id, result.title, result.user.displayName)
 
   return {
     ...result,

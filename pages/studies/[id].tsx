@@ -209,7 +209,7 @@ const getPdf = async (id: string) => {
   link.click()
 }
 
-const Study = ({ title, html, annexe = [], user, id }: Props) => {
+const Study = ({ title, html, annexe = [], user, id, modified_at }: Props) => {
   return (
     <>
       <Head>
@@ -219,6 +219,24 @@ const Study = ({ title, html, annexe = [], user, id }: Props) => {
           name="description"
           content={`${title} - Bible Strong App. Cette étude a été rédigée par ${user.displayName}`}
         />
+        <meta property="og:site_name" content="Bible Strong App" />
+        <meta property="og:title" content={title} />
+        <meta
+          property="og:description"
+          content={`${title} - Bible Strong App. Cette étude a été rédigée par ${user.displayName}`}
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:updated_time" content={modified_at.toString()} />
+
+        <meta property="og:image" content={`/studies/${id}.png`} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+
+        <meta property="og:image" content={`/studies/${id}-whatsapp.png`} />
+        <meta property="og:image:type" content="image/png" />
+        <meta property="og:image:width" content="400" />
+        <meta property="og:image:height" content="400" />
       </Head>
       <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
         <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
