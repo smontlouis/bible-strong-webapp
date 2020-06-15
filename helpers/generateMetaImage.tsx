@@ -55,8 +55,8 @@ const generateMetaImage = async (
     context.fillText(`Étude rédigée par ${username}`, 100, 430)
   }
 
-  const buffer = canvas.toBuffer('image/png')
-  fs.writeFileSync(`./public/studies/${id}.png`, buffer)
+  const buffer = canvas.toBuffer('image/jpeg', { quality: 0.5 })
+  fs.writeFileSync(`./public/studies/${id}.jpg`, buffer)
 
   context.clearRect(0, 0, canvas.width, canvas.height)
   context.canvas.width = wWidth
@@ -80,8 +80,8 @@ const generateMetaImage = async (
     wrapText(context, `Étude rédigée par ${username}`, 50, 320, 340, 24)
   }
 
-  const bufferW = canvas.toBuffer('image/png')
-  fs.writeFileSync(`./public/studies/${id}-whatsapp.png`, bufferW)
+  const bufferW = canvas.toBuffer('image/jpeg', { quality: 0.5 })
+  fs.writeFileSync(`./public/studies/${id}-whatsapp.jpg`, bufferW)
 }
 
 export default generateMetaImage
