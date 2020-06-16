@@ -1,5 +1,33 @@
-import { Heading } from '@chakra-ui/core'
 import Head from 'next/head'
+import styled from '../styled'
+
+const TextContainer = styled.div(({ theme }) => ({
+  marginTop: 100,
+  maxWidth: 500,
+  margin: '20px auto',
+
+  h1: {
+    margin: '40px 0',
+    fontFamily: theme.fonts.heading,
+    fontSize: theme.fontSizes['4xl'],
+    fontWeight: 'bold',
+  },
+
+  h2: {
+    margin: '20px 0',
+    fontFamily: theme.fonts.heading,
+    fontSize: theme.fontSizes['2xl'],
+    fontWeight: 'bold',
+  },
+
+  hr: {
+    margin: '20px 0',
+  },
+
+  ul: {
+    padding: 20,
+  },
+}))
 
 export default function Page() {
   return (
@@ -17,81 +45,149 @@ export default function Page() {
       <Head>
         <title>Politique de confidentialité - Bible Strong App</title>
       </Head>
-      <div
-        style={{
-          marginTop: 100,
-          maxWidth: 500,
-          margin: '20px auto',
-        }}
-      >
-        <Heading as="h1" my={10}>
-          Politique de confidentialité pour Bible Strong App
-        </Heading>
+      <TextContainer>
+        <h1>Politique mod&egrave;le de confidentialit&eacute;.</h1>
         <p>
-          L'une de nos principales priorités est la confidentialité de nos
-          visiteurs. Ce document de politique de confidentialité contient des
-          types d'informations qui sont collectées et enregistrées par Bible
-          Strong App et comment nous les utilisons.
+          <strong>Introduction</strong>
+          <br />
+          Devant le d&eacute;veloppement des nouveaux outils de communication,
+          il est n&eacute;cessaire de porter une attention particuli&egrave;re
+          &agrave; la protection de la vie priv&eacute;e. C'est pourquoi, nous
+          nous engageons &agrave; respecter la confidentialit&eacute; des
+          renseignements personnels que nous collectons.
         </p>
-        <p>
-          Si vous avez des questions supplémentaires ou si vous souhaitez plus
-          d'informations sur notre politique de confidentialité, n'hésitez pas à
-          nous contacter par e-mail à l'adresse s.montlouis.calixte@gmail.com.
-        </p>
-
-        <Heading as="h2" my={10}>
-          Fichiers de log
-        </Heading>
-        <p>
-          Bible Strong App suit une procédure standard d'utilisation de fichiers
-          journaux. Ces fichiers enregistrent les visiteurs lorsqu'ils visitent
-          des sites Web. Toutes les sociétés d'hébergement le font et font
-          partie des analyses des services d'hébergement. Les informations
-          collectées par les fichiers journaux comprennent les adresses de
-          protocole Internet (IP), le type de navigateur, le fournisseur d'accès
-          Internet (FAI), l'horodatage de la date et de l'heure, les pages de
-          renvoi / de sortie et éventuellement le nombre de clics. Celles-ci ne
-          sont liées à aucune information personnellement identifiable. Les
-          informations ont pour objectif d'analyser les tendances, d'administrer
-          le site, de suivre les mouvements des utilisateurs sur le site Web et
-          de collecter des informations démographiques.
-        </p>
-
-        <Heading as="h2" my={10}>
-          Information des enfants
-        </Heading>
-        <p>
-          Une autre partie de notre priorité consiste à ajouter une protection
-          pour les enfants qui utilisent Internet. Nous encourageons les parents
-          et les tuteurs à observer, participer et / ou surveiller et guider
-          leur activité en ligne. Bible Strong App ne collecte pas sciemment
-          d'informations personnelles identifiables sur des enfants de moins de
-          13 ans. Si vous pensez que votre enfant a fourni ce type
-          d'informations sur notre site Web, nous vous encourageons vivement à
-          nous contacter immédiatement et nous ferons de notre mieux pour
-          supprimer rapidement ces informations de nos archives.
-        </p>
-        <Heading as="h2" my={10}>
-          Politique de confidentialité en ligne uniquement
-        </Heading>
+        <hr />
+        <h2>Collecte des renseignements personnels</h2>
+        <p>Nous collectons les renseignements suivants :</p>
+        <ul>
+          <li>Nom</li>
+          <li>Pr&eacute;nom</li>
+          <li>Adresse &eacute;lectronique</li>
+        </ul>
 
         <p>
-          Cette politique de confidentialité s'applique uniquement à nos
-          activités en ligne et est valable pour les visiteurs de notre site Web
-          et notre application en ce qui concerne les informations qu'ils ont
-          partagées et / ou collectées dans Bible Strong App. Cette politique ne
-          s'applique pas aux informations collectées hors ligne ou via des
-          canaux autres que notre application.
+          Les renseignements personnels que nous collectons sont recueillis au
+          travers de formulaires et gr&acirc;ce &agrave; l'interactivit&eacute;
+          &eacute;tablie entre vous et notre application. Nous utilisons
+          &eacute;galement, comme indiqu&eacute; dans la section suivante, des
+          fichiers t&eacute;moins et/ou journaux pour r&eacute;unir des
+          informations vous concernant.
         </p>
-
-        <Heading as="h2" my={10}>
-          Consentement
-        </Heading>
+        <hr />
+        <h2>Formulaires&nbsp; et interactivit&eacute;:</h2>
         <p>
-          En utilisant notre site Web, vous acceptez par la présente notre
-          politique de confidentialité et acceptez ses termes et conditions.
+          Vos renseignements personnels sont collect&eacute;s par le biais de
+          formulaire, &agrave; savoir :
         </p>
-      </div>
+        <ul>
+          <li>Formulaire d'inscription à l'application</li>
+        </ul>
+        <p>
+          Nous utilisons les renseignements ainsi collect&eacute;s pour les
+          finalit&eacute;s suivantes :
+        </p>
+        <ul>
+          <li>Statistiques</li>
+          <li>Gestion de l'application (pr&eacute;sentation, organisation)</li>
+        </ul>
+        <p>
+          Vos renseignements sont &eacute;galement collect&eacute;s par le biais
+          de l'interactivit&eacute; pouvant s'&eacute;tablir entre vous et notre
+          application et ce, de la fa&ccedil;on suivante:
+        </p>
+        <ul></ul>
+        <p>
+          Nous utilisons les renseignements ainsi collect&eacute;s pour les
+          finalit&eacute;s suivantes :<br />
+        </p>
+        <ul></ul>
+        <hr />
+        <h2>Fichiers journaux et t&eacute;moins </h2>
+        <p>
+          Nous recueillons certaines informations par le biais de fichiers
+          journaux (log file) et de fichiers t&eacute;moins (cookies). Il s'agit
+          principalement des informations suivantes :
+        </p>
+        <ul>
+          <li>Adresse IP</li>
+          <li>Syst&egrave;me d'exploitation</li>
+          <li>Pages visit&eacute;es et requ&ecirc;tes</li>
+          <li>Heure et jour de connexion</li>
+        </ul>
+
+        <br />
+        <p>Le recours &agrave; de tels fichiers nous permet :</p>
+        <ul>
+          <li>Am&eacute;lioration du service et accueil personnalis&eacute;</li>
+          <li>Statistique</li>
+        </ul>
+        <hr />
+        <h2>Droit d'opposition et de retrait</h2>
+        <p>
+          Nous nous engageons &agrave; vous offrir un droit d'opposition et de
+          retrait quant &agrave; vos renseignements personnels.
+          <br />
+          Le droit d'opposition s'entend comme &eacute;tant la possiblit&eacute;
+          offerte aux internautes de refuser que leurs renseignements personnels
+          soient utilis&eacute;es &agrave; certaines fins mentionn&eacute;es
+          lors de la collecte.
+          <br />
+        </p>
+        <p>
+          Le droit de retrait s'entend comme &eacute;tant la possiblit&eacute;
+          offerte aux internautes de demander &agrave; ce que leurs
+          renseignements personnels ne figurent plus, par exemple, dans une
+          liste de diffusion.
+          <br />
+        </p>
+        <p>
+          Pour pouvoir exercer ces droits, vous pouvez : <br />
+          Code postal : 105, hillcrest road, raumati beach 5032
+          <br /> Courriel : s.montlouis.calixte@gmail.com
+          <br /> T&eacute;l&eacute;phone : 0272539320
+          <br />{' '}
+        </p>
+        <hr />
+        <h2>Droit d'acc&egrave;s</h2>
+        <p>
+          Nous nous engageons &agrave; reconna&icirc;tre un droit d'acc&egrave;s
+          et de rectification aux personnes concern&eacute;es d&eacute;sireuses
+          de consulter, modifier, voire radier les informations les concernant.
+          <br />
+          L'exercice de ce droit se fera :<br />
+          Code postal : 105, hillcrest road, raumati beach 5032
+          <br /> Courriel : s.montlouis.calixte@gmail.com
+          <br /> T&eacute;l&eacute;phone : 0272539320
+          <br />{' '}
+        </p>
+        <hr />
+        <h2>S&eacute;curit&eacute;</h2>
+        <p>
+          Les renseignements personnels que nous collectons sont
+          conserv&eacute;s dans un environnement s&eacute;curis&eacute;. Les
+          personnes travaillant pour nous sont tenues de respecter la
+          confidentialit&eacute; de vos informations.
+          <br />
+          Pour assurer la s&eacute;curit&eacute; de vos renseignements
+          personnels, nous avons recours aux mesures suivantes :
+        </p>
+        <ul>
+          <li>Gestion des acc&egrave;s - personne autoris&eacute;e</li>
+          <li>Gestion des acc&egrave;s - personne concern&eacute;e</li>
+          <li>Sauvegarde informatique</li>
+          <li>Identifiant / mot de passe</li>
+        </ul>
+
+        <p>
+          Nous nous engageons &agrave; maintenir un haut degr&eacute; de
+          confidentialit&eacute; en int&eacute;grant les derni&egrave;res
+          innovations technologiques permettant d'assurer la
+          confidentialit&eacute; de vos transactions. Toutefois, comme aucun
+          m&eacute;canisme n'offre une s&eacute;curit&eacute; maximale, une part
+          de risque est toujours pr&eacute;sente lorsque l'on utilise Internet
+          pour transmettre des renseignements personnels.
+        </p>
+      </TextContainer>
     </div>
   )
 }
