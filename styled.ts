@@ -1,5 +1,5 @@
-import { theme as cTheme } from '@chakra-ui/core'
 import styled, { CreateStyled } from '@emotion/styled'
+import cTheme from './chakra'
 
 export const theme = {
   ...cTheme,

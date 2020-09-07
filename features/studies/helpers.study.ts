@@ -1,6 +1,6 @@
-import { QuillDeltaToHtmlConverter } from '../lib/quill-to-html/main'
-import firebase from '../lib/firebase'
-import generateMetaImage from './generateMetaImage'
+import { QuillDeltaToHtmlConverter } from '../../lib/quill-to-html/main'
+import firebase from '../../lib/firebase'
+import generateMetaImage from '../../helpers/generateMetaImage'
 
 export interface FirebaseStudy {
   id: string
@@ -60,7 +60,7 @@ export const getStaticStudyProps = async (id: string) => {
 
   const annexe: Annexe = (
     await Promise.all(
-      result.content.ops.map(async (op, idx) => {
+      result.content?.ops.map(async (op, idx) => {
         if (op.insert?.['block-strong']) {
           const { book, codeStrong } = op.insert['block-strong']
           const isGrec = book > 39
@@ -71,8 +71,10 @@ export const getStaticStudyProps = async (id: string) => {
             .doc(codeStrong.toString())
             .get()
           const res = doc.exists ? doc.data() : undefined
-          result.content.ops[idx].insert['block-strong'].definition =
-            res.Definition
+          if (result.content) {
+            result.content.ops[idx].insert['block-strong'].definition =
+              res.Definition
+          }
         }
         if (op.attributes?.['inline-verse']) {
           const verses: string[] = op.attributes['inline-verse'].verses
@@ -117,7 +119,7 @@ export const getStaticStudyProps = async (id: string) => {
     )
   ).filter((v) => v)
 
-  const converter = new QuillDeltaToHtmlConverter(result.content.ops, {
+  const converter = new QuillDeltaToHtmlConverter(result.content?.ops, {
     customTag: (format, op) => {
       if (format === 'inline-verse' || format === 'inline-strong') {
         return 'a'

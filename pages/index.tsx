@@ -1,6 +1,7 @@
 import { Box, Flex } from '@chakra-ui/core'
 import Head from 'next/head'
 import Logo from '../images/svg/logo.svg'
+import { ElementType, ReactNode } from 'react'
 
 export default function Home() {
   return (
@@ -19,8 +20,7 @@ export default function Home() {
     >
       <Box>
         <Box
-          // @ts-ignore
-          as={Logo}
+          as={Logo as ElementType<ReactNode>}
           width={['280px', 'auto']}
           m="0 auto"
         />
@@ -36,7 +36,6 @@ export default function Home() {
             ml={['none', '100px']}
             width={153}
             height={60}
-            // @ts-ignore
             href="https://apps.apple.com/fr/app/bible-strong/id1454738221?mt=8"
             style={{
               display: 'inline-block',
@@ -50,7 +49,6 @@ export default function Home() {
             width={165}
             height={60}
             as="a"
-            // @ts-ignore
             href="https://play.google.com/store/apps/details?id=com.smontlouis.biblestrong&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
           >
             <img

@@ -15,7 +15,7 @@ import {
   Annexe as AnnexeProps,
   OpsInlineVerse,
   OpsInlineStrong,
-} from '../../helpers/study'
+} from './helpers.study'
 import { useEffect, useState } from 'react'
 
 interface Props {

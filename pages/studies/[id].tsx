@@ -6,12 +6,13 @@ import {
   getStaticStudyPaths,
   FirebaseStudy,
   Annexe as AnnexeProps,
-} from '../../helpers/study'
+} from '../../features/studies/helpers.study'
 import styled from '../../styled'
 import Annexe from '../../features/studies/Annexe'
 import InlineModals from '../../features/studies/InlineModals'
 import Head from 'next/head'
 import Logo from '../../images/svg/logo.svg'
+import { ReactNode, ElementType } from 'react'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const idParam = params.id as string
@@ -273,8 +274,7 @@ const Study = ({
           <Text fontSize="xs" color="grey">
             Étude rédigée par {user.displayName} avec{' '}
             <Box
-              // @ts-ignore
-              as={Logo}
+              as={Logo as ElementType<ReactNode>}
               ml={1}
               d="inline-block"
               width={100}

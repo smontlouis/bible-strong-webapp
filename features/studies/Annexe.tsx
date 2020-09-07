@@ -1,5 +1,5 @@
 import { Box, Flex, Text } from '@chakra-ui/core'
-import { Annexe as AnnexeProps } from '../../helpers/study'
+import { Annexe as AnnexeProps } from './helpers.study'
 
 interface Props {
   annexe: AnnexeProps
