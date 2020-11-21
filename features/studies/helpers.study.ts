@@ -228,6 +228,6 @@ export const getStaticStudyPaths: GetStaticPaths = async () => {
 
   return {
     paths,
-    fallback: true,
+    fallback: false,
   }
 }
