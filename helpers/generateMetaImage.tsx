@@ -1,5 +1,10 @@
 import firebase from '../lib/firebase'
-import { registerFont, createCanvas, loadImage } from 'canvas'
+import {
+  registerFont,
+  createCanvas,
+  loadImage,
+  CanvasRenderingContext2D,
+} from 'canvas'
 import { v4 as uuidv4 } from 'uuid'
 
 const width = 1200
@@ -11,7 +16,14 @@ const wHeight = 400
 
 const bucket = firebase.storage().bucket('bible-strong-app.appspot.com')
 
-const wrapText = (context, text, x, y, maxWidth, lineHeight) => {
+const wrapText = (
+  context: CanvasRenderingContext2D,
+  text: string,
+  x: number,
+  y: number,
+  maxWidth: number,
+  lineHeight: number
+) => {
   var words = text.split(' ')
   var line = ''
 

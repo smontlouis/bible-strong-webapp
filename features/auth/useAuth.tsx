@@ -1,5 +1,12 @@
-import { useState, useEffect, useContext, createContext } from 'react'
+import {
+  useState,
+  useEffect,
+  useContext,
+  createContext,
+  PropsWithChildren,
+} from 'react'
 import { auth } from '../../lib/firebase-app'
+import firebase from 'firebase'
 
 interface AuthProps {
   loadingUser: boolean
@@ -10,7 +17,7 @@ interface AuthProps {
 
 const AuthContext = createContext<AuthProps>(undefined!)
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }: PropsWithChildren<{}>) => {
   const auth = useProvideAuth()
   return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
 }
@@ -20,12 +27,12 @@ export const useAuth = () => {
 }
 
 const useProvideAuth = (): AuthProps => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<firebase.User>()
   const [loadingUser, setLoadingUser] = useState(true)
 
   const signout = async () => {
     await auth.signOut()
-    setUser(false)
+    setUser(undefined)
   }
 
   const sendPasswordResetEmail = async (email: string) => {
@@ -37,7 +44,7 @@ const useProvideAuth = (): AuthProps => {
       if (user) {
         setUser(user)
       } else {
-        setUser(false)
+        setUser(undefined)
       }
 
       setLoadingUser(false)

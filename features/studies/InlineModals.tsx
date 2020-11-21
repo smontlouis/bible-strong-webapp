@@ -1,15 +1,10 @@
 import {
-  Box,
-  Flex,
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  ModalFooter,
-  Button,
 } from '@chakra-ui/react'
 import {
   Annexe as AnnexeProps,
@@ -43,25 +38,27 @@ const InlineModals = ({ annexe }: Props) => {
 const VerseModal = ({ inlineItem }: { inlineItem: OpsInlineVerse }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [title, setTitle] = useState<string>()
-  const [content, setContent] = useState<string>()
+  const [content, setContent] = useState<string>('')
 
   useEffect(() => {
-    const itemRef: HTMLElement = document.querySelector(
+    const itemRef: HTMLElement | null = document.querySelector(
       `[data-verses="${inlineItem.id}"]`
     )
     const title = document.querySelector(
       `[data-annexe="${inlineItem.id}"] [data-title]`
-    ).innerHTML
+    )?.innerHTML
     setTitle(title)
 
     const content = document.querySelector(
       `[data-annexe="${inlineItem.id}"] [data-content]`
-    ).innerHTML
-    setContent(content)
+    )?.innerHTML
+    setContent(content || '')
 
-    itemRef.onclick = (e) => {
-      e.stopPropagation()
-      setIsOpen(true)
+    if (itemRef) {
+      itemRef.onclick = (e) => {
+        e.stopPropagation()
+        setIsOpen(true)
+      }
     }
   }, [])
 
@@ -82,25 +79,27 @@ const VerseModal = ({ inlineItem }: { inlineItem: OpsInlineVerse }) => {
 const StrongModal = ({ inlineItem }: { inlineItem: OpsInlineStrong }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [title, setTitle] = useState<string>()
-  const [content, setContent] = useState<string>()
+  const [content, setContent] = useState<string>('')
 
   useEffect(() => {
-    const itemRef: HTMLElement = document.querySelector(
+    const itemRef: HTMLElement | null = document.querySelector(
       `[data-code="${inlineItem.Code}"]`
     )
     const title = document.querySelector(
       `[data-annexe="${inlineItem.Code}"] [data-title]`
-    ).innerHTML
+    )?.innerHTML
     setTitle(title)
 
     const content = document.querySelector(
       `[data-annexe="${inlineItem.Code}"] [data-content]`
-    ).innerHTML
-    setContent(content)
+    )?.innerHTML
+    setContent(content || '')
 
-    itemRef.onclick = (e) => {
-      e.stopPropagation()
-      setIsOpen(true)
+    if (itemRef) {
+      itemRef.onclick = (e) => {
+        e.stopPropagation()
+        setIsOpen(true)
+      }
     }
   }, [])
 

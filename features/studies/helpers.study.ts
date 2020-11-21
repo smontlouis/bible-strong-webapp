@@ -58,7 +58,7 @@ export const getStaticStudyProps = async (id: string) => {
 
   const result = snapshot.data() as FirebaseStudy
 
-  const annexe: Annexe = (
+  const annexe = (
     await Promise.all(
       result.content?.ops.map(async (op, idx) => {
         if (op.insert?.['block-strong']) {
@@ -73,7 +73,7 @@ export const getStaticStudyProps = async (id: string) => {
           const res = doc.exists ? doc.data() : undefined
           if (result.content) {
             result.content.ops[idx].insert['block-strong'].definition =
-              res.Definition
+              res?.Definition
           }
         }
         if (op.attributes?.['inline-verse']) {
@@ -115,7 +115,7 @@ export const getStaticStudyProps = async (id: string) => {
             ...result,
           }
         }
-      })
+      }) || []
     )
   ).filter((v) => v)
 
@@ -125,6 +125,7 @@ export const getStaticStudyProps = async (id: string) => {
         return 'a'
       }
     },
+    //@ts-ignore
     customTagAttributes: (op) => {
       if (op.attributes['inline-verse']) {
         return {
@@ -140,6 +141,9 @@ export const getStaticStudyProps = async (id: string) => {
           ['data-title']: op.attributes['inline-strong'].title,
           ['data-book']: op.attributes['inline-strong'].book,
         }
+      }
+      return {
+        title: '',
       }
     },
     customCssClasses: (op) => {

@@ -10,13 +10,13 @@ const Annexe = ({ annexe }: Props) => {
       {annexe.map((item, idx) => {
         if (item.type === 'inline-strong') {
           const {
-            Type,
-            Grec,
-            Hebreu,
+            // Type,
+            // Grec,
+            // Hebreu,
+            // Origine,
+            // Phonetique,
+            // LSG,
             Mot,
-            Origine,
-            Phonetique,
-            LSG,
             Definition,
             Code,
           } = item
