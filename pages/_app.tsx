@@ -7,6 +7,7 @@ import { theme } from '../theme'
 import Head from 'next/head'
 
 const App = ({ Component, pageProps }: AppProps) => {
+  console.log('1')
   return (
     <AuthProvider>
       <ChakraProvider resetCSS theme={theme}>
