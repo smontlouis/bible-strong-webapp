@@ -1,5 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
-import { Box, Heading, Text, Divider, Flex, Link } from '@chakra-ui/core'
+import { Box, Heading, Text, Divider, Flex, Link } from '@chakra-ui/react'
 
 import {
   getStaticStudyProps,
@@ -7,15 +7,15 @@ import {
   FirebaseStudy,
   Annexe as AnnexeProps,
 } from '../../features/studies/helpers.study'
-import styled from '../../styled'
 import Annexe from '../../features/studies/Annexe'
 import InlineModals from '../../features/studies/InlineModals'
 import Head from 'next/head'
 import Logo from '../../images/svg/logo.svg'
 import { ReactNode, ElementType } from 'react'
+import styled from '@emotion/styled'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const idParam = params.id as string
+  const idParam = params?.id as string
   const result = await getStaticStudyProps(idParam)
 
   return {

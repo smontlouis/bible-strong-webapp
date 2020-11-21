@@ -1,5 +1,5 @@
+import styled from '@emotion/styled'
 import Head from 'next/head'
-import styled from '../styled'
 
 const TextContainer = styled.div(({ theme }) => ({
   marginTop: 100,

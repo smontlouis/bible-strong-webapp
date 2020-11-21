@@ -10,7 +10,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from '@chakra-ui/core'
+} from '@chakra-ui/react'
 import {
   Annexe as AnnexeProps,
   OpsInlineVerse,

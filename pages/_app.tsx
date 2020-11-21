@@ -1,16 +1,15 @@
 import { AppProps } from 'next/app'
-import { ChakraProvider, CSSReset } from '@chakra-ui/core'
-import { Global, css } from '@emotion/core'
+import { ChakraProvider } from '@chakra-ui/react'
 import AuthProvider from '../features/auth/useAuth'
 
 import icon from '../images/icon.png'
-import { theme } from '../styled'
+import { theme } from '../theme'
 import Head from 'next/head'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
     <AuthProvider>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider resetCSS theme={theme}>
         <Head>
           <title key="title">Bible Strong App - Lexique Hébreu et Grec</title>
           <meta
@@ -39,27 +38,24 @@ const App = ({ Component, pageProps }: AppProps) => {
             href="https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth.css"
           />
         </Head>
-        <Global
-          styles={css`
-            @media print {
-              @page {
-                margin: 2cm 3cm;
-                margin-bottom: 3cm;
-              }
-
-              h1 {
-                break-before: always;
-                page-break-before: always;
-              }
-
-              .references-divider {
-                break-before: always;
-                page-break-before: always;
-              }
+        <style jsx global>{`
+          @media print {
+            @page {
+              margin: 2cm 3cm;
+              margin-bottom: 3cm;
             }
-          `}
-        />
-        <CSSReset />
+
+            h1 {
+              break-before: always;
+              page-break-before: always;
+            }
+
+            .references-divider {
+              break-before: always;
+              page-break-before: always;
+            }
+          }
+        `}</style>
         <Component {...pageProps} />
       </ChakraProvider>
     </AuthProvider>

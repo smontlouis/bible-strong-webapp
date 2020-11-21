@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/core'
+import { Box, Flex } from '@chakra-ui/react'
 import Head from 'next/head'
 import Logo from '../images/svg/logo.svg'
 import { ElementType, ReactNode } from 'react'
