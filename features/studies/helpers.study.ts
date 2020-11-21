@@ -211,7 +211,7 @@ export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
       ...res,
       updatedAt: Date.now(),
     },
-    revalidate: 1,
+    revalidate: 5,
   }
 }
 
