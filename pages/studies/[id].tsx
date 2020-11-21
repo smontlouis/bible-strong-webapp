@@ -13,6 +13,7 @@ import Head from 'next/head'
 import Logo from '../../images/svg/logo.svg'
 import { ReactNode, ElementType } from 'react'
 import styled from '@emotion/styled'
+import { useRouter } from 'next/router'
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const idParam = params?.id as string
@@ -30,7 +31,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await getStaticStudyPaths()
   return {
     paths,
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -223,6 +224,9 @@ const Study = ({
   imageUrl,
   whatsappImageUrl,
 }: Props) => {
+  const router = useRouter()
+
+  if (router.isFallback) return <div>Loading...</div>
   return (
     <>
       <Head>
