@@ -172,6 +172,7 @@ interface Props extends FirebaseStudy {
   annexe: AnnexeProps
   imageUrl: string
   whatsappImageUrl: string
+  updatedAt: Date
 }
 
 // const getPdf = async (id: string) => {
@@ -205,8 +206,10 @@ const Study = ({
   modified_at,
   imageUrl,
   whatsappImageUrl,
+  updatedAt,
 }: Props) => {
   const router = useRouter()
+  const timeString = new Date(updatedAt).toLocaleTimeString()
 
   if (router.isFallback) return <div>Loading...</div>
   return (
@@ -266,7 +269,8 @@ const Study = ({
               d="inline-block"
               width={100}
               height={6}
-            />
+            />{' '}
+            - {timeString}
           </Text>
           <Link
             mt={1}
