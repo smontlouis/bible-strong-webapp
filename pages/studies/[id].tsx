@@ -1,4 +1,3 @@
-import { GetStaticProps, GetStaticPaths } from 'next'
 import { Box, Heading, Text, Divider, Flex, Link } from '@chakra-ui/react'
 
 import {
@@ -15,25 +14,8 @@ import { ReactNode, ElementType } from 'react'
 import styled from '@emotion/styled'
 import { useRouter } from 'next/router'
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const idParam = params?.id as string
-  const result = await getStaticStudyProps(idParam)
-
-  return {
-    props: {
-      ...result,
-    },
-    revalidate: 3,
-  }
-}
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = await getStaticStudyPaths()
-  return {
-    paths,
-    fallback: true,
-  }
-}
+export const getStaticPaths = getStaticStudyPaths
+export const getStaticProps = getStaticStudyProps
 
 const StudyContainer = styled.div(
   ({ theme: { media, fonts, fontSizes, space, colors } }) => ({

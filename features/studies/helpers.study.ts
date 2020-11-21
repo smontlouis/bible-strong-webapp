@@ -1,6 +1,7 @@
 import { QuillDeltaToHtmlConverter } from '../../lib/quill-to-html/main'
 import firebase from '../../lib/firebase'
 import generateMetaImage from '../../helpers/generateMetaImage'
+import { GetStaticPaths, GetStaticProps } from 'next'
 
 export interface FirebaseStudy {
   id: string
@@ -49,14 +50,16 @@ export type OpsInline = OpsInlineStrong | OpsInlineVerse
 
 export type Annexe = OpsInline[]
 
-export const getStaticStudyProps = async (id: string) => {
+export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
+  const id = params?.id as string
+
   const snapshot = await firebase
     .firestore()
     .collection('studies')
     .doc(id)
     .get()
 
-  const result = snapshot.data() as FirebaseStudy
+  let result = snapshot.data() as FirebaseStudy
 
   const annexe = (
     await Promise.all(
@@ -160,24 +163,24 @@ export const getStaticStudyProps = async (id: string) => {
   converter.renderCustomWith((customOp, contextOp) => {
     if (customOp.insert.type === 'block-verse') {
       return `
-        <div class="block-verse" data-verses="${customOp.insert.value.verses}">
-          <div class="block-verse__content">${customOp.insert.value.content}</div>
-          <div class="block-verse__aside">${customOp.insert.value.title} ${customOp.insert.value.version}</div>
-        </div>`
+      <div class="block-verse" data-verses="${customOp.insert.value.verses}">
+        <div class="block-verse__content">${customOp.insert.value.content}</div>
+        <div class="block-verse__aside">${customOp.insert.value.title} ${customOp.insert.value.version}</div>
+      </div>`
     }
 
     if (customOp.insert.type === 'block-strong') {
       return `
-      <div class="block-strong" data-code="${customOp.insert.value.codeStrong}" data-book="${customOp.insert.value.book}">
-      <div class="block-strong__container">
-        <div class="block-strong__title">${customOp.insert.value.title}</div>
-        <div class="block-strong__phonetique">${customOp.insert.value.phonetique}</div>
-        <div class="block-strong__original">${customOp.insert.value.original}</div>
+    <div class="block-strong" data-code="${customOp.insert.value.codeStrong}" data-book="${customOp.insert.value.book}">
+    <div class="block-strong__container">
+      <div class="block-strong__title">${customOp.insert.value.title}</div>
+      <div class="block-strong__phonetique">${customOp.insert.value.phonetique}</div>
+      <div class="block-strong__original">${customOp.insert.value.original}</div>
+    </div>
+      <div class="block-strong__definition">
+        ${customOp.insert.value.definition}
       </div>
-        <div class="block-strong__definition">
-          ${customOp.insert.value.definition}
-        </div>
-      </div>`
+    </div>`
     }
 
     if (customOp.insert.type === 'divider') {
@@ -195,16 +198,23 @@ export const getStaticStudyProps = async (id: string) => {
     result.user.displayName
   )
 
-  return {
+  const res = {
     ...result,
     imageUrl,
     whatsappImageUrl,
     html,
     annexe,
   }
+
+  return {
+    props: {
+      ...res,
+    },
+    revalidate: 1,
+  }
 }
 
-export const getStaticStudyPaths = async () => {
+export const getStaticStudyPaths: GetStaticPaths = async () => {
   const snapshot = await firebase
     .firestore()
     .collection('studies')
@@ -215,5 +225,8 @@ export const getStaticStudyPaths = async () => {
     .map((x) => x.data())
     .map((doc) => ({ params: { id: doc.id } }))
 
-  return paths
+  return {
+    paths,
+    fallback: true,
+  }
 }
