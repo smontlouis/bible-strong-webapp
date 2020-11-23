@@ -1,5 +1,5 @@
 import { Box, Flex } from '@chakra-ui/react'
-import Logo from '../images/svg/logo.svg'
+import Logo from '../public/images/svg/logo.svg'
 import { ElementType, ReactNode } from 'react'
 
 export default function Home() {
@@ -10,7 +10,7 @@ export default function Home() {
       justifyContent="center"
       flexDir="column"
       style={{
-        backgroundImage: `url(${require('../images/background.jpg')})`,
+        backgroundImage: `url('/images/background.jpg')`,
         backgroundSize: 'contain',
         backgroundPosition: 'right',
         backgroundAttachment: 'fixed',

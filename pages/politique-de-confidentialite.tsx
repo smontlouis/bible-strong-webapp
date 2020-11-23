@@ -33,7 +33,7 @@ export default function Page() {
   return (
     <div
       style={{
-        backgroundImage: `url(${require('../images/background.jpg')})`,
+        backgroundImage: `url(/images/background.jpg)`,
         backgroundSize: 'contain',
         backgroundPosition: 'right',
         backgroundAttachment: 'fixed',

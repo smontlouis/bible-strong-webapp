@@ -1,65 +1,133 @@
 import { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
-import AuthProvider from '../features/auth/useAuth'
+import AuthProvider from '../features/auth/AuthProvider'
 
-import icon from '../images/icon.png'
 import { theme } from '../theme'
 import Head from 'next/head'
+import { PropsWithChildren } from 'react'
+import { NextComponentType, NextPageContext } from 'next'
+import { FuegoProvider } from '@nandorojo/swr-firestore'
+import config from '../config'
+import { Fuego } from '../helpers/fuego'
 
-const App = ({ Component, pageProps }: AppProps) => {
-  console.log('1')
+const fuego = new Fuego(config.firebase)
+
+interface Props extends AppProps {
+  Component: NextComponentType<NextPageContext, any, {}> & {
+    Layout?: ({ children }: PropsWithChildren<{}>) => JSX.Element
+  }
+}
+
+const Noop = ({ children }: PropsWithChildren<{}>) => <>{children}</>
+
+const App = ({ Component, pageProps }: Props) => {
+  const Layout = Component.Layout || Noop
+
   return (
-    <AuthProvider>
-      <ChakraProvider resetCSS theme={theme}>
-        <Head>
-          <title key="title">Bible Strong App - Lexique Hébreu et Grec</title>
-          <meta
-            key="description"
-            name="description"
-            content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
-          />
-          <meta key="og:image" name="og:image" content="/image-fb.jpg" />
-          <meta charSet="utf-8" />
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
-          <link rel="icon" href={icon} />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Literata&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&display=swap"
-            rel="stylesheet"
-          />
-          <link
-            type="text/css"
-            rel="stylesheet"
-            href="https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth.css"
-          />
-        </Head>
-        <style jsx global>{`
-          @media print {
-            @page {
-              margin: 2cm 3cm;
-              margin-bottom: 3cm;
+    <FuegoProvider fuego={fuego}>
+      <AuthProvider>
+        <ChakraProvider resetCSS theme={theme}>
+          <Head>
+            <title key="title">Bible Strong App - Lexique Hébreu et Grec</title>
+            <meta
+              key="description"
+              name="description"
+              content="Le projet Bible Strong a pour objectif la mise à disposition d'outils efficaces d'étude de la Bible pour tous ceux qui souhaitent développer et affermir une foi réfléchie en Dieu par sa Parole."
+            />
+            <meta key="og:image" name="og:image" content="/image-fb.jpg" />
+            <meta charSet="utf-8" />
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+            />
+            <link rel="icon" href="/images/icon.png" />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Literata&display=swap"
+              rel="stylesheet"
+            />
+            <link
+              href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&display=swap"
+              rel="stylesheet"
+            />
+            <link
+              type="text/css"
+              rel="stylesheet"
+              href="https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth.css"
+            />
+          </Head>
+          <style jsx global>{`
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Extra Light.otf')
+                format('opentype');
+              font-weight: 200;
             }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Light.otf')
+                format('opentype');
+              font-weight: 300;
+            }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Regular.otf')
+                format('opentype');
+              font-weight: 400;
+            }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Medium.otf')
+                format('opentype');
+              font-weight: 500;
+            }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Semi Bold.otf')
+                format('opentype');
+              font-weight: 600;
+            }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Bold.otf')
+                format('opentype');
+              font-weight: 700;
+            }
+            @font-face {
+              font-display: swap;
+              font-family: 'Pulp-Display';
+              src: url('/fonts/UpType - Pulp Display Extra Bold.otf')
+                format('opentype');
+              font-weight: 800;
+            }
+            @media print {
+              @page {
+                margin: 2cm 3cm;
+                margin-bottom: 3cm;
+              }
 
-            h1 {
-              break-before: always;
-              page-break-before: always;
-            }
+              h1 {
+                break-before: always;
+                page-break-before: always;
+              }
 
-            .references-divider {
-              break-before: always;
-              page-break-before: always;
+              .references-divider {
+                break-before: always;
+                page-break-before: always;
+              }
             }
-          }
-        `}</style>
-        <Component {...pageProps} />
-      </ChakraProvider>
-    </AuthProvider>
+          `}</style>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ChakraProvider>
+      </AuthProvider>
+    </FuegoProvider>
   )
 }
 

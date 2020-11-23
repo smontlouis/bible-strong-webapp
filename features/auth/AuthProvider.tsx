@@ -5,12 +5,12 @@ import {
   createContext,
   PropsWithChildren,
 } from 'react'
-import { auth } from '../../lib/firebase-app'
-import firebase from 'firebase'
+import { User } from '../../common/types'
+import { auth, firestore } from '../../lib/firebase-app'
 
 interface AuthProps {
-  loadingUser: boolean
-  user: any
+  isLoading: boolean
+  user: User | undefined
   signout: () => Promise<void>
   sendPasswordResetEmail: (email: string) => Promise<void>
 }
@@ -27,8 +27,8 @@ export const useAuth = () => {
 }
 
 const useProvideAuth = (): AuthProps => {
-  const [user, setUser] = useState<firebase.User>()
-  const [loadingUser, setLoadingUser] = useState(true)
+  const [user, setUser] = useState<User | undefined>()
+  const [isLoading, setIsLoading] = useState(true)
 
   const signout = async () => {
     await auth.signOut()
@@ -40,21 +40,26 @@ const useProvideAuth = (): AuthProps => {
   }
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
+    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+      if (authUser) {
+        const firestoreUser = await firestore
+          .collection('users')
+          .doc(authUser.uid)
+          .get()
+        const user = firestoreUser.data() as User
         setUser(user)
       } else {
         setUser(undefined)
       }
 
-      setLoadingUser(false)
+      setIsLoading(false)
     })
 
     return () => unsubscribe()
   }, [])
 
   return {
-    loadingUser: loadingUser && !user,
+    isLoading,
     user,
     signout,
     sendPasswordResetEmail,

@@ -6,6 +6,17 @@ import config from '../config'
 
 try {
   firebase.initializeApp(config.firebase)
+
+  firebase
+    .firestore()
+    .enablePersistence()
+    .catch(function (err) {
+      if (err.code == 'failed-precondition') {
+        console.log(err)
+      } else if (err.code == 'unimplemented') {
+        console.log(err)
+      }
+    })
 } catch (error) {
   if (!/already exists/u.test(error.message)) {
     console.error('Firebase admin initialization error', error.stack)

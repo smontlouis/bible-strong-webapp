@@ -14,13 +14,13 @@ module.exports = withPlugins([
   [
     svg,
     {
-      include: path.resolve(__dirname, 'images/svg'),
+      include: path.resolve(__dirname, 'public/images/svg'),
     },
   ],
   [
     images,
     {
-      exclude: path.resolve(__dirname, 'images/svg'),
+      exclude: path.resolve(__dirname, 'public/images/svg'),
     },
   ],
   nextConfig,

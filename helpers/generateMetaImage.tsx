@@ -47,7 +47,7 @@ const generateMetaImage = async (
   title: string,
   username: string
 ) => {
-  registerFont('./public/SF-Pro-Display-Bold.otf', { family: 'SFPro' })
+  registerFont('./public/fonts/SF-Pro-Display-Bold.otf', { family: 'SFPro' })
 
   const canvas = createCanvas(width, height)
   const context = canvas.getContext('2d')
