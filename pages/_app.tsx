@@ -12,6 +12,10 @@ import { Fuego } from '../helpers/fuego'
 
 const fuego = new Fuego(config.firebase)
 
+import '../lib/quill/quill.css'
+import '../lib/quill/strong.css'
+import '../lib/quill/verse.css'
+
 interface Props extends AppProps {
   Component: NextComponentType<NextPageContext, any, {}> & {
     Layout?: ({ children }: PropsWithChildren<{}>) => JSX.Element

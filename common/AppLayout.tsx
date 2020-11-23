@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   const router = useRouter()
   return (
-    <Flex bg="white" minH="100vh">
+    <Flex bg="white" h="100vh">
       <Box w={300} pt="2xl" px="xl">
         <Center>
           <Box as={LogoFull} width={200} height={60} />
@@ -35,9 +35,12 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
         p="2xl"
         d="flex"
         flexDir="column"
+        overflow="auto"
+        pos="relative"
+        className="right-container"
       >
         <AnimatePresence exitBeforeEnter>
-          <Box key={router.pathname} flex={1}>
+          <Box key={router.pathname} flex={1} d="flex" flexDir="column">
             {children}
           </Box>
         </AnimatePresence>
