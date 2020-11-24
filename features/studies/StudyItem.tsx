@@ -73,7 +73,7 @@ const StudyItem = ({
             Il y a{' '}
             {formatDistance(new Date(created_at), new Date(), { locale: fr })}
           </Text>
-          <Menu>
+          <Menu isLazy>
             <MenuButton pos="relative" zIndex={2}>
               <Icon as={FiMoreVertical} fontSize={24} />
             </MenuButton>

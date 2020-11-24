@@ -28,7 +28,7 @@ class ModuleBlockVerse extends Module {
       Quill.sources.API
     )
     this.quill.insertText(cursorPosition + 1, ' ', Quill.sources.API)
-    this.quill.setSelection(cursorPosition + 2, Quill.sources.API)
+    // this.quill.setSelection(cursorPosition + 2, Quill.sources.API)
   }
 
   openStrongBlock = (value) => {

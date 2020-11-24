@@ -11,15 +11,24 @@ class ModuleInlineVerse extends Module {
     this.tooltip = new InlineTooltip(this.quill, this.quill.container)
     this.range = null
 
-    this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
-      if (type === Quill.events.SELECTION_CHANGE) {
+    // this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
+    //   if (type === Quill.events.SELECTION_CHANGE) {
+    //     this.range = range
+    //   }
+    // })
+
+    this.quill.on('selection-change', (range, oldRange, source) => {
+      if (range === null && oldRange !== null) {
+        console.log('on blur, save range', oldRange)
+        this.range = oldRange
+      } else {
         this.range = range
       }
     })
   }
 
   receiveVerseLink = ({ title, verses }) => {
-    this.quill.setSelection(this.range, Quill.sources.SILENT)
+    // this.quill.setSelection(this.range, Quill.sources.SILENT)
 
     // dispatchConsole(`Range: ${JSON.stringify(this.range)}`)
 
@@ -45,11 +54,12 @@ class ModuleInlineVerse extends Module {
   }
 
   receiveStrongLink = ({ title, codeStrong, book }) => {
-    this.quill.setSelection(this.range, Quill.sources.SILENT)
+    // this.quill.setSelection(this.range, Quill.sources.SILENT)
 
     // dispatchConsole(`Receive strong ${title}`)
 
     if (this.range) {
+      console.log(this.range)
       if (this.range.length) {
         this.quill.format('inline-verse', false) // Disable inline-verse in case
         this.quill.format('inline-strong', {

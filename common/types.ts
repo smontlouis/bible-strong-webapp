@@ -90,3 +90,15 @@ export interface Study {
     }
   }
 }
+
+export interface LexiqueHit {
+  Code: number
+  Definition: string
+  Mot: string
+  LSG: string
+  Phonetique: string
+  Grec?: string
+  Hebreu: string
+  Origine: string
+  Type: string
+}

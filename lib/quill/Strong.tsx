@@ -1,17 +1,24 @@
 import React from 'react'
-import ArrowRight from './ArrowRight'
+import { RiCloseLine } from 'react-icons/ri'
 
-const Strong = ({ title, code, phonetique, original }) => (
+interface Props {
+  title: string
+  codeStrong: string
+  phonetique: string
+  original: string
+}
+const Strong = ({ title, codeStrong, phonetique, original }: Props) => (
   <>
     <div className="block-strong--content">
+      <div className="block-strong--original">{original}</div>
       <div className="block-strong--title">{title}</div>
       <div className="block-strong--desc">
-        [{phonetique}] - {code} - {original}
+        [{phonetique}] - {codeStrong}
       </div>
-      <div className="block-strong--arrow">
-        <ArrowRight color="rgb(9,132,227)" />
+
+      <div className="block-delete">
+        <RiCloseLine />
       </div>
-      <div className="block-delete" />
     </div>
   </>
 )

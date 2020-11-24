@@ -1,4 +1,6 @@
 import { extendTheme } from '@chakra-ui/react'
+import button from './theme/button'
+import input from './theme/input'
 import menu from './theme/menu'
 import text from './theme/text'
 
@@ -14,6 +16,8 @@ export const theme = extendTheme({
   components: {
     Text: text,
     Menu: menu,
+    Input: input,
+    Button: button,
   },
   colors: {
     brand: {
@@ -23,6 +27,7 @@ export const theme = extendTheme({
     },
 
     black: 'rgb(0,0,0)',
+    black_050: 'rgb(0,0,0, 0.5)',
     white: 'rgb(255,255,255)',
     border: 'rgb(230,230,230)',
 
@@ -70,41 +75,6 @@ export const theme = extendTheme({
     '3xl': 90,
     '1px': 1,
     '2px': 1,
-  },
-  sizes: {
-    ...Object.fromEntries(
-      [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        12,
-        14,
-        16,
-        20,
-        24,
-        28,
-        32,
-        36,
-        40,
-        44,
-        48,
-        52,
-        56,
-        60,
-        64,
-        72,
-        80,
-        96,
-      ].map((p) => [p, p])
-    ),
   },
   radii: {
     s: 10,

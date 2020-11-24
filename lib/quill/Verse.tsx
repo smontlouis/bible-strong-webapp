@@ -1,5 +1,5 @@
 import React from 'react'
-import ArrowRight from './ArrowRight'
+import { RiCloseLine } from 'react-icons/ri'
 
 const Verse = ({ title, content, version }) => (
   <React.Fragment>
@@ -9,10 +9,9 @@ const Verse = ({ title, content, version }) => (
         <div className="block-verse--verse">{title}</div>
         <div className="block-verse--version">{version}</div>
       </div>
-      <div className="block-verse--arrow">
-        <ArrowRight color="rgba(48, 51, 107,1.0)" />
+      <div className="block-delete">
+        <RiCloseLine />
       </div>
-      <div className="block-delete" />
     </div>
   </React.Fragment>
 )
