@@ -1,7 +1,15 @@
 import React from 'react'
 import { RiCloseLine } from 'react-icons/ri'
 
-const Verse = ({ title, content, version }) => (
+const Verse = ({
+  title,
+  content,
+  version,
+}: {
+  title: string
+  content: string
+  version: string
+}) => (
   <React.Fragment>
     <div className="block-verse--wrapper">
       <div className="block-verse--content">{content}</div>

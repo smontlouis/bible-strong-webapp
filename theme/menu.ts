@@ -1,5 +1,3 @@
-import { mode } from '@chakra-ui/theme-tools'
-
 const parts = ['item', 'command', 'list', 'button', 'groupTitle', 'divider']
 
 function baseStyleList(props: Record<string, any>) {

@@ -16,6 +16,7 @@ const QuillEditor = dynamic(
 
 const EditStudy = () => {
   const { user } = useAuth()
+  console.log(user)
   const router = useRouter()
   const { id } = router.query as { id: string }
 
