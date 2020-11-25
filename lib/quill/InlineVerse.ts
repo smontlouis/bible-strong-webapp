@@ -34,10 +34,10 @@ class InlineVerse extends Inline {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     return {
       title: domNode.getAttribute('data-title'),
-      verses: JSON.parse(domNode.getAttribute('data-verses')),
+      verses: JSON.parse(domNode.getAttribute('data-verses') || ''),
     }
   }
 }

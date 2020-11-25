@@ -11,7 +11,16 @@ class StrongBlock extends Embed {
 
   static className = 'block-strong'
 
-  static create(data) {
+  static create(data: {
+    title: string
+    codeStrong: string
+    strongType: string
+    phonetique: string
+    definition: string
+    translatedBy: string
+    book: string
+    original: string
+  }) {
     const node = super.create(data)
     const {
       title,
@@ -62,14 +71,14 @@ class StrongBlock extends Embed {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     const data = domNode.getAttribute('data')
-    return JSON.parse(data)
+    return JSON.parse(data || '')
   }
 
-  static value(domNode) {
+  static value(domNode: HTMLElement) {
     const data = domNode.getAttribute('data')
-    return JSON.parse(data)
+    return JSON.parse(data || '')
   }
 
   /**
@@ -78,19 +87,21 @@ class StrongBlock extends Embed {
    * It behaves differently than other cases and we need to handle the node
    * removal instead of the `characterData`.
    */
-  update(mutations, context) {
+  update(mutations: any, context: any) {
     // `childList` mutations are not handled on Quill
     // see `update` implementation on:
     // https://github.com/quilljs/quill/blob/master/blots/embed.js
 
-    mutations.forEach((mutation) => {
+    mutations.forEach((mutation: any) => {
       if (mutation.type != 'childList') return
       if (mutation.removedNodes.length == 0) return
 
       setTimeout(() => this._remove(), 0)
     })
 
-    const unhandledMutations = mutations.filter((m) => m.type != 'childList')
+    const unhandledMutations = mutations.filter(
+      (m: any) => m.type != 'childList'
+    )
     super.update(unhandledMutations, context)
   }
 
@@ -98,14 +109,14 @@ class StrongBlock extends Embed {
     // NOTE: call this function as:
     // setTimeout(() => this._remove(), 0);
     // otherwise you'll get the error: "The given range isn't in document."
-    const cursorPosition = quill.getSelection().index - 1
+    const cursorPosition = this.quill.getSelection().index - 1
 
     // see `remove` implementation on:
     // https://github.com/quilljs/parchment/blob/master/src/blot/abstract/shadow.ts
     this.remove()
 
     // schedule cursor positioning after quill is done with whatever has scheduled
-    setTimeout(() => quill.setSelection(cursorPosition, Quill.sources.API), 0)
+    setTimeout(() => this.quill.setSelection(cursorPosition, 'api'), 0)
   }
 }
 

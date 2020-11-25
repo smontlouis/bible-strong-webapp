@@ -44,7 +44,9 @@ export const theme = extendTheme({
     tertiary: 'rgb(98,113,122)',
 
     quart: 'rgb(194,40,57)',
+
     quint: 'rgb(48, 51, 107)',
+    lightQuint: 'rgba(48, 51, 107, 0.1)',
 
     success: '#2ecc71',
     error: '#e74c3c',

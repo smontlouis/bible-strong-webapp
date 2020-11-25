@@ -1,23 +1,21 @@
-import { Quill } from 'react-quill'
+import { Quill, Range } from 'react-quill'
 
 const Tooltip = Quill.import('ui/tooltip')
 const InlineVerseBlot = Quill.import('formats/inline-verse')
 const InlineStrongBlot = Quill.import('formats/inline-strong')
 
 class InlineTooltip extends Tooltip {
-  constructor(quill, boundsContainer) {
+  constructor(quill: typeof Quill, boundsContainer: any) {
     super(quill, boundsContainer)
     this.title = this.root.querySelector('div.ql-preview')
     this.listen()
-
-    console.log('coucou')
   }
 
   listen = () => {
     this.root
       .querySelector('a.ql-remove')
-      .addEventListener('click', (event) => {
-        this.quill.setSelection(...this.linkRange)
+      .addEventListener('click', (event: MouseEvent) => {
+        this.quill.setSelection(...this.linkRange, 'silent')
 
         this.quill.format('inline-verse', false)
         this.quill.format('inline-strong', false)
@@ -28,20 +26,22 @@ class InlineTooltip extends Tooltip {
 
     this.root
       .querySelector('a.ql-action')
-      .addEventListener('click', (event) => {
-        this.quill.setSelection(...this.linkRange)
+      .addEventListener('click', (event: MouseEvent) => {
+        this.quill.focus()
+        this.quill.setSelection(...this.linkRange, 'silent')
 
         if (this.type === 'inline-verse') {
-          console.log('Select bible verse')
         } else {
-          console.log('Select bible strong')
+          window.postMessage({ type: 'SELECT_STRONG_WORD' }, '*')
         }
+
+        event.preventDefault()
       })
 
-    this.quill.on(Quill.events.EDITOR_CHANGE, (type, range) => {
+    this.quill.on('editor-change', (type: string, range: Range) => {
       const isReadOnly = this.quill.container.classList.contains('ql-disabled')
 
-      if (type === Quill.events.SELECTION_CHANGE) {
+      if (type === 'selection-change') {
         if (!range) return
 
         if (isReadOnly) {

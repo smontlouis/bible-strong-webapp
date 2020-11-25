@@ -32,7 +32,7 @@ class InlineStrong extends Inline {
     return node
   }
 
-  static formats(domNode) {
+  static formats(domNode: HTMLElement) {
     return {
       title: domNode.getAttribute('data-title'),
       codeStrong: domNode.getAttribute('data-codeStrong'),

@@ -14,11 +14,17 @@ const SearchLexiqueItem = ({
   return (
     <Box
       p="l"
+      cursor="pointer"
       borderRadius="l"
       bg="white"
       borderWidth={1}
       borderColor="lightGrey"
       mt="s"
+      transition="0.5s ease"
+      _hover={{
+        transform: 'scale(1.02)',
+        boxShadow: ' #5983f033 1px 15px 13px -6px',
+      }}
       onClick={() =>
         onSelect({
           title: hit.Mot,
@@ -31,6 +37,9 @@ const SearchLexiqueItem = ({
     >
       <Flex alignItems="center">
         <Box flex={1}>
+          <Text size="xs" fontWeight={500}>
+            {hit.Hebreu || hit.Grec}
+          </Text>
           <Highlight
             attribute="Mot"
             hit={hit}

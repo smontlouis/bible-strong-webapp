@@ -1,9 +1,9 @@
-import { Quill } from 'react-quill'
+import { Quill, QuillOptions } from 'react-quill'
 
 const Module = Quill.import('core/module')
 
 class ModuleBlockVerse extends Module {
-  constructor(quill, options) {
+  constructor(quill: typeof Quill, options: QuillOptions) {
     super(quill, options)
     this.quill = quill
   }
@@ -12,7 +12,12 @@ class ModuleBlockVerse extends Module {
     console.log('SELECT_BIBLE_VERSE_BLOCK')
   }
 
-  receiveVerseBlock = (data) => {
+  receiveVerseBlock = (data: {
+    title: string
+    content: string
+    version: string
+    verses: string[]
+  }) => {
     console.log(`VERSE RECEIVED: ${JSON.stringify(data)}`)
 
     const { title, content, version, verses } = data
@@ -25,26 +30,31 @@ class ModuleBlockVerse extends Module {
       cursorPosition,
       'block-verse',
       { title, content, version, verses },
-      Quill.sources.API
+      'api'
     )
-    this.quill.insertText(cursorPosition + 1, ' ', Quill.sources.API)
+    this.quill.insertText(cursorPosition + 1, ' ', 'api')
     // this.quill.setSelection(cursorPosition + 2, Quill.sources.API)
   }
 
-  openStrongBlock = (value) => {
-    console.log('SELECT_BIBLE_STRONG_BLOCK')
-  }
-
-  receiveStrongBlock = (data) => {
-    console.log(`STRONG RECEIVED: ${JSON.stringify(data)}`)
+  receiveStrongBlock = (data: {
+    title: string
+    codeStrong: string
+    strongType: string
+    phonetique: string
+    definition: string
+    translatedBy: string
+    book: string
+    original: string
+  }) => {
+    this.quill.focus()
 
     const {
       title,
       codeStrong,
-      strongType,
       phonetique,
-      definition,
-      translatedBy,
+      // strongType,
+      // definition,
+      // translatedBy,
       book,
       original,
     } = data
@@ -57,10 +67,10 @@ class ModuleBlockVerse extends Module {
       cursorPosition,
       'block-strong',
       { title, codeStrong, phonetique, book, original },
-      Quill.sources.API
+      'api'
     )
-    this.quill.insertText(cursorPosition + 1, ' ', Quill.sources.API)
-    this.quill.setSelection(cursorPosition + 2, Quill.sources.API)
+    this.quill.insertText(cursorPosition + 1, ' ', 'api')
+    this.quill.setSelection(cursorPosition + 2, 'api')
   }
 }
 
