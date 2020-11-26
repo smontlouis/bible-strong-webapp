@@ -14,7 +14,7 @@ import '../../lib/quill/DividerBlock'
 
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
-import { Delta, Study } from '../../common/types'
+import { Delta, QuillVerseBlockProps, Study } from '../../common/types'
 import Heading from '../../common/Heading'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -30,11 +30,8 @@ interface Props {
 
 const QuillEditor = ({ id }: Props) => {
   const [value, setValue] = useState<Delta>()
-  const [isSelectStrongOpen, setIsSelectStrongOpen] = useState<
-    'inline' | 'block'
-  >()
-  const [isSelectVerseOpen, setIsSelectVerseOpen] = useState<
-    'inline' | 'block'
+  const [isModalOpen, setIsModalOpen] = useState<
+    'inline-verse' | 'block-verse' | 'inline-strong' | 'block-strong'
   >()
   const editor = useRef<ReactQuill>(null)
 
@@ -47,7 +44,7 @@ const QuillEditor = ({ id }: Props) => {
 
   const receiveMessage = useCallback(({ data }) => {
     if (data.type === 'SELECT_STRONG_WORD') {
-      setIsSelectStrongOpen('inline')
+      setIsModalOpen('inline-strong')
     }
   }, [])
 
@@ -57,7 +54,7 @@ const QuillEditor = ({ id }: Props) => {
       codeStrong,
       book,
     })
-    setIsSelectStrongOpen(undefined)
+    setIsModalOpen(undefined)
   }, [])
 
   const insertBlockStrong = useCallback(
@@ -69,32 +66,32 @@ const QuillEditor = ({ id }: Props) => {
         title,
         codeStrong,
       })
-      setIsSelectStrongOpen(undefined)
+      setIsModalOpen(undefined)
     },
     []
   )
 
-  const insertBlockVerse = useCallback(() => {
-    editor.current
-      ?.getEditor()
-      .getModule('block-verse')
-      .receiveVerseBlock({
-        title: 'test',
-        content: 'test',
-        version: 'LSG',
-        verses: ['2-25-8'],
+  const insertBlockVerse = useCallback(
+    ({ title, verses, version, content }: QuillVerseBlockProps) => {
+      editor.current?.getEditor().getModule('block-verse').receiveVerseBlock({
+        title,
+        content,
+        version,
+        verses,
       })
-  }, [])
+    },
+    []
+  )
 
-  const insertInlineVerse = useCallback(() => {
-    editor.current
-      ?.getEditor()
-      .getModule('inline-verse')
-      .receiveVerseLink({
-        title: 'Test',
-        verses: ['2-25-8'],
+  const insertInlineVerse = useCallback(
+    ({ title, verses }: QuillVerseBlockProps) => {
+      editor.current?.getEditor().getModule('inline-verse').receiveVerseLink({
+        title,
+        verses,
       })
-  }, [])
+    },
+    []
+  )
 
   const insertBlockDivider = useCallback(() => {
     const range = editor.current!.getEditor().getSelection(true)
@@ -109,10 +106,10 @@ const QuillEditor = ({ id }: Props) => {
       toolbar: {
         container: '#toolbar',
         handlers: {
-          bibleVerse: () => setIsSelectVerseOpen('block'),
-          bibleStrong: () => setIsSelectStrongOpen('block'),
-          inlineVerse: () => setIsSelectVerseOpen('inline'),
-          inlineStrong: () => setIsSelectStrongOpen('inline'),
+          bibleVerse: () => setIsModalOpen('block-verse'),
+          bibleStrong: () => setIsModalOpen('block-strong'),
+          inlineVerse: () => setIsModalOpen('inline-verse'),
+          inlineStrong: () => setIsModalOpen('inline-strong'),
           divider: insertBlockDivider,
         },
       },
@@ -122,7 +119,7 @@ const QuillEditor = ({ id }: Props) => {
     []
   )
 
-  const { data, error, loading } = useDocument<Study>(`studies/${id}`, {
+  const { data, error, loading, update } = useDocument<Study>(`studies/${id}`, {
     listen: true,
     onSuccess: (data) => {
       setValue(data?.content)
@@ -162,27 +159,38 @@ const QuillEditor = ({ id }: Props) => {
             ref={editor}
             theme="snow"
             defaultValue={value as DeltaStatic}
-            onChange={() => {}}
+            onChange={() => {
+              const contents = editor.current
+                ?.getEditor()
+                .getContents() as Delta
+              if (contents?.ops.length) {
+                update({
+                  content: {
+                    ops: contents.ops,
+                  },
+                })
+              }
+            }}
             scrollingContainer=".right-container"
             modules={modules}
           />
         </MotionBox>
         <AnimatePresence exitBeforeEnter>
-          {!!isSelectStrongOpen && (
+          {isModalOpen?.endsWith('strong') && (
             <LexiqueSearch
-              onClose={() => setIsSelectStrongOpen(undefined)}
+              onClose={() => setIsModalOpen(undefined)}
               onSelect={
-                isSelectStrongOpen === 'inline'
+                isModalOpen === 'inline-strong'
                   ? insertInlineStrong
                   : insertBlockStrong
               }
             />
           )}
-          {!!isSelectVerseOpen && (
+          {isModalOpen?.endsWith('verse') && (
             <VerseSearch
-              onClose={() => setIsSelectVerseOpen(undefined)}
+              onClose={() => setIsModalOpen(undefined)}
               onSelect={
-                isSelectVerseOpen === 'inline'
+                isModalOpen === 'inline-verse'
                   ? insertInlineVerse
                   : insertBlockVerse
               }

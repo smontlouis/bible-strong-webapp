@@ -47,6 +47,10 @@ export default {
       bg: 'secondary',
       color: 'white',
     },
+    success: {
+      bg: 'success',
+      color: 'white',
+    },
     white: {
       bg: 'white',
       color: 'black',

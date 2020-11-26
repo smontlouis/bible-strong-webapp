@@ -72,6 +72,13 @@ export interface Delta {
   }[]
 }
 
+export interface QuillVerseBlockProps {
+  title: string
+  verses: string[]
+  version: string
+  content: string
+}
+
 export interface Study {
   id: string
   title: string
@@ -101,4 +108,10 @@ export interface LexiqueHit {
   Hebreu: string
   Origine: string
   Type: string
+}
+
+export interface Book {
+  Numero: number
+  Nom: string
+  Chapitres: number
 }

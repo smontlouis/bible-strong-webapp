@@ -12,7 +12,7 @@ const Toolbar = () => {
           defaultValue={''}
           onChange={(e) => e.persist()}
         >
-          <option selected />
+          <option />
           <option value="1" />
           <option value="2" />
         </select>
