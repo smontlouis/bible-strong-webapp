@@ -10,7 +10,9 @@ import {
   Box,
   Center,
   Tooltip,
+  useToast,
 } from '@chakra-ui/react'
+import copy from 'copy-to-clipboard'
 import formatDistance from 'date-fns/formatDistance'
 import { Study } from '../../common/types'
 import deltaToPlainText from '../../helpers/deltaToPlainText'
@@ -19,13 +21,19 @@ import truncate from '../../helpers/truncate'
 import { fr } from 'date-fns/locale'
 import TagList from '../../common/TagList'
 import MotionBox from '../../common/MotionBox'
-import { FiMoreVertical } from 'react-icons/fi'
+import { FiCopy, FiExternalLink, FiLink2, FiMoreVertical } from 'react-icons/fi'
+import { MdPictureAsPdf } from 'react-icons/md'
 import { AiOutlineLink } from 'react-icons/ai'
-import React from 'react'
+import React, { useState } from 'react'
 import NextLink from 'next/link'
+import { RiDeleteBinLine } from 'react-icons/ri'
+import { useRouter } from 'next/router'
+import getPDFStudy from '../../helpers/getPDFStudy'
 
 interface Props {
   study: Study
+  onDelete: (id: string) => void
+  onPublish: (id: string, value: boolean) => void
 }
 
 const variants = {
@@ -48,9 +56,16 @@ const variants = {
 
 const StudyItem = ({
   study: { id, created_at, title, content, tags, published },
+  onDelete,
+  onPublish,
 }: Props) => {
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const router = useRouter()
+  const toast = useToast()
+  const [isPDFLoading, setPDFLoading] = useState(false)
   return (
     <MotionBox
+      layout
       borderRadius="l"
       bg="white"
       variants={variants}
@@ -73,18 +88,116 @@ const StudyItem = ({
             Il y a{' '}
             {formatDistance(new Date(created_at), new Date(), { locale: fr })}
           </Text>
-          <Menu isLazy>
+          <Menu isLazy closeOnSelect={false}>
             <MenuButton pos="relative" zIndex={2}>
               <Icon as={FiMoreVertical} fontSize={24} />
             </MenuButton>
             <Portal>
               <MenuList>
-                <MenuItem>Publier l'étude</MenuItem>
-                <MenuItem>Ouvrir le lien</MenuItem>
-                <MenuItem>Copier le lien</MenuItem>
-                <MenuItem>Partager</MenuItem>
-                <MenuItem>Exporter en pdf</MenuItem>
-                <MenuItem>Supprimer</MenuItem>
+                {published ? (
+                  <>
+                    <MenuItem onClick={() => onPublish(id, false)}>
+                      <Center
+                        bg="lightGrey"
+                        borderRadius="full"
+                        w={33}
+                        h={33}
+                        mr="s"
+                      >
+                        <Box as={FiLink2} color="success" fontSize="16px" />
+                      </Center>
+                      Dépublier l'étude
+                    </MenuItem>
+                    <MenuItem as="a" target="_blank" href={`studies/${id}`}>
+                      <Center
+                        bg="lightGrey"
+                        borderRadius="full"
+                        w={33}
+                        h={33}
+                        mr="s"
+                      >
+                        <Box as={FiExternalLink} color="grey" fontSize="16px" />
+                      </Center>
+                      Ouvrir le lien
+                    </MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        console.log(router)
+                        copy(
+                          `${document.location.host}${router.pathname}/${id}`
+                        )
+                        toast({
+                          title: 'Lien copié',
+                        })
+                      }}
+                    >
+                      <Center
+                        bg="lightGrey"
+                        borderRadius="full"
+                        w={33}
+                        h={33}
+                        mr="s"
+                      >
+                        <Box as={FiCopy} color="grey" fontSize="16px" />
+                      </Center>
+                      Copier le lien
+                    </MenuItem>
+                    <MenuItem
+                      onClick={async () => {
+                        setPDFLoading(true)
+                        await getPDFStudy(id, title)
+                        setPDFLoading(false)
+                      }}
+                      isDisabled={isPDFLoading}
+                    >
+                      <Center
+                        bg="lightGrey"
+                        borderRadius="full"
+                        w={33}
+                        h={33}
+                        mr="s"
+                      >
+                        <Box as={MdPictureAsPdf} color="grey" fontSize="16px" />
+                      </Center>
+                      {isPDFLoading ? 'Génération...' : 'Exporter en pdf'}
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem onClick={() => onPublish(id, true)}>
+                    <Center
+                      bg="lightGrey"
+                      borderRadius="full"
+                      w={33}
+                      h={33}
+                      mr="s"
+                    >
+                      <Box as={FiLink2} color="grey" fontSize="16px" />
+                    </Center>
+                    Publier l'étude
+                  </MenuItem>
+                )}
+                <MenuItem
+                  color="error"
+                  onClick={(e) => {
+                    if (confirmDelete) {
+                      onDelete(id)
+                    } else {
+                      setConfirmDelete(true)
+                      e.preventDefault()
+                    }
+                  }}
+                >
+                  <Center
+                    bg="lightGrey"
+                    borderRadius="full"
+                    w={33}
+                    h={33}
+                    mr="s"
+                  >
+                    <Box as={RiDeleteBinLine} color="error" fontSize="16px" />
+                  </Center>
+                  {confirmDelete ? 'Êtes-vous sur ?' : 'Supprimer'}
+                </MenuItem>
               </MenuList>
             </Portal>
           </Menu>
@@ -92,7 +205,7 @@ const StudyItem = ({
         <Text variant="medium" size="xl" color="primary" mt="s">
           {title}
         </Text>
-        <Text mt="m">{truncate(deltaToPlainText(content.ops), 80)}</Text>
+        <Text mt="m">{truncate(deltaToPlainText(content?.ops) || '', 80)}</Text>
         <TagList limit={2} tags={tags} />
       </Box>
       {published ? (

@@ -1,7 +1,7 @@
 import { Delta } from '../common/types'
 
-export default (delta: Delta['ops']) =>
-  delta.reduce((text, op) => {
+export default (delta?: Delta['ops']) =>
+  delta?.reduce((text, op) => {
     if (!op.insert) {
       return `${text} `
     }

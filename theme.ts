@@ -2,6 +2,7 @@ import { extendTheme } from '@chakra-ui/react'
 import button from './theme/button'
 import input from './theme/input'
 import menu from './theme/menu'
+import select from './theme/select'
 import text from './theme/text'
 
 const breakpoints: { [x: string]: string } = {
@@ -9,6 +10,7 @@ const breakpoints: { [x: string]: string } = {
   md: '48em',
   lg: '62em',
   xl: '80em',
+  xxl: '90em',
 }
 
 export const theme = extendTheme({
@@ -18,7 +20,9 @@ export const theme = extendTheme({
     Menu: menu,
     Input: input,
     Button: button,
+    Select: select,
   },
+  breakpoints,
   colors: {
     brand: {
       900: '#1a365d',
@@ -66,6 +70,7 @@ export const theme = extendTheme({
     md: `@media (min-width: ${breakpoints[1]})`,
     lg: `@media (min-width: ${breakpoints[2]})`,
     xl: `@media (min-width: ${breakpoints[3]})`,
+    xxl: `@media (min-width: ${breakpoints[4]})`,
   },
   space: {
     xs: 4,

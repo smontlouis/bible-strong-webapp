@@ -83,7 +83,8 @@ export interface Study {
   id: string
   title: string
   created_at: number
-  content: Delta
+  modified_at: number
+  content?: Delta
   published?: boolean
   user: {
     displayName: string

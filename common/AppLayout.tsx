@@ -10,9 +10,14 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   const router = useRouter()
   return (
     <Flex bg="white" h="100vh">
-      <Box w={300} pt="2xl" px="xl">
+      <Box
+        d={{ base: 'none', xl: 'block' }}
+        width={{ base: '240px', xxl: '300px' }}
+        pt="2xl"
+        px="l"
+      >
         <Center>
-          <Box as={LogoFull} width={200} height={60} />
+          <Box as={LogoFull} width="200px" height="60px" />
         </Center>
         <AnimateSharedLayout>
           <Box mt="xl">

@@ -14,7 +14,9 @@ const NavLink = ({
   href?: string
 }>) => {
   const router = useRouter()
-  const active = router.asPath === href
+  const active = href && router.asPath.startsWith(href)
+
+  console.log(router.asPath, href)
 
   const component = (
     <Flex

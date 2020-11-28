@@ -1,6 +1,6 @@
 import ReactQuill from 'react-quill'
 import { DeltaStatic } from 'quill'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, Text } from '@chakra-ui/react'
 import { useDocument } from '@nandorojo/swr-firestore'
 
 import '../../lib/quill/InlineVerse'
@@ -23,6 +23,8 @@ import LexiqueSearch from '../lexique/LexiqueSearch'
 import { AnimatePresence, AnimateSharedLayout } from 'framer-motion'
 import MotionBox from '../../common/MotionBox'
 import VerseSearch from '../bible/VerseSearch'
+import debounce from '../../helpers/debounce'
+import GoBackArrow from '../../common/GoBackArrow'
 
 interface Props {
   id: string
@@ -126,12 +128,36 @@ const QuillEditor = ({ id }: Props) => {
     },
   })
 
+  const onChange = debounce(() => {
+    const contents = editor.current?.getEditor().getContents() as Delta
+    if (contents?.ops.length) {
+      update({
+        content: {
+          ops: contents.ops,
+        },
+        modified_at: Date.now(),
+      })
+    }
+  }, 500)
+
+  const onChangeTitle = debounce((e: any) => {
+    update({
+      title: e.target.value,
+      modified_at: Date.now(),
+    })
+  }, 500)
+
   if (error) {
     return <Error />
   }
 
-  if (loading || !value) {
+  if (loading) {
     return <Loading />
+  }
+
+  // CHECK IF USER CAN EDIT STUDY
+  if (!data?.exists) {
+    return <div>404</div>
   }
 
   return (
@@ -139,11 +165,24 @@ const QuillEditor = ({ id }: Props) => {
       <Flex>
         <MotionBox layout>
           <Box position="sticky" top={0} zIndex={10} maxW={700}>
-            <Box pos="relative" zIndex={1}>
-              <Heading mb="l" size="3xl">
-                {data?.title}
-              </Heading>
-            </Box>
+            <Flex>
+              <GoBackArrow pos="relative" zIndex={1} mr="m" mt="m" />
+              <Box pos="relative" zIndex={1} alignItems="center" mb="l">
+                <Heading
+                  size="3xl"
+                  as="input"
+                  defaultValue={data?.title}
+                  onChange={onChangeTitle}
+                  bg="rgba(0,0,0,0.03)"
+                  py="s"
+                  px="m"
+                  borderRadius="m"
+                />
+                <Text mt="xs" color="grey" size="s">
+                  Éditer le titre en cliquant dessus.
+                </Text>
+              </Box>
+            </Flex>
             <Box
               pos="absolute"
               top={-20}
@@ -159,19 +198,9 @@ const QuillEditor = ({ id }: Props) => {
             ref={editor}
             theme="snow"
             defaultValue={value as DeltaStatic}
-            onChange={() => {
-              const contents = editor.current
-                ?.getEditor()
-                .getContents() as Delta
-              if (contents?.ops.length) {
-                update({
-                  content: {
-                    ops: contents.ops,
-                  },
-                })
-              }
-            }}
+            onChange={onChange}
             scrollingContainer=".right-container"
+            placeholder="Prenez une grande respiration, et commencez votre étude ici..."
             modules={modules}
           />
         </MotionBox>

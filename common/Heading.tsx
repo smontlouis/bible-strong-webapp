@@ -1,7 +1,7 @@
 import { Text, TextProps } from '@chakra-ui/react'
 import MotionBox from './MotionBox'
 
-const variants = {
+export const headingVariants = {
   initial: {
     opacity: 0,
     x: -5,
@@ -21,7 +21,7 @@ const variants = {
 
 const Heading = (props: TextProps) => {
   return (
-    <MotionBox variants={variants}>
+    <MotionBox variants={headingVariants}>
       <Text variant="medium" size="3xl" {...props} />
     </MotionBox>
   )

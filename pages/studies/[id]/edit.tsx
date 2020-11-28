@@ -3,7 +3,6 @@ import React from 'react'
 import AppLayout from '../../../common/AppLayout'
 
 import MotionBox from '../../../common/MotionBox'
-import { useAuth } from '../../../features/auth/AuthProvider'
 import waitForAuth from '../../../features/auth/WaitForAuth'
 import withAuth from '../../../features/auth/WithAuth'
 import compose from '../../../helpers/compose'
@@ -15,8 +14,6 @@ const QuillEditor = dynamic(
 )
 
 const EditStudy = () => {
-  const { user } = useAuth()
-  console.log(user)
   const router = useRouter()
   const { id } = router.query as { id: string }
 
