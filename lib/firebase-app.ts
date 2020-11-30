@@ -29,6 +29,7 @@ export const firestore = firebase.firestore()
 export const uiConfig = {
   signInSuccessUrl: 'dashboard',
   signInOptions: [
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
     firebase.auth.EmailAuthProvider.PROVIDER_ID,
