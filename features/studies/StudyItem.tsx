@@ -11,6 +11,8 @@ import {
   Center,
   Tooltip,
   useToast,
+  SystemStyleObject,
+  HStack,
 } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import formatDistance from 'date-fns/formatDistance'
@@ -27,6 +29,7 @@ import { AiOutlineLink } from 'react-icons/ai'
 import React, { useState } from 'react'
 import NextLink from 'next/link'
 import { RiDeleteBinLine } from 'react-icons/ri'
+import { FiTag } from 'react-icons/fi'
 import { useRouter } from 'next/router'
 import getPDFStudy from '../../helpers/getPDFStudy'
 
@@ -55,7 +58,7 @@ const variants = {
 }
 
 const StudyItem = ({
-  study: { id, created_at, title, content, tags, published },
+  study: { id, modified_at, title, content, tags, published },
   onDelete,
   onPublish,
 }: Props) => {
@@ -70,7 +73,10 @@ const StudyItem = ({
       bg="white"
       variants={variants}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
+      borderColor="lightGrey"
+      borderWidth={1}
       boxShadow="rgba(89, 131, 240, 0) 1px 0px 36px -27px"
+      minH="250px"
       whileHover={{
         scale: 1.05,
         boxShadow: 'rgba(89, 131, 240, 0.3) 1px 47px 36px -27px',
@@ -82,11 +88,11 @@ const StudyItem = ({
       <NextLink href={`/studies/${id}/edit`} passHref>
         <Box as="a" {...absoluteFill} zIndex={1} borderRadius="l" />
       </NextLink>
-      <Box p="l">
+      <Box p="l" d="flex" flex={1} flexDir="column">
         <Flex alignItems="center">
           <Text color="grey" size="s" flex={1}>
             Il y a{' '}
-            {formatDistance(new Date(created_at), new Date(), { locale: fr })}
+            {formatDistance(new Date(modified_at), new Date(), { locale: fr })}
           </Text>
           <Menu isLazy closeOnSelect={false}>
             <MenuButton pos="relative" zIndex={2}>
@@ -202,14 +208,44 @@ const StudyItem = ({
             </Portal>
           </Menu>
         </Flex>
-        <Text variant="medium" size="xl" color="primary" mt="s">
+        <Text variant="medium" size="l" color="primary" mt="s">
           {title}
         </Text>
-        <Text mt="m">{truncate(deltaToPlainText(content?.ops) || '', 80)}</Text>
-        <TagList limit={2} tags={tags} />
+        <Text
+          mt="s"
+          sx={{
+            display: '-webkit-box',
+            WebkitLineClamp: '3' as SystemStyleObject,
+            WebkitBoxOrient: 'vertical' as SystemStyleObject,
+            overflow: 'hidden',
+          }}
+        >
+          {truncate(deltaToPlainText(content?.ops) || '', 80)}
+        </Text>
       </Box>
-      {published ? (
-        <Flex mt="auto" justifyContent="flex-end" pb="m" px="m">
+      <HStack mt="auto" justifyContent="flex-end" pb="m" px="m">
+        {Object.values(tags || {}).length && (
+          <Tooltip
+            maxW={200}
+            borderRadius="m"
+            bg="white"
+            placement="right"
+            label={<TagList limit={3} tags={tags} />}
+            aria-label="Étude publiée"
+          >
+            <Center
+              bg="lightGrey"
+              w={35}
+              h={35}
+              borderRadius="full"
+              pos="relative"
+              zIndex={2}
+            >
+              <Icon color="primary" as={FiTag} fontSize={18} />
+            </Center>
+          </Tooltip>
+        )}
+        {published && (
           <Tooltip
             placement="right"
             label="Étude publiée"
@@ -217,7 +253,8 @@ const StudyItem = ({
           >
             <Center
               bg="primary"
-              p="s"
+              w={35}
+              h={35}
               borderRadius="full"
               pos="relative"
               zIndex={2}
@@ -225,13 +262,11 @@ const StudyItem = ({
               href={`/studies/${id}`}
               target="_blank"
             >
-              <Icon color="white" as={AiOutlineLink} fontSize={22} />
+              <Icon color="white" as={AiOutlineLink} fontSize={18} />
             </Center>
           </Tooltip>
-        </Flex>
-      ) : (
-        <></>
-      )}
+        )}
+      </HStack>
     </MotionBox>
   )
 }

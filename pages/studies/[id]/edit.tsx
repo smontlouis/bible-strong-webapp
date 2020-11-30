@@ -3,8 +3,8 @@ import React from 'react'
 import AppLayout from '../../../common/AppLayout'
 
 import MotionBox from '../../../common/MotionBox'
-import waitForAuth from '../../../features/auth/WaitForAuth'
-import withAuth from '../../../features/auth/WithAuth'
+import waitForAuth from '../../../features/auth/waitForAuth'
+import withAuth from '../../../features/auth/withAuth'
 import compose from '../../../helpers/compose'
 import dynamic from 'next/dynamic'
 

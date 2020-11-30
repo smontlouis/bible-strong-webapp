@@ -1,6 +1,6 @@
 import ReactQuill from 'react-quill'
 import { DeltaStatic } from 'quill'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import { useDocument } from '@nandorojo/swr-firestore'
 
 import '../../lib/quill/InlineVerse'
@@ -15,7 +15,6 @@ import '../../lib/quill/DividerBlock'
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
 import { Delta, QuillVerseBlockProps, Study } from '../../common/types'
-import Heading from '../../common/Heading'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Toolbar from '../../lib/quill/Toolbar'
@@ -24,7 +23,8 @@ import { AnimatePresence, AnimateSharedLayout } from 'framer-motion'
 import MotionBox from '../../common/MotionBox'
 import VerseSearch from '../bible/VerseSearch'
 import debounce from '../../helpers/debounce'
-import GoBackArrow from '../../common/GoBackArrow'
+import useGlobalStore from '../../lib/store/global'
+import EditableHeader from './EditableHeader'
 
 interface Props {
   id: string
@@ -32,6 +32,11 @@ interface Props {
 
 const QuillEditor = ({ id }: Props) => {
   const [value, setValue] = useState<Delta>()
+  const { fullscreen, setFullscreen } = useGlobalStore((state) => ({
+    fullscreen: state.fullscreen,
+    setFullscreen: state.setFullscreen,
+  }))
+
   const [isModalOpen, setIsModalOpen] = useState<
     'inline-verse' | 'block-verse' | 'inline-strong' | 'block-strong'
   >()
@@ -124,7 +129,7 @@ const QuillEditor = ({ id }: Props) => {
   const { data, error, loading, update } = useDocument<Study>(`studies/${id}`, {
     listen: true,
     onSuccess: (data) => {
-      setValue(data?.content)
+      setValue(data?.content || { ops: [] })
     },
   })
 
@@ -151,7 +156,7 @@ const QuillEditor = ({ id }: Props) => {
     return <Error />
   }
 
-  if (loading) {
+  if (loading || !value) {
     return <Loading />
   }
 
@@ -162,37 +167,29 @@ const QuillEditor = ({ id }: Props) => {
 
   return (
     <AnimateSharedLayout>
+      <Box position="sticky" top={0} zIndex={10}>
+        <EditableHeader
+          fullscreen={fullscreen}
+          id={id}
+          title={data.title}
+          onChangeTitle={onChangeTitle}
+          tags={data.tags}
+          setFullscreen={setFullscreen}
+        />
+      </Box>
       <Flex>
-        <MotionBox layout>
-          <Box position="sticky" top={0} zIndex={10} maxW={700}>
-            <Flex>
-              <GoBackArrow pos="relative" zIndex={1} mr="m" mt="m" />
-              <Box pos="relative" zIndex={1} alignItems="center" mb="l">
-                <Heading
-                  size="3xl"
-                  as="input"
-                  defaultValue={data?.title}
-                  onChange={onChangeTitle}
-                  bg="rgba(0,0,0,0.03)"
-                  py="s"
-                  px="m"
-                  borderRadius="m"
-                />
-                <Text mt="xs" color="grey" size="s">
-                  Éditer le titre en cliquant dessus.
-                </Text>
-              </Box>
-            </Flex>
+        <MotionBox>
+          <Box position="sticky" top="110px" zIndex={9} maxW={700}>
+            <Toolbar />
             <Box
               pos="absolute"
-              top={-20}
+              top={-170}
               right={-5}
               left={-10}
-              height={220}
+              height={225}
               bg="linear-gradient(#F4F7FF 84%, #f4f7ff00 100%)"
               zIndex={0}
             />
-            <Toolbar />
           </Box>
           <ReactQuill
             ref={editor}

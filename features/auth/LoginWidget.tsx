@@ -3,7 +3,7 @@ import firebase from 'firebase/app'
 import * as firebaseui from '../../lib/firebaseui_fr'
 import { uiConfig } from '../../lib/firebase-app'
 
-const Login = () => {
+const LoginWidget = () => {
   useEffect(() => {
     const firebaseLoginUI =
       //@ts-ignore
@@ -15,4 +15,4 @@ const Login = () => {
   return <div id="firebaseui-auth-container"></div>
 }
 
-export default Login
+export default LoginWidget

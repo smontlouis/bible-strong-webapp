@@ -1,6 +1,6 @@
 import { Delta } from '../common/types'
 
-export default (delta?: Delta['ops']) =>
+const deltaToPlainText = (delta?: Delta['ops']) =>
   delta?.reduce((text, op) => {
     if (!op.insert) {
       return `${text} `
@@ -10,3 +10,5 @@ export default (delta?: Delta['ops']) =>
     }
     return text + op.insert
   }, '')
+
+export default deltaToPlainText

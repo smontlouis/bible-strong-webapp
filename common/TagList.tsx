@@ -4,9 +4,9 @@ import { Study } from './types'
 
 interface Props {
   tags: Study['tags']
-  limit: number
+  limit?: number
 }
-const TagList = ({ tags, limit }: Props) => {
+const TagList = ({ tags, limit = 5 }: Props) => {
   if (!tags || !Object.values(tags).length) {
     return null
   }
@@ -32,7 +32,7 @@ const TagList = ({ tags, limit }: Props) => {
           </Text>
         </Box>
       ))}
-      {!!(Object.values(tags).length - limit) && (
+      {!!(Object.values(tags).length - limit > 0) && (
         <Text ml="s" size="s" color="primary">
           + {Object.values(tags).length - limit}
         </Text>

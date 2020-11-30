@@ -4,6 +4,8 @@ import {
   useContext,
   createContext,
   PropsWithChildren,
+  SetStateAction,
+  Dispatch,
 } from 'react'
 import { User } from '../../common/types'
 import { auth, firestore } from '../../lib/firebase-app'
@@ -11,6 +13,7 @@ import { auth, firestore } from '../../lib/firebase-app'
 interface AuthProps {
   isLoading: boolean
   user: User | undefined
+  setUser: Dispatch<SetStateAction<User | undefined>>
   signout: () => Promise<void>
   sendPasswordResetEmail: (email: string) => Promise<void>
 }
@@ -61,6 +64,7 @@ const useProvideAuth = (): AuthProps => {
   return {
     isLoading,
     user,
+    setUser,
     signout,
     sendPasswordResetEmail,
   }

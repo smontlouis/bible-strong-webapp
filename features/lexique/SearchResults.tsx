@@ -43,7 +43,7 @@ const InfiniteHits = ({
   }
 
   return (
-    <Box height="70vh" overflow="auto" p="l" borderRadius="l">
+    <Box height="60vh" overflow="auto" p="l" borderRadius="l">
       <Box
         // @ts-ignore
         ref={infiniteRef}

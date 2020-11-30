@@ -37,7 +37,7 @@ const LexiqueSearch = ({
       >
         <Box
           position="sticky"
-          top={0}
+          top={100}
           display="flex"
           flexDir="column"
           bg="white"

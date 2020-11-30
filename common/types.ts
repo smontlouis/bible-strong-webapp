@@ -33,10 +33,9 @@ export interface User {
       }
     }
     notes: {}
-    studies: {
-      [x: string]: Study
+    tags?: {
+      [x: string]: FullTag
     }
-    tags: {}
     history: any[]
     strongsHebreu: {}
     strongsGrec: {}
@@ -92,11 +91,26 @@ export interface Study {
     photoUrl: string
   }
   tags?: {
-    [x: string]: {
-      id: string
-      name: string
-    }
+    [x: string]: Tag
   }
+}
+
+export interface FullTag {
+  date: number
+  id: string
+  name: string
+  studies?: { [x: string]: true }
+  highlights?: { [x: string]: true }
+  notes?: { [x: string]: true }
+  naves?: { [x: string]: true }
+  strongsGrec?: { [x: string]: true }
+  strongsHebreu?: { [x: string]: true }
+  words?: { [x: string]: true }
+}
+
+export interface Tag {
+  id: string
+  name: string
 }
 
 export interface LexiqueHit {
