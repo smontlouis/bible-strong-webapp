@@ -7,7 +7,7 @@ import {
   SetStateAction,
   Dispatch,
 } from 'react'
-import { User } from '../../common/types'
+import { User, UserRecord } from '../../common/types'
 import { auth, firestore } from '../../lib/firebase-app'
 
 interface AuthProps {
@@ -45,11 +45,35 @@ const useProvideAuth = (): AuthProps => {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
       if (authUser) {
-        const firestoreUser = await firestore
-          .collection('users')
-          .doc(authUser.uid)
-          .get()
-        const user = firestoreUser.data() as User
+        const userDoc = firestore.collection('users').doc(authUser.uid)
+
+        let firestoreUser = await userDoc.get()
+        let user = firestoreUser.data() as User
+
+        const profile = {
+          id: authUser.uid,
+          email: authUser.email,
+          ...(authUser?.providerData[0]?.displayName && {
+            displayName: authUser.providerData[0].displayName,
+          }),
+          photoURL: authUser.providerData[0]?.photoURL,
+          provider: authUser.providerData[0]?.providerId,
+          lastSeen: Date.now(),
+        }
+
+        if (user) {
+          console.log('acount update')
+          await userDoc.update(profile)
+        } else {
+          console.log('acount set')
+          await userDoc.set({ ...UserRecord, ...profile })
+        }
+
+        firestoreUser = await userDoc.get()
+        user = firestoreUser.data() as User
+
+        console.log(user)
+
         setUser(user)
       } else {
         setUser(undefined)

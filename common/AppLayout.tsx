@@ -14,6 +14,9 @@ import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
 import useGlobalStore from '../lib/store/global'
 import { Nav } from './Nav'
+import compose from '../helpers/compose'
+import withAuth from '../features/auth/withAuth'
+import waitForAuth from '../features/auth/waitForAuth'
 
 const useFullscreen = (fullscreen: boolean) => {
   useEffect(() => {
@@ -78,7 +81,7 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
         )}
         <Box
           flex={1}
-          bg="lightGrey"
+          bg={fullscreen ? 'white' : 'lightGrey'}
           // m="l"
           // borderRadius="xl"
           p="2xl"
@@ -118,4 +121,7 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   )
 }
 
-export default AppLayout
+const AppLayoutEnhanced = compose(withAuth, waitForAuth)(AppLayout)
+AppLayoutEnhanced.Layout = AppLayout
+
+export default AppLayoutEnhanced

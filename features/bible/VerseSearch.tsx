@@ -99,6 +99,9 @@ const VerseSearch = ({
         height="70vh"
         overflowY="auto"
         overflowX="hidden"
+        borderColor="lightGrey"
+        borderWidth={1}
+        boxShadow=" #5983f033 1px 15px 13px -6px"
       >
         <AnimatePresence initial={false} custom={direction}>
           {page === 0 && (

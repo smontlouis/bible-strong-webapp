@@ -16,8 +16,6 @@ const NavLink = ({
   const router = useRouter()
   const active = href && router.asPath.startsWith(href)
 
-  console.log(router.asPath, href)
-
   const component = (
     <Flex
       alignItems="center"

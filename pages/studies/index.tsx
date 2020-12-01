@@ -85,8 +85,8 @@ const Studies = () => {
       exit="exit"
       transition={{ duration: 0.5, ease: 'easeOut' }}
       variants={{
-        enter: { transition: { staggerChildren: 0.1 } },
-        exit: { transition: { staggerChildren: 0.1 } },
+        enter: { transition: { staggerChildren: 0.05 } },
+        exit: { transition: { staggerChildren: 0.05 } },
       }}
     >
       <Flex alignItems="center">
@@ -97,7 +97,7 @@ const Studies = () => {
           <Select
             value={selectedTag}
             onChange={(v) => setSelectedTag(v.target.value)}
-            placeholder="Filter piar tag"
+            placeholder="Filter par tag"
           >
             {Object.values(user?.bible.tags || {}).map((tag: any) => (
               <option key={tag.id} value={tag.id}>

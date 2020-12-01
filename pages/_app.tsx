@@ -15,6 +15,7 @@ const fuego = new Fuego(config.firebase)
 import '../lib/quill/quill.css'
 import '../lib/quill/strong.css'
 import '../lib/quill/verse.css'
+import '../lib/firebase-ui-auth.css'
 
 interface Props extends AppProps {
   Component: NextComponentType<NextPageContext, any, {}> & {
@@ -48,15 +49,6 @@ const App = ({ Component, pageProps }: Props) => {
             <link
               href="https://fonts.googleapis.com/css2?family=Literata&display=swap"
               rel="stylesheet"
-            />
-            <link
-              href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@800&display=swap"
-              rel="stylesheet"
-            />
-            <link
-              type="text/css"
-              rel="stylesheet"
-              href="https://www.gstatic.com/firebasejs/ui/4.5.1/firebase-ui-auth.css"
             />
           </Head>
           <style jsx global>{`

@@ -1,7 +1,8 @@
 import ReactQuill from 'react-quill'
 import { DeltaStatic } from 'quill'
-import { Box, Flex } from '@chakra-ui/react'
+import { Box, Flex, useToast } from '@chakra-ui/react'
 import { useDocument } from '@nandorojo/swr-firestore'
+import { v4 as uuidv4 } from 'uuid'
 
 import '../../lib/quill/InlineVerse'
 import '../../lib/quill/InlineStrong'
@@ -14,7 +15,12 @@ import '../../lib/quill/DividerBlock'
 
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
-import { Delta, QuillVerseBlockProps, Study } from '../../common/types'
+import {
+  Delta,
+  HistoryItem,
+  QuillVerseBlockProps,
+  Study,
+} from '../../common/types'
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Toolbar from '../../lib/quill/Toolbar'
@@ -36,6 +42,7 @@ const QuillEditor = ({ id }: Props) => {
     fullscreen: state.fullscreen,
     setFullscreen: state.setFullscreen,
   }))
+  const toast = useToast()
 
   const [isModalOpen, setIsModalOpen] = useState<
     'inline-verse' | 'block-verse' | 'inline-strong' | 'block-strong'
@@ -134,12 +141,27 @@ const QuillEditor = ({ id }: Props) => {
   })
 
   const onChange = debounce(() => {
-    const contents = editor.current?.getEditor().getContents() as Delta
-    if (contents?.ops.length) {
+    const content = editor.current?.getEditor().getContents() as Delta
+    if (content?.ops.length) {
+      const has5minutes =
+        Date.now() > (data?.history?.[0]?.modified_at! + 5 * 60000 || 0)
+
+      const history = JSON.parse(
+        JSON.stringify(
+          [
+            ...(has5minutes
+              ? [{ id: uuidv4(), modified_at: Date.now(), content }]
+              : []),
+            ...(data?.history || []),
+          ].slice(0, 10)
+        )
+      )
+
       update({
         content: {
-          ops: contents.ops,
+          ops: content.ops,
         },
+        history,
         modified_at: Date.now(),
       })
     }
@@ -151,6 +173,16 @@ const QuillEditor = ({ id }: Props) => {
       modified_at: Date.now(),
     })
   }, 500)
+
+  const gradientColor = fullscreen ? 'white' : '#F4F7FF'
+
+  const onRestoreVersion = (item: HistoryItem) => {
+    editor.current?.getEditor().setContents(item.content as DeltaStatic)
+    toast({
+      title: 'Version restaurée',
+      status: 'success',
+    })
+  }
 
   if (error) {
     return <Error />
@@ -174,11 +206,13 @@ const QuillEditor = ({ id }: Props) => {
           title={data.title}
           onChangeTitle={onChangeTitle}
           tags={data.tags}
+          history={data.history}
           setFullscreen={setFullscreen}
+          onRestoreVersion={onRestoreVersion}
         />
       </Box>
-      <Flex>
-        <MotionBox>
+      <Flex margin={fullscreen ? '0 auto' : 0}>
+        <MotionBox layout>
           <Box position="sticky" top="110px" zIndex={9} maxW={700}>
             <Toolbar />
             <Box
@@ -187,7 +221,7 @@ const QuillEditor = ({ id }: Props) => {
               right={-5}
               left={-10}
               height={225}
-              bg="linear-gradient(#F4F7FF 84%, #f4f7ff00 100%)"
+              bg={`linear-gradient(${gradientColor} 84%, #f4f7ff00 100%)`}
               zIndex={0}
             />
           </Box>

@@ -1,3 +1,29 @@
+export const UserRecord = {
+  bible: {
+    highlights: {},
+    notes: {},
+    tags: {},
+    history: [],
+    strongsHebreu: {},
+    strongsGrec: {},
+    words: {},
+    naves: {},
+    settings: {
+      alignContent: 'justify',
+      fontSizeScale: 0,
+      textDisplay: 'inline',
+      theme: 'default',
+      press: 'longPress',
+      notesDisplay: 'inline',
+      commentsDisplay: false,
+      colors: {},
+      compare: {
+        ['LSG']: true,
+      },
+    },
+  },
+}
+
 export interface User {
   id: string
   email: string
@@ -78,12 +104,18 @@ export interface QuillVerseBlockProps {
   content: string
 }
 
+export interface HistoryItem {
+  id: string
+  modified_at: number
+  content: Delta
+}
 export interface Study {
   id: string
   title: string
   created_at: number
   modified_at: number
   content?: Delta
+  history?: HistoryItem[]
   published?: boolean
   user: {
     displayName: string

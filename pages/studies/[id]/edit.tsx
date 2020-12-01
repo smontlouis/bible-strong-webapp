@@ -10,7 +10,7 @@ import dynamic from 'next/dynamic'
 
 const QuillEditor = dynamic(
   () => import('../../../features/studies/QuillEditor'),
-  { ssr: false }
+  { ssr: false, loading: () => <p>Loading...</p> }
 )
 
 const EditStudy = () => {

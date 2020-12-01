@@ -42,6 +42,9 @@ const LexiqueSearch = ({
           flexDir="column"
           bg="white"
           borderRadius="xl"
+          borderColor="lightGrey"
+          borderWidth={1}
+          boxShadow=" #5983f033 1px 15px 13px -6px"
         >
           <>
             <Box p="l">

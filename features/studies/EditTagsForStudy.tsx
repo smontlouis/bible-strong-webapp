@@ -158,7 +158,7 @@ const EditTagsForStudy = ({ selectedTags, id }: Props) => {
             bg="white"
             w="38px"
             h="38px"
-            ml="l"
+            ml="m"
             mb="m"
             borderRadius="full"
             pos="relative"
