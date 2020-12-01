@@ -54,15 +54,20 @@ const History = ({ history, onRestore }: Props) => {
             <DrawerBody p={0}>
               <Flex h="100%">
                 <Box flex={1} height="100%" overflow="auto" p="xl">
-                  <ReactQuill
-                    key={selectedItem?.id}
-                    theme="snow"
-                    value={selectedItem?.content as DeltaStatic}
-                    scrollingContainer=".right-container"
-                    placeholder="Prenez une grande respiration, et commencez votre étude ici..."
-                    readOnly
-                    modules={modules}
-                  />
+                  {selectedItem?.content ? (
+                    <ReactQuill
+                      key={selectedItem?.id}
+                      theme="snow"
+                      value={selectedItem?.content as DeltaStatic}
+                      scrollingContainer=".right-container"
+                      readOnly
+                      modules={modules}
+                    />
+                  ) : (
+                    <Center h="100%">
+                      <Text color="grey">Pas d'historique</Text>
+                    </Center>
+                  )}
                 </Box>
                 <Box w={250} borderColor="lightGrey" borderLeftWidth={1}>
                   <Box p="m">

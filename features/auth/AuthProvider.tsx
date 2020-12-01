@@ -62,17 +62,15 @@ const useProvideAuth = (): AuthProps => {
         }
 
         if (user) {
-          console.log('acount update')
           await userDoc.update(profile)
         } else {
-          console.log('acount set')
           await userDoc.set({ ...UserRecord, ...profile })
         }
 
         firestoreUser = await userDoc.get()
         user = firestoreUser.data() as User
 
-        console.log(user)
+        // console.log(user)
 
         setUser(user)
       } else {

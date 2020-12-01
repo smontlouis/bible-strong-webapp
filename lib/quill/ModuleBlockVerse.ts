@@ -8,9 +8,7 @@ class ModuleBlockVerse extends Module {
     this.quill = quill
   }
 
-  openVerseBlock = () => {
-    console.log('SELECT_BIBLE_VERSE_BLOCK')
-  }
+  openVerseBlock = () => {}
 
   receiveVerseBlock = (data: {
     title: string

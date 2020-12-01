@@ -268,12 +268,6 @@ const VerseSearch = ({
                     return
                   }
 
-                  console.log({
-                    title,
-                    verses,
-                    version: selectedVersion,
-                    content,
-                  })
                   onSelect({
                     title,
                     verses,

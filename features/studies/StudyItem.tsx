@@ -128,7 +128,6 @@ const StudyItem = ({
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
-                        console.log(router)
                         copy(
                           `${document.location.host}${router.pathname}/${id}`
                         )

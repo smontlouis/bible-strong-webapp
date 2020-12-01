@@ -1,4 +1,13 @@
-import { Box, Button, Flex, Grid, Select, useToast } from '@chakra-ui/react'
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Grid,
+  Select,
+  useToast,
+  Text,
+} from '@chakra-ui/react'
 import { useCollection } from '@nandorojo/swr-firestore'
 import React, { useState } from 'react'
 import AppLayout from '../../common/AppLayout'
@@ -118,16 +127,22 @@ const Studies = () => {
           templateColumns="repeat(auto-fit, minmax(200px, 250px))"
           gridGap="l"
         >
-          {data
-            ?.filter((v) => (selectedTag ? v.tags?.[selectedTag] : true))
-            .map((study) => (
-              <StudyItem
-                key={study.id}
-                study={study}
-                onDelete={onDeleteStudy}
-                onPublish={onPublishStudy}
-              />
-            ))}
+          {data?.length ? (
+            data
+              ?.filter((v) => (selectedTag ? v.tags?.[selectedTag] : true))
+              .map((study) => (
+                <StudyItem
+                  key={study.id}
+                  study={study}
+                  onDelete={onDeleteStudy}
+                  onPublish={onPublishStudy}
+                />
+              ))
+          ) : (
+            <Center p="2xl" gridColumn="-1/1">
+              <Text color="grey">Pas encore d'études</Text>
+            </Center>
+          )}
         </Grid>
       </AnimatePresence>
     </MotionBox>

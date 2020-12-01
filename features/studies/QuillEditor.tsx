@@ -31,6 +31,8 @@ import VerseSearch from '../bible/VerseSearch'
 import debounce from '../../helpers/debounce'
 import useGlobalStore from '../../lib/store/global'
 import EditableHeader from './EditableHeader'
+import { useRouter } from 'next/router'
+import { useAuth } from '../auth/AuthProvider'
 
 interface Props {
   id: string
@@ -42,6 +44,8 @@ const QuillEditor = ({ id }: Props) => {
     fullscreen: state.fullscreen,
     setFullscreen: state.setFullscreen,
   }))
+  const router = useRouter()
+  const { user } = useAuth()
   const toast = useToast()
 
   const [isModalOpen, setIsModalOpen] = useState<
@@ -184,7 +188,13 @@ const QuillEditor = ({ id }: Props) => {
     })
   }
 
-  if (error) {
+  useEffect(() => {
+    if (data?.exists && data?.user.id !== user?.id) {
+      router.replace('/studies')
+    }
+  }, [data?.user.id])
+
+  if (error || (data?.exists && data?.user.id !== user?.id)) {
     return <Error />
   }
 

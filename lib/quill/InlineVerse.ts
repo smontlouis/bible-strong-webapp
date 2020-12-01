@@ -20,14 +20,6 @@ class InlineVerse extends Inline {
         ?.classList.contains('ql-disabled')
       if (isReadOnly) {
         const [book, chapter, verse] = verses[0].split('-')
-
-        console.log('VIEW_BIBLE_VERSE', {
-          isReadOnly: true,
-          arrayVerses: verses,
-          book,
-          chapter,
-          verse,
-        })
       }
     })
 
