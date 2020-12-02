@@ -29,6 +29,7 @@ const StudyContainer = styled.div(
 
     h1: {
       fontSize: fontSizes['2xl'],
+      fontFamily: fonts.normal,
 
       [media.md]: {
         fontSize: fontSizes['4xl'],
@@ -36,6 +37,9 @@ const StudyContainer = styled.div(
     },
 
     h2: {
+      fontFamily: fonts.normal,
+
+      marginTop: space['l'],
       fontSize: fontSizes['xl'],
 
       [media.md]: {
@@ -218,8 +222,14 @@ const Study = ({
         <meta property="og:image:width" content="400" />
         <meta property="og:image:height" content="400" />
       </Head>
-      <Box margin="0 auto" maxWidth={700} px={5} py={[8, 20]}>
-        <Heading as="h1" size="2xl" lineHeight="shorter" mb={[10, 16]}>
+      <Box margin="0 auto" maxWidth={700} px={5} py={['s', 'xl']}>
+        <Heading
+          as="h1"
+          size="2xl"
+          fontFamily="normal"
+          lineHeight="shorter"
+          mb={[10, 16]}
+        >
           {title}{' '}
         </Heading>
         <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
@@ -237,7 +247,7 @@ const Study = ({
             </Box>
           </>
         )}
-        <Divider my={40} />
+        <Divider my="xl" />
         <Flex alignItems="center" justifyContent="center" direction="column">
           <Text fontSize="xs" color="grey">
             Étude rédigée par {user.displayName} avec{' '}
@@ -245,12 +255,12 @@ const Study = ({
               as={Logo as ElementType<ReactNode>}
               ml={2}
               d="inline-block"
-              width={100}
-              height={24}
+              width={'100px'}
+              height={'24px'}
             />
           </Text>
           <Link
-            mt={4}
+            mt="m"
             fontSize="xs"
             color="primary"
             href="https://bible-strong.app"
