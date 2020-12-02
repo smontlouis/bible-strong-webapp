@@ -6,7 +6,7 @@ import waitForAuth from '../features/auth/waitForAuth'
 import withAuth from '../features/auth/withAuth'
 import compose from '../helpers/compose'
 
-const Dashboard = () => {
+const Home = () => {
   return (
     <MotionBox
       initial="exit"
@@ -54,7 +54,7 @@ const Dashboard = () => {
   )
 }
 
-const DashboardEnhanced = compose(withAuth, waitForAuth)(Dashboard)
-DashboardEnhanced.Layout = AppLayout
+const HomeEnhanced = compose(withAuth, waitForAuth)(Home)
+HomeEnhanced.Layout = AppLayout
 
-export default DashboardEnhanced
+export default HomeEnhanced

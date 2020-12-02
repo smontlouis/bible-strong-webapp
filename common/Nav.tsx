@@ -25,7 +25,7 @@ export const Nav = () => {
   const { user, signout } = useAuth()
   return (
     <Box px="l" pt="2xl" pb="l" height="100%" d="flex" flexDir="column">
-      <NextLink href="/dashboard">
+      <NextLink href="/home">
         <a>
           <Box as={LogoFull} width="200px" height="60px" />
         </a>
@@ -33,7 +33,7 @@ export const Nav = () => {
 
       <AnimateSharedLayout>
         <Box mt="xl">
-          <NavLink icon={FiHome} href="/dashboard">
+          <NavLink icon={FiHome} href="/home">
             Accueil
           </NavLink>
           <NavLink icon={FiFeather} href="/studies">

@@ -1,6 +1,7 @@
 import { extendTheme } from '@chakra-ui/react'
 import button from './theme/button'
 import input from './theme/input'
+import link from './theme/link'
 import menu from './theme/menu'
 import select from './theme/select'
 import text from './theme/text'
@@ -21,6 +22,7 @@ export const theme = extendTheme({
     Input: input,
     Button: button,
     Select: select,
+    Link: link,
   },
   breakpoints,
   colors: {

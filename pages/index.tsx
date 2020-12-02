@@ -1,40 +1,41 @@
-import { Box, Flex } from '@chakra-ui/react'
-import Logo from '../public/images/svg/logo.svg'
-import { ElementType, ReactNode } from 'react'
+import { Box, Button, Flex, HStack, Link, Text } from '@chakra-ui/react'
+import NextLink from 'next/link'
+import React from 'react'
+import Logo from '../public/images/svg/logo-full.svg'
 
 export default function Home() {
   return (
     <Flex
+      p="m"
       height="100vh"
       alignItems="center"
       justifyContent="center"
       flexDir="column"
+      backgroundImage={{ base: 'none', md: "url('/images/background.jpg')" }}
       style={{
-        backgroundImage: `url('/images/background.jpg')`,
         backgroundSize: 'contain',
         backgroundPosition: 'right',
         backgroundAttachment: 'fixed',
         backgroundRepeat: 'no-repeat',
       }}
     >
+      <Box as={Logo} width="240px" pos="absolute" top={0} left="20px" />
       <Box>
-        <Box
-          as={Logo as ElementType<ReactNode>}
-          width={['280px', 'auto']}
-          m="0 auto"
-        />
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          mt={4}
-          flexDir={['column', 'row']}
-        >
+        <Text fontSize={60} variant="bold">
+          Tout.
+          <br />
+          en un.
+        </Text>
+        <Text mt="l" maxW="400px">
+          BibleStrong met à disposition des outils efficaces d'étude de la Bible
+          pour tous ceux qui souhaitent développer et affermir une foi réfléchie
+          en Dieu.
+        </Text>
+        <Flex alignItems="center" mt="l">
           <Box
             as="a"
-            mt={[2, '20px']}
-            ml={['none', '100px']}
             width={153}
-            height={60}
+            height="45px"
             href="https://apps.apple.com/fr/app/bible-strong/id1454738221?mt=8"
             style={{
               display: 'inline-block',
@@ -46,7 +47,7 @@ export default function Home() {
           />
           <Box
             width={165}
-            height={60}
+            height="60px"
             as="a"
             href="https://play.google.com/store/apps/details?id=com.smontlouis.biblestrong&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
           >
@@ -58,13 +59,27 @@ export default function Home() {
             />
           </Box>
         </Flex>
+        <NextLink passHref href="/home">
+          <Button as="a" w="305px" mt="m">
+            Version web (bêta)
+          </Button>
+        </NextLink>
       </Box>
-      <a
-        style={{ color: '#0984e3', fontSize: 16, marginTop: 20 }}
-        href="https://fr.tipeee.com/smontlouis"
+      <HStack
+        spacing="m"
+        pos="absolute"
+        bottom={0}
+        left="50%"
+        transform="translate(-50%)"
+        p="m"
       >
-        🤓 Soutenir le développeur
-      </a>
+        <Link href="https://fr.tipeee.com/smontlouis" color="grey">
+          Soutenir sur Tipeee
+        </Link>
+        <Link href="https://www.paypal.me/smontlouis" color="grey">
+          Soutenir sur Paypal
+        </Link>
+      </HStack>
     </Flex>
   )
 }
