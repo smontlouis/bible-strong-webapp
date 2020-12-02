@@ -87,6 +87,7 @@ const StudyContainer = styled.div(
       display: 'flex',
       margin: '30px auto',
       flexDirection: 'column',
+      background: 'transparent',
 
       [media.md]: {
         flexDirection: 'row',
@@ -115,6 +116,7 @@ const StudyContainer = styled.div(
       textAlign: 'center',
       marginTop: space[8],
       padding: space[6],
+      background: 'transparent',
 
       [media.md]: {
         marginTop: space[10],
@@ -184,10 +186,8 @@ const Study = ({
   modified_at,
   imageUrl,
   whatsappImageUrl,
-  updatedAt,
 }: Props) => {
   const router = useRouter()
-  const timeString = new Date(updatedAt).toLocaleTimeString()
 
   if (router.isFallback) return <div>Loading...</div>
   return (
@@ -225,9 +225,9 @@ const Study = ({
         <StudyContainer dangerouslySetInnerHTML={{ __html: html }} />
         {!!annexe.length && (
           <>
-            <Divider my={40} className="references-divider" />
+            <Divider my="xl" className="references-divider" />
             <Box>
-              <Text fontSize="xl" mb={32}>
+              <Text fontSize="xl" mb="m">
                 Références
               </Text>
               <>
@@ -247,8 +247,7 @@ const Study = ({
               d="inline-block"
               width={100}
               height={24}
-            />{' '}
-            - {timeString}
+            />
           </Text>
           <Link
             mt={4}

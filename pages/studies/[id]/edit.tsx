@@ -7,10 +7,11 @@ import waitForAuth from '../../../features/auth/waitForAuth'
 import withAuth from '../../../features/auth/withAuth'
 import compose from '../../../helpers/compose'
 import dynamic from 'next/dynamic'
+import Loading from '../../../common/Loading'
 
 const QuillEditor = dynamic(
   () => import('../../../features/studies/QuillEditor'),
-  { ssr: false, loading: () => <p>Loading...</p> }
+  { ssr: false, loading: () => <Loading /> }
 )
 
 const EditStudy = () => {

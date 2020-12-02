@@ -75,7 +75,12 @@ const Studies = () => {
 
     toast({
       title: value ? 'Étude publiée' : 'Étude dépubliée',
+      description: value
+        ? 'Comptez 2 à 5 minutes pour que le lien soit disponible'
+        : 'Comptez 2 à 5 minutes pour que le lien soit supprimé',
       status: 'success',
+      duration: 8000,
+      isClosable: true,
     })
   }
 
@@ -130,12 +135,14 @@ const Studies = () => {
           {data?.length ? (
             data
               ?.filter((v) => (selectedTag ? v.tags?.[selectedTag] : true))
-              .map((study) => (
+              .map((study, i) => (
                 <StudyItem
                   key={study.id}
                   study={study}
                   onDelete={onDeleteStudy}
                   onPublish={onPublishStudy}
+                  disabled={user?.subscription !== 'premium'}
+                  isFirst={i === 0}
                 />
               ))
           ) : (

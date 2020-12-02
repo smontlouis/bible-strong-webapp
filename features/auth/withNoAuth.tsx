@@ -1,6 +1,7 @@
 import { useAuth } from './AuthProvider'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
+import Loading from '../../common/Loading'
 
 const withNoAuth = <P,>(Component: React.ComponentType<P>) => (props: P) => {
   const { user, isLoading } = useAuth()
@@ -16,7 +17,7 @@ const withNoAuth = <P,>(Component: React.ComponentType<P>) => (props: P) => {
     return <Component {...props} />
   }
 
-  return <div>LOADING...</div>
+  return <Loading />
 }
 
 export default withNoAuth

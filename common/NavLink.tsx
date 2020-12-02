@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Text } from '@chakra-ui/react'
+import { Box, Center, Flex, Text, Tooltip } from '@chakra-ui/react'
 import React, { PropsWithChildren } from 'react'
 import { IconType } from 'react-icons'
 import NextLink from 'next/link'
@@ -22,6 +22,7 @@ const NavLink = ({
       mb="l"
       as={'a'}
       cursor={href ? 'pointer' : 'not-allowed'}
+      opacity={href ? 1 : 0.3}
     >
       <Center p="s" pos="relative">
         {active && (
@@ -72,7 +73,7 @@ const NavLink = ({
     )
   }
 
-  return component
+  return <Tooltip label="Bientôt disponible">{component}</Tooltip>
 }
 
 export default NavLink

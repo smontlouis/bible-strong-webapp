@@ -31,7 +31,7 @@ export default {
     },
     normal: {
       fontFamily: 'normal',
-      lineHeight: 1.2,
+      lineHeight: 1.3,
     },
     medium: {
       fontFamily: 'normal',

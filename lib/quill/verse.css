@@ -12,9 +12,9 @@
 
 .block-verse {
   border-radius: 30px;
-  background: rgb(48 51 107 / 9%);
+  /* background: rgb(48 51 107 / 9%); */
+  /* margin: 20px 0; */
   padding: 0 25px;
-  margin: 20px 0;
   font-family: Pulp-Display;
   cursor: default;
   transition: 0.5s ease;

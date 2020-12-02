@@ -1,8 +1,8 @@
 .block-strong {
   border-radius: 30px;
-  background: rgb(9 132 227 / 9%);
+  /* background: rgb(9 132 227 / 9%); */
   padding: 0 25px;
-  margin: 20px 0;
+  /* margin: 20px 0; */
   font-family: Pulp-Display;
   cursor: default;
   transition: 0.5s ease;

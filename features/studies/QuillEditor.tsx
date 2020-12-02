@@ -192,7 +192,7 @@ const QuillEditor = ({ id }: Props) => {
     if (data?.exists && data?.user.id !== user?.id) {
       router.replace('/studies')
     }
-  }, [data?.user.id])
+  }, [data?.user?.id])
 
   if (error || (data?.exists && data?.user.id !== user?.id)) {
     return <Error />
@@ -221,7 +221,7 @@ const QuillEditor = ({ id }: Props) => {
           onRestoreVersion={onRestoreVersion}
         />
       </Box>
-      <Flex margin={fullscreen ? '0 auto' : 0}>
+      <Flex margin={fullscreen ? '0 auto' : 0} flex={1}>
         <MotionBox layout>
           <Box position="sticky" top="110px" zIndex={9} maxW={700}>
             <Toolbar />

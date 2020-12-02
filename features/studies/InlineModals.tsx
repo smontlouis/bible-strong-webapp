@@ -85,6 +85,7 @@ const StrongModal = ({ inlineItem }: { inlineItem: OpsInlineStrong }) => {
     const itemRef: HTMLElement | null = document.querySelector(
       `[data-code="${inlineItem.Code}"]`
     )
+
     const title = document.querySelector(
       `[data-annexe="${inlineItem.Code}"] [data-title]`
     )?.innerHTML
