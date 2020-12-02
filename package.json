@@ -8,6 +8,11 @@
     "start": "next start",
     "lint": "tsc --project tsconfig.json"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint"
+    }
+  },
   "dependencies": {
     "@chakra-ui/react": "^1.0.1",
     "@emotion/react": "^11.1.1",
