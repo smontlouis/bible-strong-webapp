@@ -1,7 +1,8 @@
-import { Verse } from '../../common/types'
+import { GenericVerse, Verse } from '../../common/types'
 import { keyframes, Text, Center } from '@chakra-ui/react'
+import { useInView } from 'react-intersection-observer'
 import books from './books'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const fade = keyframes`
   from {
@@ -16,13 +17,36 @@ const fade = keyframes`
 interface Props {
   verses: Verse[]
   hasNewBook?: boolean
+  onChange: ({ book, chapter }: { book: number; chapter: number }) => void
+  defaultReference?: GenericVerse
 }
 
-const ChapterView = ({ hasNewBook, verses }: Props) => {
-  const bookName = books[verses[0].book - 1].Nom
+const ChapterView = ({
+  hasNewBook,
+  verses,
+  onChange,
+  defaultReference,
+}: Props) => {
+  const book = verses[0].book
   const chapter = verses[0].chapter
+  const bookName = books[book - 1].Nom
+  const { ref, inView } = useInView({
+    threshold: 0,
+    root: document.getElementById('div'),
+    rootMargin: '-35%',
+  })
+
+  useEffect(() => {
+    if (inView) {
+      onChange({ book, chapter })
+    }
+  }, [inView])
   return (
-    <div style={{ animation: `${fade} 0.5s ease` }}>
+    <div
+      ref={ref}
+      id={`bible-${book}-${chapter}`}
+      style={{ animation: `${fade} 0.5s ease` }}
+    >
       {verses.map((verse, i) => {
         return (
           <React.Fragment key={verse.id}>
@@ -41,7 +65,14 @@ const ChapterView = ({ hasNewBook, verses }: Props) => {
                 Chapitre {chapter}
               </Text>
             )}
-            <React.Fragment key={verse.id}>
+            <Text
+              key={verse.id}
+              as="span"
+              id={`bible-${book}-${chapter}-${verse.verse}`}
+              {...(defaultReference?.verse === verse.verse && {
+                bg: 'grey',
+              })}
+            >
               <Text mx="xs" as="span" variant="bold">
                 {verse.verse}.
               </Text>
@@ -53,7 +84,7 @@ const ChapterView = ({ hasNewBook, verses }: Props) => {
                   __html: verse.content.replace(/\n/g, '<br />'),
                 }}
               />
-            </React.Fragment>
+            </Text>
           </React.Fragment>
         )
       })}

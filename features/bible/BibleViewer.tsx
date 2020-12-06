@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InfiniteReader from './InfiniteReader'
 import { Box } from '@chakra-ui/react'
 import { GenericVerse, Verse } from '../../common/types'
@@ -14,6 +14,14 @@ import EndOfBook from './EndOfBook'
 
 interface Props {
   defaultReference: GenericVerse
+  onReferenceChange: ({
+    book,
+    chapter,
+  }: {
+    book: number
+    chapter: number
+  }) => void
+  scrollMode: 'vertical' | 'horizontal'
 }
 
 interface Chapter {
@@ -21,7 +29,11 @@ interface Chapter {
   Chapter: () => JSX.Element
 }
 
-const useBibleChapters = ({ defaultReference }: Props) => {
+const BibleViewer = ({
+  defaultReference,
+  onReferenceChange,
+  scrollMode,
+}: Props) => {
   const [chapters, setChapters] = useState<Chapter[]>([])
 
   const { book, chapter } = defaultReference
@@ -40,32 +52,14 @@ const useBibleChapters = ({ defaultReference }: Props) => {
     chapter,
   })
 
-  console.log(chapters)
+  // console.log(chapters)
 
-  const { loading, data, error } = useCollection<Verse>(
-    'bible-nbs',
-    {
-      where: [
-        ['id', '>=', `${book}-${chapter}-`],
-        ['id', '<', `${book}-${chapter}.`],
-      ],
-    },
-    {
-      onSuccess: (data) => {
-        if (!data) return
-        data.sort((a, b) => a.verse - b.verse)
-
-        setChapters([
-          {
-            key: `${book}-${chapter}`,
-            Chapter: () => (
-              <ChapterView verses={data} hasNewBook={chapter === 1} />
-            ),
-          },
-        ])
-      },
-    }
-  )
+  const { loading, data, error } = useCollection<Verse>('bible-nbs', {
+    where: [
+      ['id', '>=', `${book}-${chapter}-`],
+      ['id', '<', `${book}-${chapter}.`],
+    ],
+  })
 
   const onFetchPrevious = async (callback?: () => void) => {
     const previousChapter = getPreviousChapter(previousChapterFetched)
@@ -84,6 +78,7 @@ const useBibleChapters = ({ defaultReference }: Props) => {
       return
     }
 
+    setPreviousChapterFetched(previousChapter)
     const snapshot = await firestore
       .collection('bible-nbs')
       .where('id', '>=', `${previousChapter.book}-${previousChapter.chapter}-`)
@@ -93,7 +88,6 @@ const useBibleChapters = ({ defaultReference }: Props) => {
     const verses = snapshot.docs.map((x) => x.data()) as Verse[]
 
     callback?.()
-    setPreviousChapterFetched(previousChapter)
     verses.sort((a, b) => a.verse - b.verse)
 
     setChapters((s) => [
@@ -101,6 +95,7 @@ const useBibleChapters = ({ defaultReference }: Props) => {
         key: `${previousChapter.book}-${previousChapter.chapter}`,
         Chapter: () => (
           <ChapterView
+            onChange={onReferenceChange}
             verses={verses}
             hasNewBook={previousChapter.hasNewBook}
           />
@@ -126,6 +121,7 @@ const useBibleChapters = ({ defaultReference }: Props) => {
       return
     }
 
+    setNextChapterFetched(nextChapter)
     const snapshot = await firestore
       .collection('bible-nbs')
       .where('id', '>=', `${nextChapter.book}-${nextChapter.chapter}-`)
@@ -134,7 +130,6 @@ const useBibleChapters = ({ defaultReference }: Props) => {
 
     const verses = snapshot.docs.map((x) => x.data()) as Verse[]
 
-    setNextChapterFetched(nextChapter)
     verses.sort((a, b) => a.verse - b.verse)
 
     setChapters((s) => [
@@ -143,58 +138,78 @@ const useBibleChapters = ({ defaultReference }: Props) => {
       {
         key: `${nextChapter.book}-${nextChapter.chapter}`,
         Chapter: () => (
-          <ChapterView verses={verses} hasNewBook={nextChapter.hasNewBook} />
+          <ChapterView
+            onChange={onReferenceChange}
+            verses={verses}
+            hasNewBook={nextChapter.hasNewBook}
+          />
         ),
       },
     ])
   }
 
-  return {
-    loading,
-    data,
-    error,
-    hasMorePrevious: !!previousChapterFetched,
-    hasMoreNext: !!nextChapterFetched,
-    onFetchPrevious,
-    onFetchNext,
-    chapters,
+  const scrollToVerse = () => {
+    const { book, chapter, verse } = defaultReference
+    document
+      .querySelector(`#bible-${book}-${chapter}-${verse}`)
+      ?.scrollIntoView({ behavior: 'smooth' })
   }
-}
 
-const BibleViewer = ({ defaultReference }: Props) => {
-  const {
-    loading,
-    error,
-    onFetchNext,
-    onFetchPrevious,
-    hasMorePrevious,
-    hasMoreNext,
-    chapters,
-  } = useBibleChapters({ defaultReference })
+  useEffect(() => {
+    if (data) {
+      data.sort((a, b) => a.verse - b.verse)
 
-  if (loading) {
-    return <Loading />
-  }
+      setChapters([
+        {
+          key: `${book}-${chapter}`,
+          Chapter: () => (
+            <ChapterView
+              onChange={onReferenceChange}
+              verses={data}
+              hasNewBook={chapter === 1}
+              defaultReference={defaultReference}
+            />
+          ),
+        },
+      ])
+    }
+  }, [!!data])
 
   if (error) {
     return <Error />
   }
 
+  if (loading || !data) {
+    return <Loading />
+  }
+
   return (
-    <Box flex={1} pos="relative">
-      <InfiniteReader
-        scrollMode="horizontal"
-        onFetchPrevious={onFetchPrevious}
-        onFetchNext={onFetchNext}
-        hasMorePrevious={hasMorePrevious}
-        hasMoreNext={hasMoreNext}
-        columnWidth={400}
-        columnGap={40}
+    <Box flex={1} d="flex">
+      <Box
+        pos="relative"
+        flex={1}
+        {...(scrollMode === 'vertical'
+          ? {
+              maxW: 700,
+              margin: '0 auto',
+            }
+          : {})}
       >
-        {chapters.map(({ key, Chapter }) => (
-          <Chapter key={key} />
-        ))}
-      </InfiniteReader>
+        <InfiniteReader
+          scrollMode={scrollMode}
+          onFetchPrevious={onFetchPrevious}
+          onFetchNext={onFetchNext}
+          hasMorePrevious={!!previousChapterFetched}
+          hasMoreNext={!!nextChapterFetched}
+          columnWidth={400}
+          columnGap={40}
+          onRender={scrollToVerse}
+        >
+          {chapters.map(({ key, Chapter }) => (
+            <Chapter key={key} />
+          ))}
+        </InfiniteReader>
+      </Box>
     </Box>
   )
 }

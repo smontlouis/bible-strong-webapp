@@ -10,6 +10,7 @@ interface Props {
   hasMoreNext: boolean
   columnWidth: number
   columnGap: number
+  onRender?: () => void
 }
 
 const InfiniteReader = ({
@@ -21,6 +22,7 @@ const InfiniteReader = ({
   hasMoreNext,
   columnWidth,
   columnGap,
+  onRender,
 }: React.PropsWithChildren<Props>) => {
   const [isLoading, setIsLoading] = useState(true)
   const [isNextLoading, setIsNextLoading] = useState(false)
@@ -37,15 +39,14 @@ const InfiniteReader = ({
       let scrollWidthBefore = 0
       await onFetchPrevious(() => {
         scrollWidthBefore = element.scrollWidth - element.scrollLeft
-        console.log({ scrollWidthBefore, scrollLeft: element.scrollLeft })
+        // console.log({ scrollWidthBefore, scrollLeft: element.scrollLeft })
       })
       const scrollWidthAfter = element.scrollWidth
 
       const diff = scrollWidthAfter - scrollWidthBefore
 
       element.scrollTo({ left: diff })
-      console.log({ scrollWidthAfter, scrollLeft: element.scrollLeft })
-
+      // console.log({ scrollWidthAfter, scrollLeft: element.scrollLeft })
       setIsPrevLoading(false)
     } else {
       setIsPrevLoading(true)
@@ -133,11 +134,8 @@ const InfiniteReader = ({
     ;(async () => {
       await loadPrev()
       loadNext()
-
-      if (scrollMode === 'horizontal') {
-        document.querySelector('#div')?.scrollBy({ left: -columnGap })
-      }
       setIsLoading(false)
+      onRender?.()
     })()
   }, [])
 

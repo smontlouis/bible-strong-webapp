@@ -48,6 +48,7 @@
     "react-icons": "^3.11.0",
     "react-infinite-scroll-hook": "^3.0.0",
     "react-instantsearch-dom": "^6.8.2",
+    "react-intersection-observer": "^8.31.0",
     "react-quill": "^2.0.0-beta.2",
     "react-select": "^3.1.1",
     "slugify": "^1.4.6",
