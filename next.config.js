@@ -8,6 +8,10 @@ const nextConfig = {
   env: {
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
   },
+  i18n: {
+    locales: ['en', 'fr'],
+    defaultLocale: 'fr',
+  }
 }
 
 module.exports = withPlugins([

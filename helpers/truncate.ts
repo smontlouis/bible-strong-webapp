@@ -1,4 +1,4 @@
-export default (text: string, nbChars: number) => {
+const truncate = (text: string, nbChars: number) => {
   if (!text) {
     return ''
   }
@@ -11,3 +11,5 @@ export default (text: string, nbChars: number) => {
   }
   return truncatedText
 }
+
+export default truncate

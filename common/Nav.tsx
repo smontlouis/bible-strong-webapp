@@ -39,7 +39,9 @@ export const Nav = () => {
           <NavLink icon={FiFeather} href="/studies">
             Études
           </NavLink>
-          <NavLink icon={FiBookOpen}>Bible</NavLink>
+          <NavLink icon={FiBookOpen} href="/bible">
+            Bible
+          </NavLink>
           <NavLink icon={LexiqueIcon}>Lexique</NavLink>
           <NavLink icon={DictionnaryIcon}>Dictionnaire</NavLink>
           <NavLink icon={NaveIcon}>Nave</NavLink>

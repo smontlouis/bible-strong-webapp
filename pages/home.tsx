@@ -5,8 +5,11 @@ import MotionBox from '../common/MotionBox'
 import waitForAuth from '../features/auth/waitForAuth'
 import withAuth from '../features/auth/withAuth'
 import compose from '../helpers/compose'
+import { useTranslation } from 'react-i18next'
+import NextLink from 'next/link'
 
 const Home = () => {
+  const { t } = useTranslation()
   return (
     <MotionBox
       initial="exit"
@@ -14,20 +17,21 @@ const Home = () => {
       exit="exit"
       transition={{ duration: 0.5, ease: 'easeOut' }}
       variants={{ enter: { y: 0, opacity: 1 }, exit: { y: -10, opacity: 0 } }}
+      p="2xl"
+      pt={{ base: '3xl', xl: '2xl' }}
     >
       <VStack spacing="l" align="flex-start" maxWidth={600}>
-        <Text size="xl">Bonjour,</Text>
-        <Text>
-          Bienvenue sur la version bêta de Bible Strong Web. Pour l'instant,
-          seule la fonctionnalité études est disponible. Elle est totalement
-          accessible pour les utilisateurs sponsors et restreinte à une seule
-          étude pour les autres utilisateurs.
-        </Text>
+        <Text size="xl">{t('home.hello')}</Text>
+        <NextLink href="/home" locale="en">
+          <a>change to en</a>
+        </NextLink>
+        <NextLink href="/home" locale="fr">
+          <a>change to fr /</a>
+        </NextLink>
+        <Text>{t('home.welcome_1')}</Text>
 
         <Text>
-          Comme à chaque fois, la fonctionnalité sera disponible au grand public
-          dans les mois à venir. Si vous souhaitez soutenir mon travail,
-          n'hésitez pas à devenir sponsor ;) sur mobile, par{' '}
+          {t('home.welcome_2')}{' '}
           <Link
             color="primary"
             href="https://en.tipeee.com/smontlouis"
@@ -46,7 +50,7 @@ const Home = () => {
           .
         </Text>
         <Text>
-          Bonne étude, <br />
+          {t('home.welcome_3')} <br />
           Stéphane
         </Text>
       </VStack>

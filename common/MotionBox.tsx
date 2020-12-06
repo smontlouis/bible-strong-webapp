@@ -9,4 +9,12 @@ const MotionBox = motion.custom(
   )
 )
 
+export const MotionText = motion.custom(
+  forwardRef<MotionProps & ChakraProps, 'div'>(
+    ({ layoutId, whileHover, whileTap, layout, ...rest }, ref) => (
+      <chakra.p ref={ref} {...(rest as ChakraProps)} />
+    )
+  )
+)
+
 export default MotionBox

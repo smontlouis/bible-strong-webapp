@@ -84,8 +84,7 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
           bg={fullscreen ? 'white' : 'lightGrey'}
           // m="l"
           // borderRadius="xl"
-          p="2xl"
-          pt={{ base: '3xl', xl: '2xl' }}
+
           d="flex"
           flexDir="column"
           overflow="auto"

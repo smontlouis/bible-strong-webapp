@@ -24,6 +24,8 @@ export const UserRecord = {
   },
 }
 
+export type Status = 'Idle' | 'Pending' | 'Resolved' | 'Rejected'
+
 export interface User {
   id: string
   email: string
@@ -161,4 +163,15 @@ export interface Book {
   Numero: number
   Nom: string
   Chapitres: number
+}
+
+export interface GenericVerse {
+  book: number
+  chapter: number
+  verse: number
+}
+
+export interface Verse extends GenericVerse {
+  id: string
+  content: string
 }

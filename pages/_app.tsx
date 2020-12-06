@@ -1,10 +1,12 @@
+import '../i18n'
+
 import { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import AuthProvider from '../features/auth/AuthProvider'
 
 import { theme } from '../theme'
 import Head from 'next/head'
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren, useEffect } from 'react'
 import { NextComponentType, NextPageContext } from 'next'
 import { FuegoProvider } from '@nandorojo/swr-firestore'
 import config from '../config'
@@ -16,6 +18,8 @@ import '../lib/quill/quill.css'
 import '../lib/quill/strong.css'
 import '../lib/quill/verse.css'
 import '../lib/firebase-ui-auth.css'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
 interface Props extends AppProps {
   Component: NextComponentType<NextPageContext, any, {}> & {
@@ -27,6 +31,13 @@ const Noop = ({ children }: PropsWithChildren<{}>) => <>{children}</>
 
 const App = ({ Component, pageProps }: Props) => {
   const Layout = Component.Layout || Noop
+  const router = useRouter()
+  const { i18n } = useTranslation()
+  const { locale } = router
+
+  useEffect(() => {
+    i18n.changeLanguage(locale!)
+  }, [locale])
 
   return (
     <FuegoProvider fuego={fuego}>
@@ -116,6 +127,9 @@ const App = ({ Component, pageProps }: Props) => {
                 break-before: always;
                 page-break-before: always;
               }
+            }
+            body {
+              overflow: hidden;
             }
           `}</style>
           <Layout>

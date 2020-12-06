@@ -1,5 +1,57 @@
+import { GenericVerse } from '../../common/types'
 import books from './books'
 
+export const getPreviousChapter = (
+  basicVerse: Omit<GenericVerse, 'verse'> | null
+) => {
+  if (!basicVerse) return null
+  const { book, chapter } = basicVerse
+  if (chapter === 1) {
+    if (book === 1) {
+      return null
+    }
+    return {
+      book: book - 1,
+      chapter: books[book - 1 - 1].Chapitres,
+      hasNewBook: books[book - 1 - 1].Chapitres === 1,
+    }
+  }
+
+  return {
+    book,
+    chapter: chapter - 1,
+    hasNewBook: chapter - 1 === 1,
+  }
+}
+
+export const getNextChapter = (
+  basicVerse: Omit<GenericVerse, 'verse'> | null
+) => {
+  if (!basicVerse) return null
+  const { book, chapter } = basicVerse
+  if (chapter === books[book - 1].Chapitres) {
+    if (book === 66 && chapter === books[65].Chapitres) {
+      return null
+    }
+    return {
+      book: book + 1,
+      chapter: 1,
+      hasNewBook: true,
+    }
+  }
+
+  return {
+    book,
+    chapter: chapter + 1,
+    hasNewBook: false,
+  }
+}
+
+/**
+ * Get reference of given verses
+ * eg: ['1-1-1', '1-1-2', '1-1-4'] : Genèse 1:1-2,4
+ * @param verses
+ */
 export const getReference = (verses: string[]) => {
   const [book, chapter] = verses[0].split('-').map(Number)
 

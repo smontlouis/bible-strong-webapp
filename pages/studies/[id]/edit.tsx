@@ -26,6 +26,8 @@ const EditStudy = () => {
       initial="exit"
       animate="enter"
       exit="exit"
+      p="2xl"
+      pt={{ base: '3xl', xl: '2xl' }}
     >
       <QuillEditor id={id} />
     </MotionBox>

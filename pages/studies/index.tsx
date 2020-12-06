@@ -102,6 +102,8 @@ const Studies = () => {
         enter: { transition: { staggerChildren: 0.05 } },
         exit: { transition: { staggerChildren: 0.05 } },
       }}
+      p="2xl"
+      pt={{ base: '3xl', xl: '2xl' }}
     >
       <Flex alignItems="center">
         <Box flex={1}>
