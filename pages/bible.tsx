@@ -32,6 +32,7 @@ const Bible = () => {
     >
       <Box height="100px" m="l" bg="grey">
         {JSON.stringify(currentReference)}
+        - 
         {JSON.stringify(defaultReference)}
       </Box>
       <BibleViewer
