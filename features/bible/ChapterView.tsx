@@ -3,6 +3,7 @@ import { keyframes, Text, Center } from '@chakra-ui/react'
 import { useInView } from 'react-intersection-observer'
 import books from './books'
 import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const fade = keyframes`
   from {
@@ -27,9 +28,10 @@ const ChapterView = ({
   onChange,
   defaultReference,
 }: Props) => {
+  const { t } = useTranslation()
   const book = verses[0].book
   const chapter = verses[0].chapter
-  const bookName = books[book - 1].Nom
+  const bookName = t(books[book - 1].Nom)
   const { ref, inView } = useInView({
     threshold: 0,
     root: document.getElementById('div'),

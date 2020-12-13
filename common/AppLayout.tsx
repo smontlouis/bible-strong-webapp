@@ -12,11 +12,8 @@ import React, { PropsWithChildren, useEffect } from 'react'
 import { FiMenu } from 'react-icons/fi'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
-import useGlobalStore from '../lib/store/global'
+import useGlobalStore from '../global.store'
 import { Nav } from './Nav'
-import compose from '../helpers/compose'
-import withAuth from '../features/auth/withAuth'
-import waitForAuth from '../features/auth/waitForAuth'
 
 const useFullscreen = (fullscreen: boolean) => {
   useEffect(() => {
@@ -56,35 +53,19 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
 
   return (
     <>
-      <Box
-        role="button"
-        onClick={onOpen}
-        // @ts-ignore
-        d={{ base: 'block', xl: 'none' }}
-        pos="fixed"
-        top="20px"
-        left="20px"
-        as={FiMenu}
-        fontSize="35px"
-        zIndex={10}
-      />
+      <Box height="56px" bg="greys.0">
+        <Box
+          role="button"
+          onClick={onOpen}
+          as={FiMenu}
+          fontSize="25px"
+          zIndex={10}
+        />
+      </Box>
       <Flex bg="white" h="100vh">
-        {!fullscreen && (
-          <Box
-            d={{ base: 'none', xl: 'block' }}
-            width={{ base: '280px' }}
-            borderRightColor="lightGrey"
-            borderRightWidth={1}
-          >
-            <Nav />
-          </Box>
-        )}
         <Box
           flex={1}
           bg={fullscreen ? 'white' : 'lightGrey'}
-          // m="l"
-          // borderRadius="xl"
-
           d="flex"
           flexDir="column"
           overflow="auto"
@@ -120,7 +101,4 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   )
 }
 
-const AppLayoutEnhanced = compose(withAuth, waitForAuth)(AppLayout)
-AppLayoutEnhanced.Layout = AppLayout
-
-export default AppLayoutEnhanced
+export default AppLayout

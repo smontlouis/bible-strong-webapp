@@ -22,6 +22,7 @@ interface Props {
     chapter: number
   }) => void
   scrollMode: 'vertical' | 'horizontal'
+  divRef: React.RefObject<HTMLDivElement>
 }
 
 interface Chapter {
@@ -33,6 +34,7 @@ const BibleViewer = ({
   defaultReference,
   onReferenceChange,
   scrollMode,
+  divRef,
 }: Props) => {
   const [chapters, setChapters] = useState<Chapter[]>([])
 
@@ -51,8 +53,6 @@ const BibleViewer = ({
     book,
     chapter,
   })
-
-  // console.log(chapters)
 
   const { loading, data, error } = useCollection<Verse>('bible-nbs', {
     where: [
@@ -196,6 +196,7 @@ const BibleViewer = ({
           : {})}
       >
         <InfiniteReader
+          ref={divRef}
           scrollMode={scrollMode}
           onFetchPrevious={onFetchPrevious}
           onFetchNext={onFetchNext}

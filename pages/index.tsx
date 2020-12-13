@@ -1,9 +1,11 @@
 import { Box, Button, Flex, HStack, Link, Text } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import Logo from '../public/images/svg/logo-full.svg'
 
 export default function Home() {
+  const { t } = useTranslation()
   return (
     <Flex
       p="m"
@@ -22,9 +24,9 @@ export default function Home() {
       <Box as={Logo} width="240px" pos="absolute" top={0} left="20px" />
       <Box>
         <Text fontSize={60} variant="bold">
-          Tout.
+          {t('all')}
           <br />
-          en un.
+          {t('in-one')}
         </Text>
         <Text mt="l" maxW="400px">
           BibleStrong met à disposition des outils efficaces d'étude de la Bible

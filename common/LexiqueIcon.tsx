@@ -1,7 +1,7 @@
 import React from 'react'
 
-const LexiqueIcon = ({ ...props }) => (
-  <svg width={22} height={22} viewBox="0 0 18 22" {...props}>
+const LexiqueIcon = ({ size = 22, ...props }: { size?: string | number }) => (
+  <svg width={size} height={size} viewBox="0 0 18 22" {...props}>
     <g id="Page-1" stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
       <g id="Group" transform="translate(1.000000, 1.000000)">
         <path

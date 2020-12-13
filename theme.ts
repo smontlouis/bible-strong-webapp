@@ -16,6 +16,15 @@ const breakpoints: { [x: string]: string } = {
 
 export const theme = extendTheme({
   initialColorMode: 'light',
+  styles: {
+    global: {
+      '#div': {
+        '&::-webkit-scrollbar': {
+          display: 'none',
+        },
+      },
+    },
+  },
   components: {
     Text: text,
     Menu: menu,
@@ -38,8 +47,9 @@ export const theme = extendTheme({
     border: 'rgb(230,230,230)',
 
     lightGrey: '#F4F7FF',
-    grey: '#A2A9C8',
     darkGrey: 'rgba(0,0,0,0.5)',
+    grey: '#A2A9C8',
+    greys: ['#eceff4', '#dde1ea', '#b0b9cf', '#929fbd', '#7484ab'],
 
     primary: 'rgb(89,131,240)',
     lightPrimary: 'rgb(233, 243, 252)',

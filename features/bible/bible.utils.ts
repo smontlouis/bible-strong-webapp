@@ -1,5 +1,7 @@
 import { GenericVerse } from '../../common/types'
+import { firestore } from '../../lib/firebase-app'
 import books from './books'
+import i18n from '../../i18n'
 
 export const getPreviousChapter = (
   basicVerse: Omit<GenericVerse, 'verse'> | null
@@ -47,6 +49,96 @@ export const getNextChapter = (
   }
 }
 
+export const findReference = async (
+  ref: string
+): Promise<GenericVerse | null> => {
+  let reference = ref.trim().toLowerCase()
+
+  const findBook = books.find((book) =>
+    reference.includes(i18n.t(book.Nom).toLowerCase())
+  )
+
+  if (!findBook) {
+    return null
+  }
+
+  if (reference === i18n.t(findBook.Nom).toLowerCase()) {
+    return {
+      book: findBook.Numero,
+      chapter: 1,
+      verse: 1,
+    }
+  }
+
+  const numbers = reference
+    .replace(i18n.t(findBook.Nom).toLowerCase(), '')
+    .trim()
+    .match(/\d+/g)
+    ?.map(Number)
+
+  if (!numbers?.length) {
+    return null
+  }
+
+  if (numbers.length === 1) {
+    if (numbers[0] <= findBook.Chapitres) {
+      return {
+        book: findBook.Numero,
+        chapter: numbers[0],
+        verse: 1,
+      }
+    } else {
+      const snapshot = await firestore
+        .collection(findBook.Numero < 40 ? 'lsgsat2' : 'lsgsnt2')
+        .doc(`${findBook.Numero}-${findBook.Chapitres}`)
+        .get()
+      const { count } = snapshot.data() as { count: number }
+
+      return {
+        book: findBook.Numero,
+        chapter: findBook.Chapitres,
+        verse: count,
+      }
+    }
+  }
+
+  if (numbers.length > 1) {
+    const [chapter, verse] = numbers
+    if (chapter <= findBook.Chapitres) {
+      const snapshot = await firestore
+        .collection(findBook.Numero < 40 ? 'lsgsat2' : 'lsgsnt2')
+        .doc(`${findBook.Numero}-${chapter}`)
+        .get()
+      const { count } = snapshot.data() as { count: number }
+
+      return {
+        book: findBook.Numero,
+        chapter,
+        verse: verse > count ? count : verse,
+      }
+    } else {
+      return null
+    }
+  }
+
+  return null
+}
+
+export const getReferenceChapter = ({
+  book,
+  chapter,
+}: {
+  book: number
+  chapter: number
+}) => {
+  return `${i18n.t(books[book - 1].Nom)} ${chapter}`
+}
+
+export const getReferenceByObject = (verses: GenericVerse[]) =>
+  getReference(
+    verses.map(({ book, chapter, verse }) => `${book}-${chapter}-${verse}`)
+  )
+
 /**
  * Get reference of given verses
  * eg: ['1-1-1', '1-1-2', '1-1-4'] : Genèse 1:1-2,4
@@ -71,7 +163,7 @@ export const getReference = (verses: string[]) => {
         return `${acc},${v}`
       }
       return acc + v
-    }, `${books[book - 1].Nom} ${chapter}:`)
+    }, `${i18n.t(books[book - 1].Nom)} ${chapter}:`)
 
   return title
 }

@@ -1,41 +1,32 @@
 export default {
   baseStyle: {
-    borderRadius: 'xl',
+    borderRadius: 'full',
     justifyContent: 'center',
     textTransform: 'initial',
     display: 'flex',
     px: 'm',
   },
   sizes: {
-    icon: {
-      minWidth: 0,
-      height: '40px',
-      width: '40px',
-    },
     xxs: {
-      fontSize: '13px',
-      height: '30px',
-      minWidth: 110,
+      fontSize: '17px',
+      height: '28px',
+      minWidth: '28px',
     },
     xs: {
       fontSize: '14px',
       height: '35px',
-      minWidth: 110,
     },
     s: {
       fontSize: '15px',
       height: '45px',
-      minWidth: 150,
     },
     m: {
       fontSize: '18px',
       height: '54px',
-      minWidth: 200,
     },
     l: {
       fontSize: '25px',
       height: '69px',
-      minWidth: 200,
     },
   },
   variants: {
@@ -66,7 +57,23 @@ export default {
     },
     naked: {
       bg: 'transparent',
-      color: '#909090',
+      color: 'grey',
+
+      _hover: {
+        bg: 'grey',
+        color: 'white',
+      },
+    },
+    icon: {
+      borderRadius: 'full',
+      _hover: {
+        bg: 'primary',
+        color: 'white',
+      },
+      _focus: {
+        bg: 'primary',
+        color: 'white',
+      },
     },
   },
   defaultProps: {

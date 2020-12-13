@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --project tsconfig.json",
-    "test": "jest"
+    "test": "jest",
+    "i18n": "i18next '**/*.{js,ts,tsx}' '!node_modules/**'"
   },
   "husky": {
     "hooks": {
@@ -26,6 +27,7 @@
     "@types/testing-library__jest-dom": "^5.9.5",
     "@types/testing-library__react": "^10.2.0",
     "@types/uuid": "^8.3.0",
+    "@unly/universal-language-detector": "^2.0.3",
     "algoliasearch": "^4.8.0",
     "canvas": "^2.6.1",
     "copy-to-clipboard": "^3.3.1",
@@ -37,12 +39,14 @@
     "husky": "^4.3.0",
     "i18next": "^19.8.4",
     "immer": "^8.0.0",
+    "install": "^0.13.0",
     "lodash.isequal": "^4.5.0",
     "next": "10.0.1",
     "next-compose-plugins": "^2.2.0",
     "next-images": "^1.4.1",
     "next-react-svg": "^1.1.2",
     "react": "17.0.1",
+    "react-autocomplete-hint": "^1.2.0",
     "react-dom": "17.0.1",
     "react-i18next": "^11.7.4",
     "react-icons": "^3.11.0",
@@ -54,6 +58,7 @@
     "slugify": "^1.4.6",
     "ts-jest": "^26.4.4",
     "uuid": "^8.3.1",
+    "yarn": "^1.22.10",
     "zustand": "^3.2.0"
   },
   "devDependencies": {
