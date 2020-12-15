@@ -8,6 +8,8 @@ import commonManualEn from './public/locales/en/common_manual.json'
 import commonManualFr from './public/locales/fr/common_manual.json'
 
 i18n.use(initReactI18next).init({
+  keySeparator: '.',
+  nsSeparator: '|',
   resources: {
     en: {
       translation: { ...en, ...enBooksTranslation, ...commonManualEn },

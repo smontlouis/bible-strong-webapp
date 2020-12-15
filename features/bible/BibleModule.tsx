@@ -1,16 +1,31 @@
 import BibleHeader from './BibleHeader'
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import BibleViewer from './BibleViewer'
 import MotionBox from '../../common/MotionBox'
 import SearchBox from './SearchBox'
-import useBibleStore from './bible.store'
 import { GenericVerse } from '../../common/types'
 import { getReferenceByObject, getReferenceChapter } from './bible.utils'
 import { Box } from '@chakra-ui/react'
+import useBrowserStore, { BibleTab } from '../browser/browser.store'
 
-const BibleModule = () => {
-  const { book, chapter, verse, setReference } = useBibleStore()
-  const reference = { book, chapter, verse }
+const BibleModule = ({ tabId }: { tabId: string }) => {
+  const [reference, updateReference] = useBrowserStore((state) => {
+    const tabItem = state.tabs.find((t) => t.id === tabId) as BibleTab
+    return [
+      tabItem.data,
+      (reference: GenericVerse) =>
+        state.updateEntity(tabId, {
+          ...tabItem,
+          data: reference,
+          name: getReferenceByObject([reference]),
+        }),
+    ]
+  })
+
+  useEffect(() => {
+    updateReference(reference)
+  }, [])
+
   const divRef = useRef<HTMLDivElement>(null)
 
   const [currentReference, setCurrentReference] = useState<{
@@ -20,15 +35,13 @@ const BibleModule = () => {
   }>(reference)
 
   const onChangeReference = (reference: GenericVerse) => {
-    setReference(reference)
+    updateReference(reference)
     setCurrentReference(reference)
   }
 
   const isHome =
     reference.book === currentReference.book &&
     reference.chapter === currentReference.chapter
-
-  console.log(reference)
 
   return (
     <MotionBox flex={1} d="flex" flexDir="column">
@@ -44,7 +57,7 @@ const BibleModule = () => {
       </BibleHeader>
       <BibleViewer
         divRef={divRef}
-        key={`${book}-${chapter}-${verse}`}
+        key={`${reference.book}-${reference.chapter}-${reference.verse}`}
         scrollMode="horizontal"
         defaultReference={reference}
         onReferenceChange={(ref) => setCurrentReference(ref)}
@@ -54,4 +67,4 @@ const BibleModule = () => {
   )
 }
 
-export default BibleModule
+export default React.memo(BibleModule)

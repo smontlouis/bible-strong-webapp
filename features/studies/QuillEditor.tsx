@@ -36,9 +36,10 @@ import { useAuth } from '../auth/AuthProvider'
 
 interface Props {
   id: string
+  onUpdateTitle: (title: string) => void
 }
 
-const QuillEditor = ({ id }: Props) => {
+const QuillEditor = ({ id, onUpdateTitle }: Props) => {
   const [value, setValue] = useState<Delta>()
   const { fullscreen, setFullscreen } = useGlobalStore((state) => ({
     fullscreen: state.fullscreen,
@@ -176,9 +177,8 @@ const QuillEditor = ({ id }: Props) => {
       title: e.target.value,
       modified_at: Date.now(),
     })
+    onUpdateTitle(e.target.value)
   }, 500)
-
-  const gradientColor = fullscreen ? 'white' : '#F4F7FF'
 
   const onRestoreVersion = (item: HistoryItem) => {
     editor.current?.getEditor().setContents(item.content as DeltaStatic)
@@ -193,6 +193,10 @@ const QuillEditor = ({ id }: Props) => {
       router.replace('/studies')
     }
   }, [data?.user?.id])
+
+  useEffect(() => {
+    onUpdateTitle(data?.title || '')
+  }, [])
 
   if (error || (data?.exists && data?.user.id !== user?.id)) {
     return <Error />
@@ -231,7 +235,7 @@ const QuillEditor = ({ id }: Props) => {
               right={-5}
               left={-10}
               height={225}
-              bg={`linear-gradient(${gradientColor} 84%, #f4f7ff00 100%)`}
+              bg={`linear-gradient(#fff 84%, #ffffff00 100%)`}
               zIndex={0}
             />
           </Box>

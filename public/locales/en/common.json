@@ -1,10 +1,12 @@
 {
+  "logout": "Logout",
   "bible": {
     "reference-not-found": "This verse can't be found"
   },
   "browser": {
     "new-tab": "New tab",
     "bible": "Bible",
+    "studies": "Studies",
     "lexique": "Lexicon",
     "dictionnary": "Dictionnary",
     "nave": "Nave",

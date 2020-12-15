@@ -34,6 +34,7 @@ const InfiniteReader = React.forwardRef<
     const [isLoading, setIsLoading] = useState(true)
     const [isNextLoading, setIsNextLoading] = useState(false)
     const [isPrevLoading, setIsPrevLoading] = useState(false)
+    const element = (ref as React.RefObject<HTMLDivElement>).current
 
     const loadPrev = async () => {
       const element = (ref as React.RefObject<HTMLDivElement>)?.current
@@ -78,9 +79,7 @@ const InfiniteReader = React.forwardRef<
 
     const wheelHandler = React.useCallback(
       (event: WheelEvent) => {
-        const element = (ref as React.RefObject<HTMLDivElement>).current
-
-        if (!element) return
+        if (!element || !element.offsetParent) return
 
         if (scrollMode === 'horizontal') {
           const toLeft = event.deltaY < 0 && element.scrollLeft > 0
@@ -153,6 +152,10 @@ const InfiniteReader = React.forwardRef<
         initial={{ opacity: 0 }}
         animate={{ opacity: isLoading ? 0 : 1 }}
         sx={{
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+
           ...(scrollMode === 'horizontal'
             ? {
                 columnWidth,

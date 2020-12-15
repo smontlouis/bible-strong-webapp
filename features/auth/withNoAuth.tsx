@@ -9,7 +9,7 @@ const withNoAuth = <P,>(Component: React.ComponentType<P>) => (props: P) => {
 
   useEffect(() => {
     if (!isLoading && user) {
-      router.replace('/home')
+      router.replace('/browser')
     }
   }, [isLoading, user?.id])
 

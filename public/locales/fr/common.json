@@ -1,10 +1,12 @@
 {
+  "logout": "Se déconnecter",
   "bible": {
     "reference-not-found": "Ce verset n'existe pas"
   },
   "browser": {
     "new-tab": "Nouvel onglet",
     "bible": "Bible",
+    "studies": "Études",
     "lexique": "Lexique",
     "dictionnary": "Dictionnaire",
     "nave": "Nave",

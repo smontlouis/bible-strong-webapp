@@ -1,19 +1,9 @@
-import {
-  Box,
-  Drawer,
-  DrawerBody,
-  DrawerCloseButton,
-  DrawerContent,
-  DrawerOverlay,
-  Flex,
-  useDisclosure,
-} from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import React, { PropsWithChildren, useEffect } from 'react'
-import { FiMenu } from 'react-icons/fi'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
 import useGlobalStore from '../global.store'
-import { Nav } from './Nav'
+import Header from './Header'
 
 const useFullscreen = (fullscreen: boolean) => {
   useEffect(() => {
@@ -42,30 +32,19 @@ const useFullscreen = (fullscreen: boolean) => {
 
 const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   const router = useRouter()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const btnRef = React.useRef(null)
   const { fullscreen } = useGlobalStore((state) => ({
     fullscreen: state.fullscreen,
-    setFullscreen: state.setFullscreen,
   }))
 
   useFullscreen(fullscreen)
 
   return (
-    <>
-      <Box height="56px" bg="greys.0">
-        <Box
-          role="button"
-          onClick={onOpen}
-          as={FiMenu}
-          fontSize="25px"
-          zIndex={10}
-        />
-      </Box>
-      <Flex bg="white" h="100vh">
+    <Box height="100vh" d="flex" flexDir="column">
+      <Header />
+      <Flex bg="white" flex={1}>
         <Box
           flex={1}
-          bg={fullscreen ? 'white' : 'lightGrey'}
+          bg={'lightGrey'}
           d="flex"
           flexDir="column"
           overflow="auto"
@@ -79,25 +58,7 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
           </AnimatePresence>
         </Box>
       </Flex>
-      <Drawer
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay>
-          <DrawerContent>
-            <DrawerCloseButton />
-
-            <DrawerBody>
-              <Box mt="xl">
-                <Nav />
-              </Box>
-            </DrawerBody>
-          </DrawerContent>
-        </DrawerOverlay>
-      </Drawer>
-    </>
+    </Box>
   )
 }
 

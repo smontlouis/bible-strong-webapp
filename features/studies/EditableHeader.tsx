@@ -1,7 +1,6 @@
 import { Box, Center, Flex, Tooltip, Text } from '@chakra-ui/react'
 import React from 'react'
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
-import GoBackArrow from '../../common/GoBackArrow'
 import Heading from '../../common/Heading'
 import MotionBox from '../../common/MotionBox'
 import { HistoryItem, Study } from '../../common/types'
@@ -35,7 +34,6 @@ const EditableHeader = ({
       alignItems="center"
       justifyContent={fullscreen ? 'center' : 'flex-start'}
     >
-      {!fullscreen && <GoBackArrow pos="relative" zIndex={1} mr="m" mb="m" />}
       {fullscreen ? (
         <MotionBox layoutId="heading">
           <Text size="3xl" py="s" px="m">

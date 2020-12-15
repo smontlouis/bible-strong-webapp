@@ -4,17 +4,17 @@ import waitForAuth from '../features/auth/waitForAuth'
 import withAuth from '../features/auth/withAuth'
 import compose from '../helpers/compose'
 import MotionBox from '../common/MotionBox'
-import Browser from '../features/browser/Browser'
+import BrowserModule from '../features/browser/Browser'
 
-const Bible = () => {
+const Browser = () => {
   return (
     <MotionBox flex={1}>
-      <Browser />
+      <BrowserModule />
     </MotionBox>
   )
 }
 
-const BibleEnhanced = compose(withAuth, waitForAuth)(Bible)
-BibleEnhanced.Layout = AppLayout
+const BrowserEnhanced = compose(withAuth, waitForAuth)(Browser)
+BrowserEnhanced.Layout = AppLayout
 
-export default BibleEnhanced
+export default BrowserEnhanced

@@ -1,14 +1,10 @@
 import { Link, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
-import AppLayout from '../common/AppLayout'
-import MotionBox from '../common/MotionBox'
-import waitForAuth from '../features/auth/waitForAuth'
-import withAuth from '../features/auth/withAuth'
-import compose from '../helpers/compose'
-import { useTranslation } from 'react-i18next'
+import MotionBox from '../../common/MotionBox'
 import NextLink from 'next/link'
+import { useTranslation } from 'react-i18next'
 
-const Home = () => {
+const HomeModule = ({ tabId }: { tabId: string }) => {
   const { t } = useTranslation()
   return (
     <MotionBox
@@ -22,10 +18,10 @@ const Home = () => {
     >
       <VStack spacing="l" align="flex-start" maxWidth={600}>
         <Text size="xl">{t('home.hello')}</Text>
-        <NextLink href="/home" locale="en">
+        <NextLink href="/browser" locale="en">
           <a>change to en</a>
         </NextLink>
-        <NextLink href="/home" locale="fr">
+        <NextLink href="/browser" locale="fr">
           <a>change to fr /</a>
         </NextLink>
         <Text>{t('home.welcome_1')}</Text>
@@ -57,8 +53,4 @@ const Home = () => {
     </MotionBox>
   )
 }
-
-const HomeEnhanced = compose(withAuth, waitForAuth)(Home)
-HomeEnhanced.Layout = AppLayout
-
-export default HomeEnhanced
+export default HomeModule

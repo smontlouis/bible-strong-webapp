@@ -27,11 +27,10 @@ import { FiCopy, FiExternalLink, FiLink2, FiMoreVertical } from 'react-icons/fi'
 import { MdPictureAsPdf } from 'react-icons/md'
 import { AiOutlineLink } from 'react-icons/ai'
 import React, { useState } from 'react'
-import NextLink from 'next/link'
 import { RiDeleteBinLine } from 'react-icons/ri'
 import { FiTag } from 'react-icons/fi'
-import { useRouter } from 'next/router'
 import getPDFStudy from '../../helpers/getPDFStudy'
+import useBrowserStore, { EditStudyTab } from '../browser/browser.store'
 
 interface Props {
   study: Study
@@ -39,24 +38,6 @@ interface Props {
   onPublish: (id: string, value: boolean) => void
   disabled: boolean
   isFirst: boolean
-}
-
-const variants = {
-  initial: {
-    scale: 0.8,
-    opacity: 0,
-    transition: { duration: 0.4, ease: [0.48, 0.15, 0.25, 0.96] },
-  },
-  enter: ({ disabled, isFirst }: { disabled: boolean; isFirst: boolean }) => ({
-    scale: 1,
-    opacity: disabled && !isFirst ? 0.6 : 1,
-    transition: { duration: 0.8, ease: [0.48, 0.15, 0.25, 0.96] },
-  }),
-  exit: {
-    scale: 0.8,
-    opacity: 0,
-    transition: { duration: 0.4, ease: [0.48, 0.15, 0.25, 0.96] },
-  },
 }
 
 const StudyItem = ({
@@ -67,17 +48,14 @@ const StudyItem = ({
   isFirst,
 }: Props) => {
   const [confirmDelete, setConfirmDelete] = useState(false)
-  const router = useRouter()
   const toast = useToast()
   const [isPDFLoading, setPDFLoading] = useState(false)
+  const [addTab] = useBrowserStore((state) => [state.addTab])
 
   return (
     <MotionBox
-      layout
       borderRadius="l"
       bg="white"
-      variants={variants}
-      custom={{ disabled, isFirst }}
       transition={{ duration: 0.4, ease: 'easeInOut' }}
       borderColor="lightGrey"
       borderWidth={1}
@@ -94,9 +72,21 @@ const StudyItem = ({
       pos="relative"
     >
       {!disabled || isFirst ? (
-        <NextLink href={`/studies/${id}/edit`} passHref>
-          <Box as="a" {...absoluteFill} zIndex={1} borderRadius="l" />
-        </NextLink>
+        <Box
+          {...absoluteFill}
+          cursor="pointer"
+          zIndex={1}
+          borderRadius="l"
+          onClick={() => {
+            const tabItem = {
+              type: 'edit-study',
+              data: {
+                studyId: id,
+              },
+            } as EditStudyTab
+            addTab(tabItem)
+          }}
+        />
       ) : (
         <Tooltip label="Limité à une étude pour les non-sponsors">
           <Box as="a" {...absoluteFill} zIndex={1} borderRadius="l" />
@@ -147,9 +137,7 @@ const StudyItem = ({
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          copy(
-                            `${document.location.host}${router.pathname}/${id}`
-                          )
+                          copy(`${document.location.host}/studies/${id}`)
                           toast({
                             title: 'Lien copié',
                           })

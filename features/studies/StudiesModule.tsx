@@ -10,33 +10,30 @@ import {
 } from '@chakra-ui/react'
 import { useCollection } from '@nandorojo/swr-firestore'
 import React, { useState } from 'react'
-import AppLayout from '../../common/AppLayout'
 import Heading from '../../common/Heading'
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
 import MotionBox from '../../common/MotionBox'
 import { Study } from '../../common/types'
 import { useAuth } from '../../features/auth/AuthProvider'
-import waitForAuth from '../../features/auth/waitForAuth'
-import withAuth from '../../features/auth/withAuth'
 import StudyItem from '../../features/studies/StudyItem'
-import compose from '../../helpers/compose'
 import { FiFilePlus } from 'react-icons/fi'
 import { firestore } from '../../lib/firebase-app'
 import { v4 as uuidv4 } from 'uuid'
-import { useRouter } from 'next/router'
 import Entrance from '../../common/Entrance'
 import { AnimatePresence } from 'framer-motion'
+import useBrowserStore, { EditStudyTab } from '../browser/browser.store'
 
-const Studies = () => {
+const StudiesModule = ({ tabId }: { tabId: string }) => {
   const { user } = useAuth()
-  const router = useRouter()
   const toast = useToast()
   const [selectedTag, setSelectedTag] = useState<string>()
   const { loading, data, error, revalidate } = useCollection<Study>('studies', {
     orderBy: ['modified_at', 'desc'],
     where: ['user.id', '==', user?.id],
   })
+
+  const [addTab] = useBrowserStore((state) => [state.addTab])
 
   const onAddStudy = async () => {
     const uuid = uuidv4()
@@ -57,7 +54,13 @@ const Studies = () => {
         },
       })
 
-    router.push(`/studies/${uuid}/edit`)
+    const tabItem = {
+      type: 'edit-study',
+      data: {
+        studyId: uuid,
+      },
+    } as EditStudyTab
+    addTab(tabItem)
   }
 
   const onDeleteStudy = async (id: string) => {
@@ -93,18 +96,7 @@ const Studies = () => {
   }
 
   return (
-    <MotionBox
-      initial="exit"
-      animate="enter"
-      exit="exit"
-      transition={{ duration: 0.5, ease: 'easeOut' }}
-      variants={{
-        enter: { transition: { staggerChildren: 0.05 } },
-        exit: { transition: { staggerChildren: 0.05 } },
-      }}
-      p="2xl"
-      pt={{ base: '3xl', xl: '2xl' }}
-    >
+    <MotionBox flex={1} p="2xl" pt={{ base: '3xl', xl: '2xl' }}>
       <Flex alignItems="center">
         <Box flex={1}>
           <Heading>Études</Heading>
@@ -158,7 +150,4 @@ const Studies = () => {
   )
 }
 
-const StudiesEnhanced = compose(withAuth, waitForAuth)(Studies)
-StudiesEnhanced.Layout = AppLayout
-
-export default StudiesEnhanced
+export default StudiesModule
