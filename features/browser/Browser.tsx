@@ -58,6 +58,7 @@ const Browser = () => {
     removeTab,
     onIdChange,
     reorderTabs,
+    moveTabs,
   } = useBrowserStore()
 
   const onDragEnd = useCallback((result: DropResult) => {
@@ -70,6 +71,13 @@ const Browser = () => {
         result.source.index,
         result.destination.index,
         Number(result.source.droppableId)
+      )
+    } else {
+      moveTabs(
+        Number(result.source.droppableId),
+        Number(result.destination.droppableId),
+        result.source.index,
+        result.destination.index
       )
     }
   }, [])

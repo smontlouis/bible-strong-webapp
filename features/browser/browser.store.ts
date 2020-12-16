@@ -77,6 +77,12 @@ type State = {
     destinationIndex: number,
     layoutIndex: number
   ) => void
+  moveTabs: (
+    sourceDroppableId: number,
+    destinationDroppableId: number,
+    sourceIndex: number,
+    destinationIndex: number
+  ) => void
   layouts: {
     tabId: string
     tabs: TabItem[]
@@ -88,9 +94,9 @@ const defaultTabs: TabItem[] = [
   { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
 ]
 
-// const defaultTabs2: TabItem[] = [
-//   { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
-// ]
+const defaultTabs2: TabItem[] = [
+  { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
+]
 
 const useBrowserStore = create<State>(
   immer((set, get) => ({
@@ -103,6 +109,10 @@ const useBrowserStore = create<State>(
       {
         tabId: defaultTabs[0].id,
         tabs: defaultTabs,
+      },
+      {
+        tabId: defaultTabs2[0].id,
+        tabs: defaultTabs2,
       },
     ],
     addTab: (tabItem, layoutIndex = 0) =>
@@ -158,6 +168,23 @@ const useBrowserStore = create<State>(
       set((state) => {
         const [removed] = state.layouts[layoutIndex].tabs.splice(sourceIndex, 1)
         state.layouts[layoutIndex].tabs.splice(destinationIndex, 0, removed)
+      }),
+    moveTabs: (
+      sourceDroppableId,
+      destinationDroppableId,
+      sourceIndex,
+      destinationIndex
+    ) =>
+      set((state) => {
+        const [removed] = state.layouts[sourceDroppableId].tabs.splice(
+          sourceIndex,
+          1
+        )
+        state.layouts[destinationDroppableId].tabs.splice(
+          destinationIndex,
+          0,
+          removed
+        )
       }),
   }))
 )
