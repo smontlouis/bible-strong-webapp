@@ -16,6 +16,7 @@ import NaveIcon from '../../common/NaveIcon'
 import { IconType } from 'react-icons'
 import { FaFeather } from 'react-icons/fa'
 import BibleIcon from '../../common/BibleIcon'
+import { BrowserModuleProps } from '../../common/types'
 
 const getInitialData = (type: TabItem['type']): TabItem => {
   if (type === 'bible') {
@@ -68,7 +69,7 @@ const getInitialData = (type: TabItem['type']): TabItem => {
   } as EmptyTab
 }
 
-const Empty = ({ tabId }: { tabId: string }) => {
+const Empty = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   const { t } = useTranslation()
   const { updateEntity } = useBrowserStore()
 
@@ -122,7 +123,7 @@ const Empty = ({ tabId }: { tabId: string }) => {
             w="180px"
             flexDir="column"
             key={entity.type}
-            onClick={() => updateEntity(tabId, initialData)}
+            onClick={() => updateEntity(tabId, initialData, layoutIndex)}
             height="180px"
             borderRadius="l"
             cursor="pointer"

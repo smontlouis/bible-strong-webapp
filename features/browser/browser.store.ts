@@ -68,41 +68,64 @@ export type TabItem =
   | EditStudyTab
 
 type State = {
-  tabIndex: number
-  onIndexChange: (index: number) => void
-  tabs: TabItem[]
-  addTab: (tabItem?: TabItem) => void
-  removeTab: (tab: string) => void
-  updateEntity: (id: string, tabItem: TabItem) => void
+  onIdChange: (index: string, layoutIndex: number) => void
+  addTab: (tabItem?: TabItem, layoutIndex?: number) => void
+  removeTab: (tab: string, layoutIndex: number) => void
+  updateEntity: (id: string, tabItem: TabItem, layoutIndex: number) => void
+  reorderTabs: (
+    sourceIndex: number,
+    destinationIndex: number,
+    layoutIndex: number
+  ) => void
+  layouts: {
+    tabId: string
+    tabs: TabItem[]
+  }[]
 }
+
+const defaultTabs: TabItem[] = [
+  { id: uuidv4(), name: 'browser.home', type: 'home', data: {} },
+  { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
+]
+
+// const defaultTabs2: TabItem[] = [
+//   { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
+// ]
 
 const useBrowserStore = create<State>(
   immer((set, get) => ({
-    tabIndex: 0,
-    onIndexChange: (index) =>
+    tabId: defaultTabs[0].id,
+    onIdChange: (id, layoutIndex) =>
       set((state) => {
-        state.tabIndex = index
+        state.layouts[layoutIndex].tabId = id
       }),
-    tabs: [
-      { id: uuidv4(), name: 'browser.home', type: 'home', data: {} },
-      { id: uuidv4(), name: 'browser.new-tab', type: 'empty', data: {} },
+    layouts: [
+      {
+        tabId: defaultTabs[0].id,
+        tabs: defaultTabs,
+      },
     ],
-    addTab: (tabItem) =>
+    addTab: (tabItem, layoutIndex = 0) =>
       set((state) => {
-        state.tabs.push({
-          id: uuidv4(),
+        const id = uuidv4()
+        state.layouts[layoutIndex].tabs.push({
+          id,
           name: tabItem?.name || 'browser.new-tab',
           type: tabItem?.type || 'empty',
           data: tabItem?.data || {},
         })
-        state.tabIndex = state.tabs.length - 1
+        state.layouts[layoutIndex].tabId = id
       }),
-    removeTab: async (id) => {
-      const tabToRemoveIndex = get().tabs.findIndex((t) => t.id === id)
+    removeTab: async (id, layoutIndex) => {
+      const tabs = get().layouts[layoutIndex].tabs
+      const tabIndex = tabs.findIndex(
+        (t) => t.id === get().layouts[layoutIndex].tabId
+      )
+      const tabToRemoveIndex = tabs.findIndex((t) => t.id === id)
 
       set((state) => {
         if (tabToRemoveIndex !== -1) {
-          state.tabs.splice(tabToRemoveIndex, 1)
+          state.layouts[layoutIndex].tabs.splice(tabToRemoveIndex, 1)
         }
       })
 
@@ -111,20 +134,30 @@ const useBrowserStore = create<State>(
       set((state) => {
         if (tabToRemoveIndex !== -1) {
           // Wait for framer-motion to finish animation before switching index
-          if (state.tabIndex === tabToRemoveIndex && tabToRemoveIndex === 0) {
-            state.tabIndex = 0
-          } else if (state.tabIndex > tabToRemoveIndex) {
-            state.tabIndex -= 1
-          } else if (state.tabIndex === tabToRemoveIndex) {
-            state.tabIndex -= 1
+          if (tabIndex === tabToRemoveIndex && tabToRemoveIndex === 0) {
+            state.layouts[layoutIndex].tabId = tabs[0].id
+          } else if (tabIndex > tabToRemoveIndex) {
+            state.layouts[layoutIndex].tabId = tabs[tabIndex - 1].id
+          } else if (tabIndex === tabToRemoveIndex) {
+            state.layouts[layoutIndex].tabId = tabs[tabIndex - 1].id
           }
         }
       })
     },
-    updateEntity: (id, tabItem) =>
+    updateEntity: (id, tabItem, layoutIndex) =>
       set((state) => {
-        const tabIndex = state.tabs.findIndex((t) => t.id === id)
-        state.tabs[tabIndex] = { ...state.tabs[tabIndex], ...tabItem }
+        const tabIndex = state.layouts[layoutIndex].tabs.findIndex(
+          (t) => t.id === id
+        )
+        state.layouts[layoutIndex].tabs[tabIndex] = {
+          ...state.layouts[layoutIndex].tabs[tabIndex],
+          ...tabItem,
+        }
+      }),
+    reorderTabs: (sourceIndex, destinationIndex, layoutIndex) =>
+      set((state) => {
+        const [removed] = state.layouts[layoutIndex].tabs.splice(sourceIndex, 1)
+        state.layouts[layoutIndex].tabs.splice(destinationIndex, 0, removed)
       }),
   }))
 )

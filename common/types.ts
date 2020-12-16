@@ -175,3 +175,8 @@ export interface Verse extends GenericVerse {
   id: string
   content: string
 }
+
+export interface BrowserModuleProps {
+  tabId: string
+  layoutIndex: number
+}

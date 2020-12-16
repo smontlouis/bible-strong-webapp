@@ -3,8 +3,9 @@ import React from 'react'
 import MotionBox from '../../common/MotionBox'
 import NextLink from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { BrowserModuleProps } from '../../common/types'
 
-const HomeModule = ({ tabId }: { tabId: string }) => {
+const HomeModule = ({ tabId }: BrowserModuleProps) => {
   const { t } = useTranslation()
   return (
     <MotionBox

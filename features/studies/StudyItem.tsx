@@ -16,7 +16,7 @@ import {
 } from '@chakra-ui/react'
 import copy from 'copy-to-clipboard'
 import formatDistance from 'date-fns/formatDistance'
-import { Study } from '../../common/types'
+import { BrowserModuleProps, Study } from '../../common/types'
 import deltaToPlainText from '../../helpers/deltaToPlainText'
 import { absoluteFill } from '../../helpers/box'
 import truncate from '../../helpers/truncate'
@@ -32,7 +32,7 @@ import { FiTag } from 'react-icons/fi'
 import getPDFStudy from '../../helpers/getPDFStudy'
 import useBrowserStore, { EditStudyTab } from '../browser/browser.store'
 
-interface Props {
+interface Props extends BrowserModuleProps {
   study: Study
   onDelete: (id: string) => void
   onPublish: (id: string, value: boolean) => void
@@ -46,6 +46,7 @@ const StudyItem = ({
   onPublish,
   disabled,
   isFirst,
+  layoutIndex,
 }: Props) => {
   const [confirmDelete, setConfirmDelete] = useState(false)
   const toast = useToast()
@@ -84,7 +85,7 @@ const StudyItem = ({
                 studyId: id,
               },
             } as EditStudyTab
-            addTab(tabItem)
+            addTab(tabItem, layoutIndex)
           }}
         />
       ) : (

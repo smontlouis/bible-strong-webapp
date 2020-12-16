@@ -3,22 +3,28 @@ import React, { useEffect, useRef, useState } from 'react'
 import BibleViewer from './BibleViewer'
 import MotionBox from '../../common/MotionBox'
 import SearchBox from './SearchBox'
-import { GenericVerse } from '../../common/types'
+import { BrowserModuleProps, GenericVerse } from '../../common/types'
 import { getReferenceByObject, getReferenceChapter } from './bible.utils'
 import { Box } from '@chakra-ui/react'
 import useBrowserStore, { BibleTab } from '../browser/browser.store'
 
-const BibleModule = ({ tabId }: { tabId: string }) => {
+const BibleModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   const [reference, updateReference] = useBrowserStore((state) => {
-    const tabItem = state.tabs.find((t) => t.id === tabId) as BibleTab
+    const tabItem = state.layouts[layoutIndex].tabs.find(
+      (t) => t.id === tabId
+    ) as BibleTab
     return [
       tabItem.data,
       (reference: GenericVerse) =>
-        state.updateEntity(tabId, {
-          ...tabItem,
-          data: reference,
-          name: getReferenceByObject([reference]),
-        }),
+        state.updateEntity(
+          tabId,
+          {
+            ...tabItem,
+            data: reference,
+            name: getReferenceByObject([reference]),
+          },
+          layoutIndex
+        ),
     ]
   })
 

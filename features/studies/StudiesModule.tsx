@@ -14,7 +14,7 @@ import Heading from '../../common/Heading'
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
 import MotionBox from '../../common/MotionBox'
-import { Study } from '../../common/types'
+import { BrowserModuleProps, Study } from '../../common/types'
 import { useAuth } from '../../features/auth/AuthProvider'
 import StudyItem from '../../features/studies/StudyItem'
 import { FiFilePlus } from 'react-icons/fi'
@@ -24,7 +24,7 @@ import Entrance from '../../common/Entrance'
 import { AnimatePresence } from 'framer-motion'
 import useBrowserStore, { EditStudyTab } from '../browser/browser.store'
 
-const StudiesModule = ({ tabId }: { tabId: string }) => {
+const StudiesModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   const { user } = useAuth()
   const toast = useToast()
   const [selectedTag, setSelectedTag] = useState<string>()
@@ -60,7 +60,7 @@ const StudiesModule = ({ tabId }: { tabId: string }) => {
         studyId: uuid,
       },
     } as EditStudyTab
-    addTab(tabItem)
+    addTab(tabItem, layoutIndex)
   }
 
   const onDeleteStudy = async (id: string) => {
@@ -133,6 +133,8 @@ const StudiesModule = ({ tabId }: { tabId: string }) => {
                 <StudyItem
                   key={study.id}
                   study={study}
+                  tabId={tabId}
+                  layoutIndex={layoutIndex}
                   onDelete={onDeleteStudy}
                   onPublish={onPublishStudy}
                   disabled={user?.subscription !== 'premium'}
