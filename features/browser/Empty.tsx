@@ -112,35 +112,38 @@ const Empty = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   return (
     <Grid
       gridGap="l"
-      templateColumns="repeat(auto-fit, 180px)"
+      templateColumns="repeat(3, 100px)"
       p="xl"
       justifyContent="center"
+      flex={1}
+      placeItems="center"
+      sx={{
+        placeContent: 'center',
+      }}
     >
       {entities.map((entity) => {
         const initialData = getInitialData(entity.type)
         return (
           <Center
-            w="180px"
+            w="100px"
+            h="100px"
             flexDir="column"
             key={entity.type}
             onClick={() => updateEntity(tabId, initialData, layoutIndex)}
-            height="180px"
             borderRadius="l"
             cursor="pointer"
             transition="0.5s ease"
-            _hover={{
-              transform: 'scale(1.05)',
-              boxShadow: 'rgba(89, 131, 240, 0.3) 1px 35px 20px -20px',
-            }}
+            _hover={{}}
+            bg={entity.color}
           >
             <Box
               as={entity.icon}
-              width="90px"
-              height="90px"
-              color={entity.color}
-              mb="l"
+              width="30px"
+              height="30px"
+              color="white"
+              mb="s"
             />
-            <Text color="black" variant="light">
+            <Text color="white" variant="bold" size="s">
               {entity.name}
             </Text>
           </Center>

@@ -1,10 +1,10 @@
 import React from 'react'
 
-import MotionBox from '../../common/MotionBox'
 import dynamic from 'next/dynamic'
 import Loading from '../../common/Loading'
 import useBrowserStore, { EditStudyTab } from '../browser/browser.store'
 import { BrowserModuleProps } from '../../common/types'
+import { Box } from '@chakra-ui/react'
 
 const QuillEditor = dynamic(() => import('./QuillEditor'), {
   ssr: false,
@@ -32,18 +32,16 @@ const EditStudyModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   })
 
   return (
-    <MotionBox
+    <Box
       flex={1}
       d="flex"
       flexDir="column"
-      initial="exit"
-      animate="enter"
-      exit="exit"
       p="2xl"
       pt={{ base: '3xl', xl: '2xl' }}
+      className={`edit-study-${studyId}`}
     >
       <QuillEditor id={studyId} onUpdateTitle={updateTitle} />
-    </MotionBox>
+    </Box>
   )
 }
 

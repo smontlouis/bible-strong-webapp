@@ -56,10 +56,8 @@ const StudyItem = ({
   return (
     <MotionBox
       borderRadius="l"
-      bg="white"
+      bg="greys.0"
       transition={{ duration: 0.4, ease: 'easeInOut' }}
-      borderColor="lightGrey"
-      borderWidth={1}
       boxShadow="rgba(89, 131, 240, 0) 1px 0px 36px -27px"
       minH="250px"
       {...((!disabled || isFirst) && {

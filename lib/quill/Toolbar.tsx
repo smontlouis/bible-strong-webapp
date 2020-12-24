@@ -5,7 +5,7 @@ import { FiBox } from 'react-icons/fi'
 
 const Toolbar = () => {
   return (
-    <div id="toolbar">
+    <div className="toolbar">
       <span className="ql-formats">
         <select
           className="ql-header"

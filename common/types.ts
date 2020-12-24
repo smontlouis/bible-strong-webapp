@@ -116,7 +116,7 @@ export interface Study {
   title: string
   created_at: number
   modified_at: number
-  content?: Delta
+  content?: Delta | null
   history?: HistoryItem[]
   published?: boolean
   user: {

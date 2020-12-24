@@ -19,8 +19,8 @@ const Header = () => {
   const { user, signout } = useAuth()
   const { t } = useTranslation()
   return (
-    <Flex px="m" height="64px" bg="greys.0" alignItems="center">
-      <Box as={LogoFull} width="150px" height="30px" />
+    <Flex px="m" height="64px" alignItems="center">
+      <Box as={LogoFull} width="150px" />
       <Box ml="auto">
         {user && (
           <Menu isLazy>

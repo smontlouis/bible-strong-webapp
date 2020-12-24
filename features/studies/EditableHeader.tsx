@@ -2,7 +2,6 @@ import { Box, Center, Flex, Tooltip, Text } from '@chakra-ui/react'
 import React from 'react'
 import { BiExitFullscreen, BiFullscreen } from 'react-icons/bi'
 import Heading from '../../common/Heading'
-import MotionBox from '../../common/MotionBox'
 import { HistoryItem, Study } from '../../common/types'
 import EditTagsForStudy from './EditTagsForStudy'
 import History from './History'
@@ -30,30 +29,25 @@ const EditableHeader = ({
 }: Props) => {
   return (
     <Flex
-      layout
       alignItems="center"
       justifyContent={fullscreen ? 'center' : 'flex-start'}
     >
       {fullscreen ? (
-        <MotionBox layoutId="heading">
-          <Text size="3xl" py="s" px="m">
-            {title}
-          </Text>
-        </MotionBox>
+        <Text size="2xl" py="s" px="m">
+          {title}
+        </Text>
       ) : (
         <Box pos="relative" zIndex={1} alignItems="center">
-          <MotionBox layoutId="heading">
-            <Heading
-              size="3xl"
-              as="input"
-              defaultValue={title}
-              onChange={onChangeTitle}
-              bg="rgba(0,0,0,0.03)"
-              py="s"
-              px="m"
-              borderRadius="m"
-            />
-          </MotionBox>
+          <Heading
+            size="2xl"
+            as="input"
+            defaultValue={title}
+            onChange={onChangeTitle}
+            bg="rgba(0,0,0,0.03)"
+            py="s"
+            px="m"
+            borderRadius="m"
+          />
           <Text mt="xs" color="grey" size="s">
             Éditer le titre en cliquant dessus.
           </Text>

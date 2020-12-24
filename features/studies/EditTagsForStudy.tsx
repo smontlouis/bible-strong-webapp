@@ -76,9 +76,12 @@ const EditTagsForStudy = ({ selectedTags, id }: Props) => {
         setActiveTags((s) => [...s, { id: tag.value, name: tag.label }])
 
         // Add to bible tags
-        const user_ = await produce(user, async (draft) => {
+        const user_ = produce(user, (draft) => {
           // @ts-ignore
-          draft.bible.tags[tag.value].studies[id] = true
+          draft.bible.tags[tag.value].studies = {
+            ...draft?.bible.tags?.[tag.value].studies,
+            [id]: true,
+          }
 
           const bibleTags = current(draft?.bible.tags)
           firestore

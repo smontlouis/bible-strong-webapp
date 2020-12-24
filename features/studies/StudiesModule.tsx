@@ -28,31 +28,34 @@ const StudiesModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   const { user } = useAuth()
   const toast = useToast()
   const [selectedTag, setSelectedTag] = useState<string>()
-  const { loading, data, error, revalidate } = useCollection<Study>('studies', {
-    orderBy: ['modified_at', 'desc'],
-    where: ['user.id', '==', user?.id],
-  })
+  const { loading, data, error, revalidate, mutate } = useCollection<Study>(
+    'studies',
+    {
+      orderBy: ['modified_at', 'desc'],
+      where: ['user.id', '==', user?.id],
+      listen: true,
+    }
+  )
 
   const [addTab] = useBrowserStore((state) => [state.addTab])
 
   const onAddStudy = async () => {
     const uuid = uuidv4()
 
-    await firestore
-      .collection('studies')
-      .doc(uuid)
-      .set({
-        id: uuid,
-        created_at: Date.now(),
-        modified_at: Date.now(),
-        title: 'Document sans titre',
-        content: null,
-        user: {
-          id: user?.id,
-          displayName: user?.displayName,
-          photoUrl: user?.photoURL,
-        },
-      })
+    const study: Study = {
+      id: uuid,
+      created_at: Date.now(),
+      modified_at: Date.now(),
+      title: 'Document sans titre',
+      content: null,
+      user: {
+        id: user?.id || '',
+        displayName: user?.displayName || '',
+        photoUrl: user?.photoURL || '',
+      },
+    }
+
+    await firestore.collection('studies').doc(uuid).set(study)
 
     const tabItem = {
       type: 'edit-study',
@@ -61,6 +64,7 @@ const StudiesModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
       },
     } as EditStudyTab
     addTab(tabItem, layoutIndex)
+    mutate((studies) => [study, ...(studies || [])], false)
   }
 
   const onDeleteStudy = async (id: string) => {
@@ -115,7 +119,12 @@ const StudiesModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
           </Select>
         </Entrance>
         <Entrance>
-          <Button ml="l" onClick={onAddStudy} leftIcon={<FiFilePlus />}>
+          <Button
+            size="s"
+            ml="l"
+            onClick={onAddStudy}
+            leftIcon={<FiFilePlus />}
+          >
             Nouvelle étude
           </Button>
         </Entrance>

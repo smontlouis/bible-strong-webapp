@@ -49,7 +49,16 @@ export const theme = extendTheme({
     lightGrey: '#F4F7FF',
     darkGrey: 'rgba(0,0,0,0.5)',
     grey: '#A2A9C8',
-    greys: ['#eceff4', '#dde1ea', '#b0b9cf', '#929fbd', '#7484ab'],
+    greys: [
+      '#f4f7ff',
+      '#eff2fb',
+      '#ebeef8',
+      '#e6eaf5',
+      '#e2e6f2',
+      '#dde2ef',
+      '#d9deec',
+      '#d4dae9',
+    ],
 
     primary: 'rgb(89,131,240)',
     lightPrimary: 'rgb(233, 243, 252)',

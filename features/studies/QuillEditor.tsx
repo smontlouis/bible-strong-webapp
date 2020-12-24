@@ -33,6 +33,7 @@ import useGlobalStore from '../../global.store'
 import EditableHeader from './EditableHeader'
 import { useRouter } from 'next/router'
 import { useAuth } from '../auth/AuthProvider'
+import { useTranslation } from 'react-i18next'
 
 interface Props {
   id: string
@@ -40,6 +41,7 @@ interface Props {
 }
 
 const QuillEditor = ({ id, onUpdateTitle }: Props) => {
+  const { t } = useTranslation()
   const [value, setValue] = useState<Delta>()
   const { fullscreen, setFullscreen } = useGlobalStore((state) => ({
     fullscreen: state.fullscreen,
@@ -123,7 +125,7 @@ const QuillEditor = ({ id, onUpdateTitle }: Props) => {
   const modules = useMemo(
     () => ({
       toolbar: {
-        container: '#toolbar',
+        container: `.edit-study-${id} .toolbar`,
         handlers: {
           bibleVerse: () => setIsModalOpen('block-verse'),
           bibleStrong: () => setIsModalOpen('block-strong'),
@@ -195,8 +197,10 @@ const QuillEditor = ({ id, onUpdateTitle }: Props) => {
   }, [data?.user?.id])
 
   useEffect(() => {
-    onUpdateTitle(data?.title || '')
-  }, [])
+    if (data?.title) {
+      onUpdateTitle(data?.title)
+    }
+  }, [data?.title])
 
   if (error || (data?.exists && data?.user.id !== user?.id)) {
     return <Error />
@@ -208,12 +212,12 @@ const QuillEditor = ({ id, onUpdateTitle }: Props) => {
 
   // CHECK IF USER CAN EDIT STUDY
   if (!data?.exists) {
-    return <div>404</div>
+    return <div>{t('browsr.study-not-found')}</div>
   }
 
   return (
     <AnimateSharedLayout>
-      <Box position="sticky" top={0} zIndex={10}>
+      <Box position="sticky" top="30px" zIndex={10}>
         <EditableHeader
           fullscreen={fullscreen}
           id={id}
@@ -226,8 +230,8 @@ const QuillEditor = ({ id, onUpdateTitle }: Props) => {
         />
       </Box>
       <Flex margin={fullscreen ? '0 auto' : 0} flex={1}>
-        <MotionBox layout>
-          <Box position="sticky" top="110px" zIndex={9} maxW={700}>
+        <MotionBox>
+          <Box position="sticky" top="120px" zIndex={9} maxW={700}>
             <Toolbar />
             <Box
               pos="absolute"
@@ -244,7 +248,6 @@ const QuillEditor = ({ id, onUpdateTitle }: Props) => {
             theme="snow"
             defaultValue={value as DeltaStatic}
             onChange={onChange}
-            scrollingContainer=".right-container"
             placeholder="Prenez une grande respiration, et commencez votre étude ici..."
             modules={modules}
           />

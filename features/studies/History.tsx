@@ -59,7 +59,6 @@ const History = ({ history, onRestore }: Props) => {
                       key={selectedItem?.id}
                       theme="snow"
                       value={selectedItem?.content as DeltaStatic}
-                      scrollingContainer=".right-container"
                       readOnly
                       modules={modules}
                     />

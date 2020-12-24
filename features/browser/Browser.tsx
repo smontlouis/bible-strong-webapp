@@ -1,6 +1,6 @@
 import useBrowserStore, { TabItem } from './browser.store'
 import React, { useCallback } from 'react'
-import { Box, BoxProps, Flex, IconButton } from '@chakra-ui/react'
+import { Box, BoxProps, Flex, HStack, IconButton } from '@chakra-ui/react'
 import { FiPlus } from 'react-icons/fi'
 import { useTranslation } from 'react-i18next'
 import Tab from './Tab'
@@ -20,6 +20,8 @@ import {
   DropResult,
 } from 'react-beautiful-dnd'
 import { Tabs, useTabPanel } from '../../helpers/tabs'
+import Layout from './Layout'
+import useGlobalStore from '../../global.store'
 
 const SwitchModule = ({
   tab,
@@ -52,6 +54,9 @@ const SwitchModule = ({
 
 const Browser = () => {
   const { t } = useTranslation()
+  const { fullscreen } = useGlobalStore((state) => ({
+    fullscreen: state.fullscreen,
+  }))
   const {
     layouts,
     addTab,
@@ -95,7 +100,7 @@ const Browser = () => {
             id={tabId}
             setKey={(key) => onIdChange(key, layoutIndex)}
           >
-            <Box height="100%" d="flex" flexDir="column" flex={1}>
+            <Layout>
               <Droppable
                 droppableId={layoutIndex.toString()}
                 direction="horizontal"
@@ -103,7 +108,9 @@ const Browser = () => {
                 {(provided, snapshot) => (
                   <Flex
                     sx={{
-                      overflowY: 'auto',
+                      borderTopLeftRadius: 's',
+                      borderTopRightRadius: 's',
+                      p: 'm',
                       bg: 'greys.0',
                       alignItems: 'center',
                       '&::-webkit-scrollbar': {
@@ -111,12 +118,10 @@ const Browser = () => {
                       },
                     }}
                   >
-                    <Box
+                    <HStack
                       ref={provided.innerRef}
                       {...provided.droppableProps}
                       border="0"
-                      d="flex"
-                      bg="greys.0"
                       as="nav"
                       alignItems="center"
                     >
@@ -135,7 +140,7 @@ const Browser = () => {
                         ))}
                       </AnimatePresence>
                       {provided.placeholder}
-                    </Box>
+                    </HStack>
                     <IconButton
                       isRound
                       ml="m"
@@ -151,7 +156,18 @@ const Browser = () => {
                 )}
               </Droppable>
 
-              <Box flex={1} overflowY="auto" bg="white">
+              <Box
+                flex={1}
+                overflowY="auto"
+                bg="white"
+                {...(fullscreen && {
+                  position: 'fixed',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                })}
+              >
                 {tabs.map((tab) => (
                   <TabPanel
                     key={tab.id}
@@ -165,7 +181,7 @@ const Browser = () => {
                   </TabPanel>
                 ))}
               </Box>
-            </Box>
+            </Layout>
           </Tabs>
         ))}
       </Flex>

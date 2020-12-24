@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
 import React, { PropsWithChildren, useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { useRouter } from 'next/router'
@@ -39,25 +39,13 @@ const AppLayout = ({ children }: PropsWithChildren<{}>) => {
   useFullscreen(fullscreen)
 
   return (
-    <Box height="100vh" d="flex" flexDir="column">
+    <Box bg="greys.3" height="100vh" d="flex" flexDir="column">
       <Header />
-      <Flex bg="white" flex={1}>
-        <Box
-          flex={1}
-          bg={'lightGrey'}
-          d="flex"
-          flexDir="column"
-          overflow="auto"
-          pos="relative"
-          className="right-container"
-        >
-          <AnimatePresence exitBeforeEnter>
-            <Box key={router.pathname} flex={1} d="flex" flexDir="column">
-              {children}
-            </Box>
-          </AnimatePresence>
+      <AnimatePresence exitBeforeEnter>
+        <Box key={router.pathname} flex={1} minH="0" d="flex" flexDir="column">
+          {children}
         </Box>
-      </Flex>
+      </AnimatePresence>
     </Box>
   )
 }

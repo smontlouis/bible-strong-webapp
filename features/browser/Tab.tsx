@@ -4,7 +4,7 @@ import { MdClose } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { absoluteFill } from '../../helpers/box'
 import { TabItem } from './browser.store'
-import { FaCircle, FaFeather } from 'react-icons/fa'
+import { FaFeather } from 'react-icons/fa'
 import { HiHome } from 'react-icons/hi'
 import LexiqueIcon from '../../common/LexiqueIcon'
 import DictionnaryIcon from '../../common/DictionnaryIcon'
@@ -13,6 +13,31 @@ import MotionBox from '../../common/MotionBox'
 import BibleIcon from '../../common/BibleIcon'
 import { Draggable } from 'react-beautiful-dnd'
 import { useTab } from '../../helpers/tabs'
+import { FiFile } from 'react-icons/fi'
+
+const getColorType = (type: TabItem['type']) => {
+  switch (type) {
+    case 'bible':
+      return 'primary'
+    case 'dictionnary':
+      return 'secondary'
+    case 'edit-study':
+      return 'grey'
+    case 'empty':
+      return 'primary'
+    case 'home':
+      return 'primary'
+    case 'lexique':
+      return 'primary'
+    case 'nave':
+      return 'quint'
+    case 'studies':
+      return 'grey'
+
+    default:
+      return 'primary'
+  }
+}
 
 const TabIcon = ({
   type,
@@ -20,33 +45,80 @@ const TabIcon = ({
   ...props
 }: BoxProps & { isSelected: boolean; type: TabItem['type'] }) => {
   if (type === 'empty') {
-    return <Box as={FaCircle} color="greys.2" fontSize="18px" {...props} />
+    return (
+      <Box
+        as={FiFile}
+        color={isSelected ? 'white' : getColorType(type)}
+        fontSize="18px"
+        {...props}
+      />
+    )
   }
 
   if (type === 'bible') {
-    return <Box as={BibleIcon} color={'primary'} size="22px" {...props} />
+    return (
+      <Box
+        as={BibleIcon}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="22px"
+        {...props}
+      />
+    )
   }
 
   if (type === 'lexique') {
-    return <Box as={LexiqueIcon} color={'primary'} size="18px" {...props} />
+    return (
+      <Box
+        as={LexiqueIcon}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="18px"
+        {...props}
+      />
+    )
   }
 
   if (type === 'dictionnary') {
     return (
-      <Box as={DictionnaryIcon} color={'secondary'} size="18px" {...props} />
+      <Box
+        as={DictionnaryIcon}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="18px"
+        {...props}
+      />
     )
   }
 
   if (type === 'nave') {
-    return <Box as={NaveIcon} color={'quint'} size="18px" {...props} />
+    return (
+      <Box
+        as={NaveIcon}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="18px"
+        {...props}
+      />
+    )
   }
 
   if (type === 'home') {
-    return <Box as={HiHome} color={'primary'} size="22px" {...props} />
+    return (
+      <Box
+        as={HiHome}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="22px"
+        {...props}
+      />
+    )
   }
 
   if (type === 'studies' || type === 'edit-study') {
-    return <Box as={FaFeather} color={'primary'} size="16px" {...props} />
+    return (
+      <Box
+        as={FaFeather}
+        color={isSelected ? 'white' : getColorType(type)}
+        size="16px"
+        {...props}
+      />
+    )
   }
 
   return null
@@ -75,38 +147,25 @@ const Tab = ({
     return (
       <Center
         pos="relative"
+        cursor="pointer"
         sx={{
           _hover: {
-            bg: isSelected ? 'white' : 'greys.1',
-            '&:after': {
-              display: 'none',
-            },
+            bg: isSelected ? 'primary' : 'greys.3',
           },
           ...(!isSelected
-            ? {
-                '&::after': {
-                  bg: 'grey',
-                  height: '18px',
-                  width: '1px',
-                  content: '""',
-                  position: 'absolute',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  right: '-1px',
-                },
-              }
+            ? {}
             : {
                 zIndex: 1,
               }),
         }}
         h="38px"
-        px="12px"
+        w="38px"
         alignItems="center"
-        borderTopRadius="8px"
+        borderRadius="s"
         _focus={{
           bg: 'white',
         }}
-        bg={isSelected ? 'white' : 'greys.0'}
+        bg={isSelected ? 'primary' : 'greys.2'}
         outline="none"
         onClick={onClick}
       >
@@ -129,41 +188,24 @@ const Tab = ({
           h="38px"
           px="12px"
           py="10px"
-          maxWidth="200px"
+          maxWidth="170px"
           width="100%"
           alignItems="center"
-          borderTopRadius="8px"
+          borderRadius="s"
+          title={children as string}
           sx={{
             _hover: {
-              bg: isSelected ? 'white' : 'greys.1',
-              '&:after': {
-                display: 'none',
-              },
+              bg: isSelected ? getColorType(tabType) : 'greys.3',
             },
-            ...(!isSelected
-              ? {
-                  '&::after': {
-                    bg: 'grey',
-                    height: '18px',
-                    width: '1px',
-                    content: '""',
-                    position: 'absolute',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    right: '-1px',
-                  },
-                }
-              : {
-                  zIndex: 1,
-                }),
             ...provided.draggableProps.style,
           }}
           _focus={{
-            bg: 'white',
+            bg: 'primary',
           }}
-          bg={isSelected ? 'white' : 'greys.0'}
+          bg={isSelected ? getColorType(tabType) : 'greys.2'}
           initial="exit"
           animate="enter"
+          custom={isSelected}
           exit="exit"
           transition={{ duration: 0.2, ease: 'easeOut' }}
           variants={{
@@ -184,12 +226,13 @@ const Tab = ({
           <Box outline="none" {...absoluteFill} zIndex={1} onClick={onClick} />
           <TabIcon mr="s" isSelected={isSelected} type={tabType} />
           <Text
-            size="s"
+            fontSize={16}
             variant="light"
             flex={1}
             whiteSpace="nowrap"
             overflow="hidden"
             textOverflow="ellipsis"
+            color={isSelected ? 'white' : 'black'}
           >
             {children}
           </Text>
@@ -200,7 +243,9 @@ const Tab = ({
             h="17px"
             variant="naked"
             aria-label={t('browser.close-tab')}
-            icon={<MdClose />}
+            icon={
+              <MdClose color={isSelected ? 'white' : undefined} size="13px" />
+            }
             onClick={onClose}
             zIndex={2}
             pos="relative"
