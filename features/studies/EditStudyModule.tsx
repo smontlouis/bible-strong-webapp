@@ -37,7 +37,6 @@ const EditStudyModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
       d="flex"
       flexDir="column"
       p="2xl"
-      pt={{ base: '3xl', xl: '2xl' }}
       className={`edit-study-${studyId}`}
     >
       <QuillEditor id={studyId} onUpdateTitle={updateTitle} />

@@ -4,12 +4,12 @@ import { Box, Flex, useToast } from '@chakra-ui/react'
 import books from './books'
 import { useTranslation } from 'react-i18next'
 import { findReference } from './bible.utils'
-import { GenericVerse } from '../../common/types'
+import { VerseBase } from '../../common/types'
 import { BiSearch } from 'react-icons/bi'
 
 interface Props {
   defaultValue: string
-  onChange: (reference: GenericVerse) => void
+  onChange: (reference: VerseBase) => void
 }
 const SearchBox = ({ onChange, defaultValue }: Props) => {
   const { t } = useTranslation()
@@ -22,12 +22,13 @@ const SearchBox = ({ onChange, defaultValue }: Props) => {
   }, [defaultValue])
 
   return (
-    <Flex alignItems="center" pos="relative" borderBottomWidth="3px">
+    <Flex alignItems="center" pos="relative" bg="greys.0" borderRadius="full">
       <Box
         zIndex={1}
         pos="absolute"
         left="16px"
-        top="16px"
+        top="50%"
+        transform="translateY(-50%)"
         w="23px"
         h="23px"
         as={BiSearch}
@@ -39,12 +40,12 @@ const SearchBox = ({ onChange, defaultValue }: Props) => {
       <Hint options={options} allowTabFill>
         <Box
           flex={1}
-          fontSize={22}
+          fontSize={18}
           bg="transparent"
           fontFamily="normal"
           pr="m"
           pl="50px"
-          py="10px"
+          py="4px"
           as="input"
           outline="none"
           value={text}
@@ -55,6 +56,7 @@ const SearchBox = ({ onChange, defaultValue }: Props) => {
           _focus={{
             zIndex: '1',
             boxShadow: ' rgb(89,131,240) 0px 0px 0px 2px',
+            borderRadius: 'full',
           }}
           onBlur={() => setText(defaultValue)}
           onKeyUp={async (e) => {

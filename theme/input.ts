@@ -1,6 +1,12 @@
 export default {
   parts: ['input', 'addon'],
-  baseStyle: {},
+  baseStyle: {
+    field: {
+      _focus: {
+        borderRadius: 'full',
+      },
+    },
+  },
   sizes: {
     md: {
       field: {

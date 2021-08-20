@@ -110,8 +110,7 @@ const Browser = () => {
                     sx={{
                       borderTopLeftRadius: 's',
                       borderTopRightRadius: 's',
-                      p: 'm',
-                      bg: 'greys.0',
+                      p: 's',
                       alignItems: 'center',
                       '&::-webkit-scrollbar': {
                         display: 'none',

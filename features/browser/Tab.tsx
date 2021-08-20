@@ -226,7 +226,6 @@ const Tab = ({
           <Box outline="none" {...absoluteFill} zIndex={1} onClick={onClick} />
           <TabIcon mr="s" isSelected={isSelected} type={tabType} />
           <Text
-            fontSize={16}
             variant="light"
             flex={1}
             whiteSpace="nowrap"

@@ -2,18 +2,24 @@ import * as React from 'react'
 import { useEffect, useState } from 'react'
 import InfiniteReader from './InfiniteReader'
 import { Box } from '@chakra-ui/react'
-import { GenericVerse, Verse } from '../../common/types'
+import { VerseBase, Verse, VersionId } from '../../common/types'
 import Loading from '../../common/Loading'
 import Error from '../../common/Error'
 import { useCollection } from '@nandorojo/swr-firestore'
 import { firestore } from '../../lib/firebase-app'
-import { getNextChapter, getPreviousChapter } from './bible.utils'
+import {
+  getNextChapter,
+  getPreviousChapter,
+  isElementVisible,
+  versions,
+} from './bible.utils'
 import ChapterView from './ChapterView'
 import StartOfBook from './StartOfBook'
 import EndOfBook from './EndOfBook'
 
 interface Props {
-  defaultReference: GenericVerse
+  defaultReference: VerseBase
+  versionId: VersionId
   onReferenceChange: ({
     book,
     chapter,
@@ -32,6 +38,7 @@ interface Chapter {
 
 const BibleViewer = ({
   defaultReference,
+  versionId,
   onReferenceChange,
   scrollMode,
   divRef,
@@ -40,21 +47,22 @@ const BibleViewer = ({
 
   const { book, chapter } = defaultReference
   const [previousChapterFetched, setPreviousChapterFetched] = useState<Omit<
-    GenericVerse,
+    VerseBase,
     'verse'
   > | null>({
     book,
     chapter,
   })
   const [nextChapterFetched, setNextChapterFetched] = useState<Omit<
-    GenericVerse,
+    VerseBase,
     'verse'
   > | null>({
     book,
     chapter,
   })
+  const collection = versions.find((v) => v.id === versionId)?.collection || ''
 
-  const { loading, data, error } = useCollection<Verse>('bible-nbs', {
+  const { loading, data, error } = useCollection<Verse>(collection, {
     where: [
       ['id', '>=', `${book}-${chapter}-`],
       ['id', '<', `${book}-${chapter}.`],
@@ -150,9 +158,8 @@ const BibleViewer = ({
 
   const scrollToVerse = () => {
     const { book, chapter, verse } = defaultReference
-    document
-      .querySelector(`#bible-${book}-${chapter}-${verse}`)
-      ?.scrollIntoView({ behavior: 'smooth' })
+    const el = document.querySelector(`#bible-${book}-${chapter}-${verse}`)
+    if (el && !isElementVisible(el)) el?.scrollIntoView({ behavior: 'smooth' })
   }
 
   useEffect(() => {
@@ -179,22 +186,13 @@ const BibleViewer = ({
     return <Error />
   }
 
-  if (loading || !data) {
+  if (loading || !chapters.length) {
     return <Loading />
   }
 
   return (
     <Box flex={1} d="flex">
-      <Box
-        pos="relative"
-        flex={1}
-        {...(scrollMode === 'vertical'
-          ? {
-              maxW: 700,
-              margin: '0 auto',
-            }
-          : {})}
-      >
+      <Box pos="relative" flex={1}>
         <InfiniteReader
           ref={divRef}
           scrollMode={scrollMode}

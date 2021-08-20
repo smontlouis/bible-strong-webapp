@@ -24,9 +24,12 @@ const getInitialData = (type: TabItem['type']): TabItem => {
       type: 'bible',
       name: 'browser.bible',
       data: {
-        book: 1,
-        chapter: 1,
-        verse: 1,
+        reference: {
+          book: 1,
+          chapter: 1,
+          verse: 1,
+        },
+        versionId: 'LSG',
       },
     } as BibleTab
   }

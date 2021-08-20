@@ -165,13 +165,50 @@ export interface Book {
   Chapitres: number
 }
 
-export interface GenericVerse {
+export interface VerseBase {
   book: number
   chapter: number
   verse: number
 }
 
-export interface Verse extends GenericVerse {
+export type VersionId =
+  | 'LSG'
+  | 'NBS'
+  | 'NEG79'
+  | 'NVS78P'
+  | 'S21'
+  | 'KJF'
+  | 'DBY'
+  | 'OST'
+  | 'CHU'
+  | 'BDS'
+  | 'FMAR'
+  | 'BFC'
+  | 'FRC97'
+  | 'NFC'
+  | 'KJV'
+  | 'NKJV'
+  | 'ESV'
+  | 'NIV'
+  | 'BCC1923'
+  | 'PDV2017'
+  | 'POV'
+  | 'BHS'
+  | 'LXX'
+  | 'SBLGNT'
+  | 'TR1624'
+  | 'TR1894'
+
+export interface Version {
+  id: VersionId
+  name: string
+  name_en?: string
+  c?: string
+  type?: 'en' | 'fr'
+  collection: string
+}
+
+export interface Verse extends VerseBase {
   id: string
   content: string
 }

@@ -1,7 +1,7 @@
 import { Box, Tooltip, Text, Center } from '@chakra-ui/react'
 import React from 'react'
+import { Version } from '../../common/types'
 import { absoluteFill } from '../../helpers/box'
-import { Version } from './bible.utils'
 
 interface Props {
   version: Version

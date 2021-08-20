@@ -5,6 +5,9 @@ export default {
     textTransform: 'initial',
     display: 'flex',
     px: 'm',
+    _focus: {
+      borderRadius: 'full',
+    },
   },
   sizes: {
     xxs: {

@@ -2,64 +2,68 @@ import create, { StateCreator } from 'zustand'
 import produce from 'immer'
 import { v4 as uuidv4 } from 'uuid'
 import timeout from '../../helpers/timeout'
-import { GenericVerse } from '../../common/types'
+import { VerseBase, VersionId } from '../../common/types'
 import { persist } from 'zustand/middleware'
 
-const immer = <T extends State>(
+const immer = <T extends BrowserState>(
   config: StateCreator<T, (fn: (draft: T) => void) => void>
 ): StateCreator<T> => (set, get, api) =>
   config((fn) => set(produce(fn) as (state: T) => T), get, api)
 
-export interface BasicTab {
+export interface TabBase {
   id: string
   name: string
 }
-export interface EmptyTab extends BasicTab {
-  type:
-    | 'empty'
-    | 'bible'
-    | 'lexique'
-    | 'dictionnary'
-    | 'nave'
-    | 'home'
-    | 'studies'
-    | 'edit-study'
+
+export interface EmptyTab extends TabBase {
+  type: 'empty'
   data: {}
 }
 
-export interface BibleTab extends BasicTab {
-  type: 'bible'
-  data: GenericVerse
+export interface HomeTab extends TabBase {
+  type: 'home'
+  data: {}
 }
 
-export interface StudiesTab extends BasicTab {
+export interface BibleTab extends TabBase {
+  type: 'bible'
+  data: {
+    reference: VerseBase
+    versionId: VersionId
+  }
+}
+
+export interface StudiesTab extends TabBase {
   type: 'studies'
   data: {}
 }
 
-export interface EditStudyTab extends BasicTab {
+export interface EditStudyTab extends TabBase {
   type: 'edit-study'
   data: {
     studyId: string
   }
 }
 
-export interface LexiqueTab extends BasicTab {
+export interface LexiqueTab extends TabBase {
   type: 'lexique'
   data: {}
 }
 
-export interface DictionnaryTab extends BasicTab {
+export interface DictionnaryTab extends TabBase {
   type: 'dictionnary'
   data: {}
 }
 
-export interface NaveTab extends BasicTab {
+export interface NaveTab extends TabBase {
   type: 'nave'
   data: {}
 }
 
+// type TabKind = TabItem['type']
+
 export type TabItem =
+  | HomeTab
   | EmptyTab
   | BibleTab
   | LexiqueTab
@@ -68,7 +72,7 @@ export type TabItem =
   | StudiesTab
   | EditStudyTab
 
-type State = {
+export type BrowserState = {
   onIdChange: (index: string, layoutIndex: number) => void
   addTab: (tabItem?: TabItem, layoutIndex?: number) => void
   removeTab: (tab: string, layoutIndex: number) => void
@@ -104,7 +108,7 @@ const dummyStorageApi = {
   setItem: () => undefined,
 }
 
-const useBrowserStore = create<State>(
+const useBrowserStore = create<BrowserState>(
   persist(
     immer((set, get) => ({
       tabId: defaultTabs[0].id,
@@ -124,13 +128,28 @@ const useBrowserStore = create<State>(
       ],
       addTab: (tabItem, layoutIndex = 0) =>
         set((state) => {
-          const id = uuidv4()
-          state.layouts[layoutIndex].tabs.push({
-            id,
-            name: tabItem?.name || 'browser.new-tab',
-            type: tabItem?.type || 'empty',
-            data: tabItem?.data || {},
-          })
+          const tabIndex = state.layouts[layoutIndex].tabs.findIndex(
+            (t) => t.id === tabItem?.id
+          )
+          const id = tabItem?.id || uuidv4()
+
+          if (tabIndex === -1) {
+            if (tabItem?.name) {
+              state.layouts[layoutIndex].tabs.push({
+                id,
+                name: tabItem?.name,
+                type: tabItem?.type,
+                data: tabItem?.data,
+              } as TabItem)
+            } else {
+              state.layouts[layoutIndex].tabs.push({
+                id,
+                name: 'browser.new-tab',
+                type: 'empty',
+                data: {},
+              })
+            }
+          }
           state.layouts[layoutIndex].tabId = id
         }),
       removeTab: async (id, layoutIndex) => {

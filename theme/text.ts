@@ -8,7 +8,7 @@ export default {
       fontSize: 14,
     },
     m: {
-      fontSize: 18,
+      fontSize: 16,
     },
     l: {
       fontSize: 20,

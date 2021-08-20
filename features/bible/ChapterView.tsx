@@ -1,5 +1,5 @@
-import { GenericVerse, Verse } from '../../common/types'
-import { keyframes, Text, Center } from '@chakra-ui/react'
+import { VerseBase, Verse } from '../../common/types'
+import { keyframes, Text, Center, Box } from '@chakra-ui/react'
 import { useInView } from 'react-intersection-observer'
 import books from './books'
 import React, { useEffect } from 'react'
@@ -19,7 +19,7 @@ interface Props {
   verses: Verse[]
   hasNewBook?: boolean
   onChange: ({ book, chapter }: { book: number; chapter: number }) => void
-  defaultReference?: GenericVerse
+  defaultReference?: VerseBase
 }
 
 const ChapterView = ({
@@ -44,10 +44,10 @@ const ChapterView = ({
     }
   }, [inView])
   return (
-    <div
+    <Box
       ref={ref}
       id={`bible-${book}-${chapter}`}
-      style={{ animation: `${fade} 0.5s ease` }}
+      sx={{ animation: `${fade} 0.5s ease`, maxW: 600, margin: '0 auto' }}
     >
       {verses.map((verse, i) => {
         return (
@@ -82,15 +82,16 @@ const ChapterView = ({
                 fontFamily="text"
                 lineHeight={1.8}
                 as="span"
+                whiteSpace="pre-wrap"
                 dangerouslySetInnerHTML={{
-                  __html: verse.content.replace(/\n/g, '<br />'),
+                  __html: verse.content,
                 }}
               />
             </Text>
           </React.Fragment>
         )
       })}
-    </div>
+    </Box>
   )
 }
 

@@ -78,6 +78,7 @@ const StudyItem = ({
           borderRadius="l"
           onClick={() => {
             const tabItem = {
+              id,
               type: 'edit-study',
               data: {
                 studyId: id,

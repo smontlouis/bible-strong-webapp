@@ -1,10 +1,10 @@
-import { GenericVerse } from '../../common/types'
+import { VerseBase, Version } from '../../common/types'
 import { firestore } from '../../lib/firebase-app'
 import books from './books'
 import i18n from '../../i18n'
 
 export const getPreviousChapter = (
-  basicVerse: Omit<GenericVerse, 'verse'> | null
+  basicVerse: Omit<VerseBase, 'verse'> | null
 ) => {
   if (!basicVerse) return null
   const { book, chapter } = basicVerse
@@ -26,9 +26,7 @@ export const getPreviousChapter = (
   }
 }
 
-export const getNextChapter = (
-  basicVerse: Omit<GenericVerse, 'verse'> | null
-) => {
+export const getNextChapter = (basicVerse: Omit<VerseBase, 'verse'> | null) => {
   if (!basicVerse) return null
   const { book, chapter } = basicVerse
   if (chapter === books[book - 1].Chapitres) {
@@ -49,9 +47,7 @@ export const getNextChapter = (
   }
 }
 
-export const findReference = async (
-  ref: string
-): Promise<GenericVerse | null> => {
+export const findReference = async (ref: string): Promise<VerseBase | null> => {
   let reference = ref.trim().toLowerCase()
 
   const findBook = books.find((book) =>
@@ -134,7 +130,7 @@ export const getReferenceChapter = ({
   return `${i18n.t(books[book - 1].Nom)} ${chapter}`
 }
 
-export const getReferenceByObject = (verses: GenericVerse[]) =>
+export const getReferenceByObject = (verses: VerseBase[]) =>
   getReference(
     verses.map(({ book, chapter, verse }) => `${book}-${chapter}-${verse}`)
   )
@@ -166,15 +162,6 @@ export const getReference = (verses: string[]) => {
     }, `${i18n.t(books[book - 1].Nom)} ${chapter}:`)
 
   return title
-}
-
-export interface Version {
-  id: string
-  name: string
-  name_en?: string
-  c?: string
-  type?: 'en' | 'fr'
-  collection: string
 }
 
 export const versions: Version[] = [
@@ -356,3 +343,29 @@ export const versions: Version[] = [
     collection: 'bible-TR1894',
   },
 ]
+
+export const isElementVisible = (el: Element) => {
+  const rect = el.getBoundingClientRect(),
+    vWidth = window.innerWidth || document.documentElement.clientWidth,
+    vHeight = window.innerHeight || document.documentElement.clientHeight,
+    efp = function (x: number, y: number) {
+      return document.elementFromPoint(x, y)
+    }
+
+  // Return false if it's not in the viewport
+  if (
+    rect.right < 0 ||
+    rect.bottom < 0 ||
+    rect.left > vWidth ||
+    rect.top > vHeight
+  )
+    return false
+
+  // Return true if any of its four corners are visible
+  return (
+    el.contains(efp(rect.left, rect.top)) ||
+    el.contains(efp(rect.right, rect.top)) ||
+    el.contains(efp(rect.right, rect.bottom)) ||
+    el.contains(efp(rect.left, rect.bottom))
+  )
+}

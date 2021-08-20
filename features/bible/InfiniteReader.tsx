@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useState } from 'react'
 import MotionBox from '../../common/MotionBox'
 
@@ -11,6 +11,7 @@ interface Props {
   columnWidth: number
   columnGap: number
   onRender?: () => void
+  onStartScrolling?: () => void
 }
 
 const InfiniteReader = React.forwardRef<
@@ -28,12 +29,14 @@ const InfiniteReader = React.forwardRef<
       columnWidth,
       columnGap,
       onRender,
+      onStartScrolling,
     },
     ref
   ) => {
     const [isLoading, setIsLoading] = useState(true)
     const [isNextLoading, setIsNextLoading] = useState(false)
     const [isPrevLoading, setIsPrevLoading] = useState(false)
+    const hasStartedScrolling = useRef(false)
     const element = (ref as React.RefObject<HTMLDivElement>).current
 
     const loadPrev = async () => {
@@ -47,19 +50,16 @@ const InfiniteReader = React.forwardRef<
         let scrollWidthBefore = 0
         await onFetchPrevious(() => {
           scrollWidthBefore = element.scrollWidth - element.scrollLeft
-          // console.log({ scrollWidthBefore, scrollLeft: element.scrollLeft })
         })
         const scrollWidthAfter = element.scrollWidth
 
         const diff = scrollWidthAfter - scrollWidthBefore
 
         element.scrollTo({ left: diff })
-        // console.log({ scrollWidthAfter, scrollLeft: element.scrollLeft })
         setIsPrevLoading(false)
       } else {
         setIsPrevLoading(true)
         const scrollHeightBefore = element.scrollHeight - element.scrollTop
-
         await onFetchPrevious()
 
         const scrollHeightAfter = element.scrollHeight
@@ -125,6 +125,11 @@ const InfiniteReader = React.forwardRef<
             }
           }
         }
+
+        if (!hasStartedScrolling.current) {
+          hasStartedScrolling.current = true
+          onStartScrolling?.()
+        }
       },
       [isNextLoading, isPrevLoading]
     )
@@ -140,6 +145,7 @@ const InfiniteReader = React.forwardRef<
     React.useEffect(() => {
       ;(async () => {
         await loadPrev()
+
         loadNext()
         setIsLoading(false)
         onRender?.()
