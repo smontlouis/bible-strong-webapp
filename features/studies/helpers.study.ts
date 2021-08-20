@@ -216,18 +216,18 @@ export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
 }
 
 export const getStaticStudyPaths: GetStaticPaths = async () => {
-  const snapshot = await firebase
-    .firestore()
-    .collection('studies')
-    .where('published', '==', true)
-    .get()
+  // const snapshot = await firebase
+  //   .firestore()
+  //   .collection('studies')
+  //   .where('published', '==', true)
+  //   .get()
 
-  const paths = snapshot.docs
-    .map((x) => x.data())
-    .map((doc) => ({ params: { id: doc.id } }))
+  // const paths = snapshot.docs
+  //   .map((x) => x.data())
+  //   .map((doc) => ({ params: { id: doc.id } }))
 
   return {
-    paths,
-    fallback: false,
+    paths: [],
+    fallback: 'blocking',
   }
 }
