@@ -74,7 +74,7 @@ const getInitialData = (type: TabItem['type']): TabItem => {
 
 const Empty = ({ tabId, layoutIndex }: BrowserModuleProps) => {
   const { t } = useTranslation()
-  const { updateEntity } = useBrowserStore()
+  const { updateTab } = useBrowserStore()
 
   const entities: {
     name: string
@@ -132,7 +132,7 @@ const Empty = ({ tabId, layoutIndex }: BrowserModuleProps) => {
             h="100px"
             flexDir="column"
             key={entity.type}
-            onClick={() => updateEntity(tabId, initialData, layoutIndex)}
+            onClick={() => updateTab(tabId, initialData, layoutIndex)}
             borderRadius="l"
             cursor="pointer"
             transition="0.5s ease"

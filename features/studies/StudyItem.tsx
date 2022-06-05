@@ -84,7 +84,7 @@ const StudyItem = ({
                 studyId: id,
               },
             } as EditStudyTab
-            addTab(tabItem, layoutIndex)
+            addTab({ tabItem, layoutIndex })
           }}
         />
       ) : (

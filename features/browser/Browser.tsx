@@ -57,14 +57,8 @@ const Browser = () => {
   const { fullscreen } = useGlobalStore((state) => ({
     fullscreen: state.fullscreen,
   }))
-  const {
-    layouts,
-    addTab,
-    removeTab,
-    onIdChange,
-    reorderTabs,
-    moveTabs,
-  } = useBrowserStore()
+  const { layouts, addTab, removeTab, onIdChange, reorderTabs, moveTabs } =
+    useBrowserStore()
 
   const onDragEnd = useCallback((result: DropResult) => {
     if (!result.destination) {
@@ -148,7 +142,7 @@ const Browser = () => {
                       aria-label={t('browser.new-tab')}
                       icon={<FiPlus />}
                       onClick={() => {
-                        addTab(undefined, layoutIndex)
+                        addTab({ layoutIndex })
                       }}
                     />
                   </Flex>

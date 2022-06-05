@@ -63,7 +63,7 @@ const StudiesModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
         studyId: uuid,
       },
     } as EditStudyTab
-    addTab(tabItem, layoutIndex)
+    addTab({ tabItem, layoutIndex })
     mutate((studies) => [study, ...(studies || [])], false)
   }
 

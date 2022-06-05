@@ -38,10 +38,6 @@ const BibleModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
     reference.book === currentReference.book &&
     reference.chapter === currentReference.chapter
 
-  console.log(
-    `${reference.book}-${reference.chapter}-${reference.verse}-${versionId}`
-  )
-
   return (
     <MotionBox flex={1} d="flex" flexDir="column">
       <BibleHeader>

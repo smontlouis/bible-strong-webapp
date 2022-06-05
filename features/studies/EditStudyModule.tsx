@@ -19,7 +19,7 @@ const EditStudyModule = ({ tabId, layoutIndex }: BrowserModuleProps) => {
     return [
       tabItem.data.studyId,
       (title: string) => {
-        state.updateEntity(
+        state.updateTab(
           tabId,
           {
             ...tabItem,

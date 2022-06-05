@@ -5,10 +5,12 @@ import timeout from '../../helpers/timeout'
 import { VerseBase, VersionId } from '../../common/types'
 import { persist } from 'zustand/middleware'
 
-const immer = <T extends BrowserState>(
-  config: StateCreator<T, (fn: (draft: T) => void) => void>
-): StateCreator<T> => (set, get, api) =>
-  config((fn) => set(produce(fn) as (state: T) => T), get, api)
+const immer =
+  <T extends BrowserState>(
+    config: StateCreator<T, (fn: (draft: T) => void) => void>
+  ): StateCreator<T> =>
+  (set, get, api) =>
+    config((fn) => set(produce(fn) as (state: T) => T), get, api)
 
 export interface TabBase {
   id: string
@@ -74,9 +76,15 @@ export type TabItem =
 
 export type BrowserState = {
   onIdChange: (index: string, layoutIndex: number) => void
-  addTab: (tabItem?: TabItem, layoutIndex?: number) => void
+  addTab: ({
+    tabItem,
+    layoutIndex,
+  }: {
+    tabItem?: TabItem
+    layoutIndex?: number
+  }) => void
   removeTab: (tab: string, layoutIndex: number) => void
-  updateEntity: (id: string, tabItem: TabItem, layoutIndex: number) => void
+  updateTab: (id: string, tabItem: TabItem, layoutIndex: number) => void
   reorderTabs: (
     sourceIndex: number,
     destinationIndex: number,
@@ -126,7 +134,7 @@ const useBrowserStore = create<BrowserState>(
         //   tabs: defaultTabs2,
         // },
       ],
-      addTab: (tabItem, layoutIndex = 0) =>
+      addTab: ({ tabItem, layoutIndex = 0 }) =>
         set((state) => {
           const tabIndex = state.layouts[layoutIndex].tabs.findIndex(
             (t) => t.id === tabItem?.id
@@ -134,7 +142,7 @@ const useBrowserStore = create<BrowserState>(
           const id = tabItem?.id || uuidv4()
 
           if (tabIndex === -1) {
-            if (tabItem?.name) {
+            if (tabItem) {
               state.layouts[layoutIndex].tabs.push({
                 id,
                 name: tabItem?.name,
@@ -180,7 +188,7 @@ const useBrowserStore = create<BrowserState>(
           }
         })
       },
-      updateEntity: (id, tabItem, layoutIndex) =>
+      updateTab: (id, tabItem, layoutIndex) =>
         set((state) => {
           const tabIndex = state.layouts[layoutIndex].tabs.findIndex(
             (t) => t.id === id
