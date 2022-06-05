@@ -31,31 +31,26 @@ const EditableHeader = ({
 }: Props) => {
   return (
     <Flex
-      layout
       alignItems="center"
       justifyContent={fullscreen ? 'center' : 'flex-start'}
     >
       {!fullscreen && <GoBackArrow pos="relative" zIndex={1} mr="m" mb="m" />}
       {fullscreen ? (
-        <MotionBox layoutId="heading">
-          <Text size="3xl" py="s" px="m">
-            {title}
-          </Text>
-        </MotionBox>
+        <Text size="3xl" py="s" px="m">
+          {title}
+        </Text>
       ) : (
         <Box pos="relative" zIndex={1} alignItems="center">
-          <MotionBox layoutId="heading">
-            <Heading
-              size="3xl"
-              as="input"
-              defaultValue={title}
-              onChange={onChangeTitle}
-              bg="rgba(0,0,0,0.03)"
-              py="s"
-              px="m"
-              borderRadius="m"
-            />
-          </MotionBox>
+          <Heading
+            size="3xl"
+            as="input"
+            defaultValue={title}
+            onChange={onChangeTitle}
+            bg="rgba(0,0,0,0.03)"
+            py="s"
+            px="m"
+            borderRadius="m"
+          />
           <Text mt="xs" color="grey" size="s">
             Éditer le titre en cliquant dessus.
           </Text>

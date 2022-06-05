@@ -6,6 +6,9 @@ import menu from './theme/menu'
 import select from './theme/select'
 import text from './theme/text'
 
+export const pxToRem = (paddingX: number, suffix = 'rem') =>
+  paddingX / 16 + suffix
+
 const breakpoints: { [x: string]: string } = {
   sm: '30em',
   md: '48em',
@@ -75,22 +78,22 @@ export const theme = extendTheme({
     xxl: `@media (min-width: ${breakpoints[4]})`,
   },
   space: {
-    xs: 4,
-    s: 8,
-    m: 16,
-    l: 24,
-    xl: 40,
-    '2xl': 60,
-    '3xl': 90,
-    '1px': 1,
-    '2px': 1,
+    xs: pxToRem(4),
+    s: pxToRem(8),
+    m: pxToRem(16),
+    l: pxToRem(24),
+    xl: pxToRem(40),
+    '2xl': pxToRem(60),
+    '3xl': pxToRem(90),
+    '1px': pxToRem(1),
+    '2px': pxToRem(1),
   },
   radii: {
-    s: 10,
-    m: 14,
-    l: 24,
-    xl: 40,
-    full: 500,
+    s: pxToRem(10),
+    m: pxToRem(14),
+    l: pxToRem(24),
+    xl: pxToRem(40),
+    full: pxToRem(500),
   },
 })
 

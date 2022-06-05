@@ -1,7 +1,7 @@
 import { QuillDeltaToHtmlConverter } from '../../lib/quill-to-html/main'
 import firebase from '../../lib/firebase'
-// import generateMetaImage from '../../helpers/generateMetaImage'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import generateMetaImage from '../../helpers/generateMetaImage'
+import { GetServerSideProps } from 'next'
 
 export interface FirebaseStudy {
   id: string
@@ -50,7 +50,7 @@ export type OpsInline = OpsInlineStrong | OpsInlineVerse
 
 export type Annexe = OpsInline[]
 
-export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
+export const getServerStudyProps: GetServerSideProps = async ({ params }) => {
   const id = params?.id as string
 
   const snapshot = await firebase
@@ -60,6 +60,12 @@ export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
     .get()
 
   let result = snapshot.data() as FirebaseStudy
+
+  if (!result?.published) {
+    return {
+      notFound: true,
+    }
+  }
 
   const annexe = (
     await Promise.all(
@@ -192,13 +198,11 @@ export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
 
   const html = converter.convert()
 
-  const { imageUrl, whatsappImageUrl } = { imageUrl: '', whatsappImageUrl: '' }
-
-  // await generateMetaImage(
-  //   result.id,
-  //   result.title,
-  //   result.user.displayName
-  // )
+  const { imageUrl, whatsappImageUrl } = await generateMetaImage(
+    result.id,
+    result.title,
+    result.user.displayName
+  )
 
   const res = {
     ...result,
@@ -213,23 +217,5 @@ export const getStaticStudyProps: GetStaticProps = async ({ params }) => {
       ...res,
       updatedAt: Date.now(),
     },
-    revalidate: 5,
-  }
-}
-
-export const getStaticStudyPaths: GetStaticPaths = async () => {
-  // const snapshot = await firebase
-  //   .firestore()
-  //   .collection('studies')
-  //   .where('published', '==', true)
-  //   .get()
-
-  // const paths = snapshot.docs
-  //   .map((x) => x.data())
-  //   .map((doc) => ({ params: { id: doc.id } }))
-
-  return {
-    paths: [],
-    fallback: 'blocking',
   }
 }

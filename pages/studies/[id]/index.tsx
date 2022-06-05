@@ -1,21 +1,17 @@
-import { Box, Heading, Text, Divider, Flex, Link } from '@chakra-ui/react'
-
-import {
-  getStaticStudyProps,
-  getStaticStudyPaths,
-  FirebaseStudy,
-  Annexe as AnnexeProps,
-} from '../../../features/studies/helpers.study'
-import Annexe from '../../../features/studies/Annexe'
-import InlineModals from '../../../features/studies/InlineModals'
-import Head from 'next/head'
-import Logo from '../../../public/images/svg/logo.svg'
-import { ReactNode, ElementType } from 'react'
+import { Box, Divider, Flex, Heading, Link, Text } from '@chakra-ui/react'
 import styled from '@emotion/styled'
-import { useRouter } from 'next/router'
+import Head from 'next/head'
+import { ElementType, ReactNode } from 'react'
+import Annexe from '../../../features/studies/Annexe'
+import {
+  Annexe as AnnexeProps,
+  FirebaseStudy,
+  getServerStudyProps,
+} from '../../../features/studies/helpers.study'
+import InlineModals from '../../../features/studies/InlineModals'
+import Logo from '../../../public/images/svg/logo.svg'
 
-export const getStaticPaths = getStaticStudyPaths
-export const getStaticProps = getStaticStudyProps
+export const getServerSideProps = getServerStudyProps
 
 const StudyContainer = styled.div(
   ({ theme: { media, fonts, fontSizes, space, colors } }) => ({
@@ -191,9 +187,6 @@ const Study = ({
   imageUrl,
   whatsappImageUrl,
 }: Props) => {
-  const router = useRouter()
-
-  if (router.isFallback) return <div>Loading...</div>
   return (
     <>
       <Head>
