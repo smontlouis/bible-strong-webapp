@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --project tsconfig.json"
+    "lint": "tsc --project tsconfig.json",
+    "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
+    "vercel-build": "npm run canvas:fix && npm run build"
   },
   "husky": {
     "hooks": {
@@ -23,7 +25,7 @@
     "@types/react-select": "^3.0.26",
     "@types/uuid": "^8.3.0",
     "algoliasearch": "^4.8.0",
-    "canvas": "^2.9.1",
+    "canvas": "2.6.1",
     "copy-to-clipboard": "^3.3.1",
     "date-fns": "^2.28.0",
     "firebase": "^8.1.1",
