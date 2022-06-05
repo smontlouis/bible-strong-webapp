@@ -1,6 +1,6 @@
 import { QuillDeltaToHtmlConverter } from '../../lib/quill-to-html/main'
 import firebase from '../../lib/firebase'
-import generateMetaImage from '../../helpers/generateMetaImage'
+// import generateMetaImage from '../../helpers/generateMetaImage'
 import { GetServerSideProps } from 'next'
 
 export interface FirebaseStudy {
@@ -198,11 +198,12 @@ export const getServerStudyProps: GetServerSideProps = async ({ params }) => {
 
   const html = converter.convert()
 
-  const { imageUrl, whatsappImageUrl } = await generateMetaImage(
-    result.id,
-    result.title,
-    result.user.displayName
-  )
+  const { imageUrl, whatsappImageUrl } = { imageUrl: '', whatsappImageUrl: '' }
+  // await generateMetaImage(
+  //   result.id,
+  //   result.title,
+  //   result.user.displayName
+  // )
 
   const res = {
     ...result,

@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "tsc --project tsconfig.json",
-    "canvas:fix": "yum install gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel && cp /lib64/{libuuid,libmount,libblkid}.so.1 node_modules/canvas/build/Release/",
-    "vercel-build": "npm run canvas:fix && npm run build"
+    "lint": "tsc --project tsconfig.json"
   },
   "husky": {
     "hooks": {
