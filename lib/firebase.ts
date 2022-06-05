@@ -6,7 +6,7 @@ try {
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://bible-strong-app.firebaseio.com',
   })
-} catch (error) {
+} catch (error: any) {
   if (!/already exists/u.test(error.message)) {
     console.error('Firebase admin initialization error', error.stack)
   }

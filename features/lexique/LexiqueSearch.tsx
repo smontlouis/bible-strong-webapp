@@ -25,7 +25,7 @@ const LexiqueSearch = ({
         flex={1}
         maxW={450}
         minW={350}
-        onBlur={(e) => {
+        onBlur={(e: any) => {
           if (!e.currentTarget.contains(e.relatedTarget as Node)) {
             onClose()
           }

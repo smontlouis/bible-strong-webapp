@@ -238,7 +238,9 @@ const StudyItem = ({
           mt="s"
           sx={{
             display: '-webkit-box',
+            //@ts-ignore
             WebkitLineClamp: '3' as SystemStyleObject,
+            //@ts-ignore
             WebkitBoxOrient: 'vertical' as SystemStyleObject,
             overflow: 'hidden',
           }}

@@ -79,7 +79,7 @@ const VerseSearch = ({
       flex={1}
       maxW={350}
       minW={350}
-      onBlur={(e) => {
+      onBlur={(e: any) => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) {
           onClose()
         }

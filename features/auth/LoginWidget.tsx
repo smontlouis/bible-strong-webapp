@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import firebase from 'firebase/app'
+//@ts-ignore
 import * as firebaseui from '../../lib/firebaseui_fr'
 import { uiConfig } from '../../lib/firebase-app'
 
