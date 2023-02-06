@@ -1,6 +1,4 @@
-import { Box, Button, Flex, HStack, Link, Text } from '@chakra-ui/react'
-import NextLink from 'next/link'
-import React from 'react'
+import { Box, Flex, HStack, Link, Text } from '@chakra-ui/react'
 import Logo from '../public/images/svg/logo-full.svg'
 
 export default function Home() {
@@ -59,11 +57,6 @@ export default function Home() {
             />
           </Box>
         </Flex>
-        <NextLink passHref href="/home">
-          <Button as="a" w="305px" mt="m">
-            Version web (bêta)
-          </Button>
-        </NextLink>
       </Box>
       <HStack
         spacing="m"
@@ -73,8 +66,8 @@ export default function Home() {
         transform="translate(-50%)"
         p="m"
       >
-        <Link href="https://fr.tipeee.com/smontlouis" color="grey">
-          Soutenir sur Tipeee
+        <Link href="/rice.txt" color="grey">
+          Soutenir par virement
         </Link>
         <Link href="https://www.paypal.me/smontlouis" color="grey">
           Soutenir sur Paypal
