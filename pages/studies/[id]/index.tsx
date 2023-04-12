@@ -247,7 +247,7 @@ const Study = ({
             <Box
               as={Logo as ElementType<ReactNode>}
               ml={2}
-              d="inline-block"
+              display="inline-block"
               width={'100px'}
               height={'24px'}
             />
