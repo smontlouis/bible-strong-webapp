@@ -1,7 +1,8 @@
 import { Box, Center, Spinner, Text } from '@chakra-ui/react'
+import { useQuery } from '@tanstack/react-query'
+import { Howl } from 'howler'
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
 import BibleAudioFooter from './BibleAudioFooter'
-import { useQuery } from '@tanstack/react-query'
 
 type Word = {
   type: string
@@ -34,7 +35,7 @@ const timeout = (ms: number) =>
 const PAUSE_BETWEEN_SENTENCES = 500
 
 const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
-  const player = useRef<HTMLAudioElement | null>(null)
+  const player = useRef<Howl | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const currentAudioIndex = useRef(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -62,8 +63,8 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
     : false
   const canGoPrev = currentAudioIndex.current > 0
 
-  const onPlay = async () => {
-    if (player.current?.paused === false) {
+  const onPlay = () => {
+    if (player.current?.playing() === true) {
       player.current?.pause()
       setIsPlaying(false)
       cancelAnimationFrame(requestRef.current!)
@@ -71,13 +72,17 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
     }
 
     if (!player.current) {
-      const newPlayer = new Audio(
-        `data:audio/ogg;base64,${
-          jsonData?.[currentAudioIndex.current].audioStream
-        }`
-      )
-      newPlayer.addEventListener('ended', onAudioEnded)
-      player.current = newPlayer
+      const sound = new Howl({
+        src: [
+          `data:audio/mp3;base64,${
+            jsonData?.[currentAudioIndex.current].audioStream
+          }`,
+        ],
+        onend: onAudioEnded,
+        format: 'mp3',
+      })
+
+      player.current = sound
     }
     player.current?.play()
     setIsPlaying(true)
@@ -99,17 +104,17 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
       currentAudioIndex.current = 0
       containerRef.current!.style.cssText = ''
       player.current?.pause()
-      player.current?.removeEventListener('ended', onAudioEnded)
+      player.current?.off('end', onAudioEnded)
       player.current = null
       return
     }
 
-    const isAudioPlaying = player.current?.paused === false
+    const isAudioPlaying = player.current?.playing() === true
 
     currentAudioIndex.current += 1
     containerRef.current!.style.cssText = ''
     player.current?.pause()
-    player.current?.removeEventListener('ended', onAudioEnded)
+    player.current?.off('end', onAudioEnded)
     player.current = null
 
     forceUpdate() // Force update to re-render the text with new background color
@@ -124,15 +129,15 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
     if (!canGoPrev) return
 
     // If current audio is playing and current time is more than 0.5 seconds, restart the audio
-    if (player.current && player.current?.currentTime > 1) {
-      player.current.currentTime = 0
+    if (player.current && player.current?.seek() > 1) {
+      player.current.seek(0)
       return
     }
 
     currentAudioIndex.current -= 1
     containerRef.current!.style.cssText = ''
     player.current?.pause()
-    player.current?.removeEventListener('ended', onAudioEnded)
+    player.current?.off('end', onAudioEnded)
     player.current = null
 
     forceUpdate() // Force update to re-render the text with new background color
@@ -178,7 +183,7 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
   const onAudioTimeUpdate = () => {
     if (!player.current) return
 
-    const currentTime = player.current.currentTime * 1000 // Convert to milliseconds
+    const currentTime = player.current.seek() * 1000 // Convert to milliseconds
     const wordPositions: Word[] =
       jsonData?.[currentAudioIndex.current].speechMarks.chunks[0].chunks.filter(
         (w) => w.value.length !== 1
@@ -230,7 +235,7 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
       setIsPlaying(false)
       currentAudioIndex.current = 0
       player.current?.pause()
-      player.current?.removeEventListener('ended', onAudioEnded)
+      player.current?.off('end', onAudioEnded)
       player.current = null
       cancelAnimationFrame(requestRef.current!)
     }
