@@ -1,6 +1,7 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react'
-import { useRef, useState } from 'react'
-import jsonData from './data.json'
+import { Box, Center, Spinner, Text } from '@chakra-ui/react'
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import BibleAudioFooter from './BibleAudioFooter'
+import { useQuery } from '@tanstack/react-query'
 
 type Word = {
   type: string
@@ -11,78 +12,149 @@ type Word = {
   value: string
 }
 
-const BibleAudioReader = () => {
-  const [currentAudioIndex, setCurrentAudioIndex] = useState(0)
-  const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null)
+type WordWithChunks = Word & {
+  chunks: Word[]
+}
+
+type BibleAudioReaderProps = {
+  version: string
+  person: string
+}
+
+type BibleData = {
+  audioStream: string
+  speechMarks: {
+    chunks: WordWithChunks[]
+  }
+}[]
+
+const timeout = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms))
+
+const PAUSE_BETWEEN_SENTENCES = 500
+
+const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
   const player = useRef<HTMLAudioElement | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+  const currentAudioIndex = useRef(0)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const textsRef = useRef(new Map<number, HTMLParagraphElement>())
+  const requestRef = useRef<number>()
+  const [_, forceUpdate] = useReducer((x) => x + 1, 0)
 
-  const onPlayButtonClick = async () => {
-    if (isPlaying) {
+  const loadAsyncJson = useCallback(
+    async (v: string, p: string) => {
+      const response = await fetch(`/audio/${v}/${p}/1-1.json`)
+      const data = await response.json()
+      return data as BibleData
+    },
+    [version, person]
+  )
+
+  const query = useQuery({
+    queryKey: ['json', version, person],
+    queryFn: () => loadAsyncJson(version, person),
+  })
+  const jsonData = query.data
+
+  const canGoNext = jsonData
+    ? currentAudioIndex.current < jsonData.length - 1
+    : false
+  const canGoPrev = currentAudioIndex.current > 0
+
+  const onPlay = async () => {
+    if (player.current?.paused === false) {
       player.current?.pause()
       setIsPlaying(false)
-    } else {
-      if (!player.current) {
-        const newPlayer = new Audio(
-          `data:audio/ogg;base64,${jsonData[currentAudioIndex].audioStream}`
-        )
-        newPlayer.addEventListener('ended', onAudioEnded)
-        newPlayer.addEventListener('timeupdate', onAudioTimeUpdate)
-        player.current = newPlayer
-      }
-      player.current?.play()
-      setIsPlaying(true)
+      cancelAnimationFrame(requestRef.current!)
+      return
     }
+
+    if (!player.current) {
+      const newPlayer = new Audio(
+        `data:audio/ogg;base64,${
+          jsonData?.[currentAudioIndex.current].audioStream
+        }`
+      )
+      newPlayer.addEventListener('ended', onAudioEnded)
+      player.current = newPlayer
+    }
+    player.current?.play()
+    setIsPlaying(true)
+
+    requestRef.current = requestAnimationFrame(onAudioTimeUpdate)
   }
 
   const onAudioEnded = () => {
-    if (currentAudioIndex < jsonData.length - 1) {
-      setCurrentAudioIndex((prevIndex) => prevIndex + 1)
-      setCurrentWordIndex(null)
+    goToNext(true)
+  }
+
+  const goToNext = async (forcePlay?: boolean) => {
+    const canGoNext = jsonData
+      ? currentAudioIndex.current < jsonData.length - 1
+      : false
+
+    if (!canGoNext) {
       setIsPlaying(false)
+      currentAudioIndex.current = 0
+      containerRef.current!.style.cssText = ''
+      player.current?.pause()
+      player.current?.removeEventListener('ended', onAudioEnded)
+      player.current = null
+      return
+    }
 
-      if (player) {
-        player.current?.removeEventListener('ended', onAudioEnded)
-        player.current?.removeEventListener('timeupdate', onAudioTimeUpdate)
-        player.current = null
-      }
+    const isAudioPlaying = player.current?.paused === false
+
+    currentAudioIndex.current += 1
+    containerRef.current!.style.cssText = ''
+    player.current?.pause()
+    player.current?.removeEventListener('ended', onAudioEnded)
+    player.current = null
+
+    forceUpdate() // Force update to re-render the text with new background color
+
+    if (isAudioPlaying || forcePlay) {
+      await timeout(PAUSE_BETWEEN_SENTENCES)
+      onPlay()
     }
   }
 
-  const onAudioTimeUpdate = () => {
-    if (!player.current) return
+  const goToPrev = () => {
+    if (!canGoPrev) return
 
-    const currentTime = player.current.currentTime * 1000 // Convert to milliseconds
+    // If current audio is playing and current time is more than 0.5 seconds, restart the audio
+    if (player.current && player.current?.currentTime > 1) {
+      player.current.currentTime = 0
+      return
+    }
+
+    currentAudioIndex.current -= 1
+    containerRef.current!.style.cssText = ''
+    player.current?.pause()
+    player.current?.removeEventListener('ended', onAudioEnded)
+    player.current = null
+
+    forceUpdate() // Force update to re-render the text with new background color
+
+    if (isPlaying) {
+      onPlay()
+    }
+  }
+
+  const getWordCoordinatesBySentence = useCallback(() => {
+    const textRef = textsRef.current.get(currentAudioIndex.current)
+
+    if (!textRef) {
+      return []
+    }
+
     const wordPositions: Word[] =
-      jsonData[currentAudioIndex].speechMarks.chunks[0].chunks
+      jsonData?.[currentAudioIndex.current].speechMarks.chunks[0].chunks.filter(
+        (w) => w.value.length !== 1
+      ) || []
 
-    for (let i = 0; i < wordPositions.length; i++) {
-      if (
-        currentTime >= wordPositions[i].startTime &&
-        currentTime <= wordPositions[i].endTime
-      ) {
-        setCurrentWordIndex(i)
-        break
-      }
-    }
-  }
-
-  const wordCoordinates = (() => {
-    if (
-      typeof window !== 'undefined' &&
-      textsRef.current?.size > 0 &&
-      currentWordIndex !== null
-    ) {
-      const textRef = textsRef.current.get(currentAudioIndex)
-      const word =
-        jsonData[currentAudioIndex].speechMarks.chunks[0].chunks[
-          currentWordIndex
-        ]
-
-      console.log({ word, currentWordIndex, currentAudioIndex })
-
+    const wordCoordinatesBySentence = wordPositions.map((word) => {
       const range = document.createRange()
       range.setStart(textRef?.firstChild as Node, word.start)
       range.setEnd(textRef?.firstChild as Node, word.end)
@@ -98,25 +170,100 @@ const BibleAudioReader = () => {
         width: rect.width,
         height: rect.height,
       }
+    })
+
+    return wordCoordinatesBySentence
+  }, [currentAudioIndex.current, query.isSuccess])
+
+  const onAudioTimeUpdate = () => {
+    if (!player.current) return
+
+    const currentTime = player.current.currentTime * 1000 // Convert to milliseconds
+    const wordPositions: Word[] =
+      jsonData?.[currentAudioIndex.current].speechMarks.chunks[0].chunks.filter(
+        (w) => w.value.length !== 1
+      ) || []
+
+    for (let i = 0; i < wordPositions.length; i++) {
+      if (
+        currentTime >= wordPositions[i].startTime - 50 && // -50 to make the word highlight a bit earlier
+        currentTime <= wordPositions[i].endTime - 50 // -50 to make the word highlight a bit earlier
+      ) {
+        const word = getWordCoordinatesBySentence()?.[i]
+        if (word) {
+          containerRef.current?.style.setProperty('--word-x', `${word.x}px`)
+          containerRef.current?.style.setProperty('--word-y', `${word.y}px`)
+          containerRef.current?.style.setProperty(
+            '--word-width',
+            `${word.width}px`
+          )
+          containerRef.current?.style.setProperty(
+            '--word-height',
+            `${word.height}px`
+          )
+
+          // If next word has different y position, remove 'left' transition to avoid the word highlight jumping to the next line
+          if (
+            wordPositions[i + 1] &&
+            word.y !== getWordCoordinatesBySentence()?.[i + 1].y
+          ) {
+            containerRef.current?.style.setProperty(
+              '--word-transition',
+              'width'
+            )
+          } else {
+            containerRef.current?.style.setProperty(
+              '--word-transition',
+              'left, width'
+            )
+          }
+        }
+        break
+      }
     }
 
-    return null
-  })()
+    requestAnimationFrame(onAudioTimeUpdate)
+  }
+
+  useEffect(() => {
+    return () => {
+      setIsPlaying(false)
+      currentAudioIndex.current = 0
+      player.current?.pause()
+      player.current?.removeEventListener('ended', onAudioEnded)
+      player.current = null
+      cancelAnimationFrame(requestRef.current!)
+    }
+  }, [version, person])
+
+  if (query.isLoading || !jsonData) {
+    return (
+      <Center h={200}>
+        <Spinner />
+      </Center>
+    )
+  }
 
   return (
     <>
-      <Flex justifyContent="center" mt={6} pos="fixed" bottom={0} zIndex="1000">
-        <Button onClick={onPlayButtonClick} colorScheme="teal">
-          {isPlaying ? 'Pause' : 'Play'}
-        </Button>
-      </Flex>
-      <Box position="relative" ref={containerRef}>
+      <Box
+        ref={containerRef}
+        position="relative"
+        lineHeight={2.2}
+        paddingBottom="24"
+      >
         {jsonData.map((data, index) => (
           <Text
             key={index}
+            as="span"
             fontSize="xl"
-            my={4}
-            opacity={index === currentAudioIndex ? 1 : 0.6}
+            px="4px"
+            borderRadius="4px"
+            background={
+              index === currentAudioIndex.current
+                ? 'rgb(119, 179, 253, .2)'
+                : 'none'
+            }
             ref={(node) => {
               if (node) {
                 textsRef.current.set(index, node)
@@ -131,12 +278,13 @@ const BibleAudioReader = () => {
         <Box
           key="word-coordinate"
           position="absolute"
-          style={{
-            top: wordCoordinates?.y,
-            left: wordCoordinates?.x,
-            width: wordCoordinates?.width,
-            height: wordCoordinates?.height,
-            transitionProperty: 'left, width',
+          sx={{
+            position: 'absolute',
+            top: 'var(--word-y)',
+            left: 'var(--word-x)',
+            width: 'var(--word-width)',
+            height: 'var(--word-height)',
+            transitionProperty: "var(--word-transition, 'left, width')",
             transitionDuration: '0.05s',
             backgroundColor: 'rgb(119, 179, 253)',
             borderRadius: '3px',
@@ -147,6 +295,14 @@ const BibleAudioReader = () => {
           }}
         />
       </Box>
+      <BibleAudioFooter
+        isPlaying={isPlaying}
+        onPlay={onPlay}
+        goToNext={goToNext}
+        goToPrev={goToPrev}
+        canGoPrev={canGoPrev}
+        canGoNext={canGoNext}
+      />
     </>
   )
 }
