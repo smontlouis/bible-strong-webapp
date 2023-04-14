@@ -30,6 +30,20 @@ export interface BibleAudioFooterProps {
   canGoPrev: boolean
 }
 
+const getGroupTitle = (version: string) => {
+  switch (version) {
+    case 'esv': {
+      return 'English'
+    }
+    case 'frc97': {
+      return 'Français'
+    }
+    case 'cloned': {
+      return 'Pastors'
+    }
+  }
+}
+
 const BibleAudioFooter = ({
   isPlaying,
   onPlay,
@@ -39,6 +53,8 @@ const BibleAudioFooter = ({
   canGoPrev,
 }: BibleAudioFooterProps) => {
   const router = useRouter()
+  const { slug } = router.query
+  const [version, person] = (slug as string[]) || []
 
   return (
     <Flex
@@ -52,7 +68,9 @@ const BibleAudioFooter = ({
       borderColor="gray.200"
       borderRadius="2xl"
       paddingY="6"
+      paddingX="4"
       gap="4"
+      flexDir={{ base: 'column', md: 'row' }}
     >
       <Box flex={1} />
       <HStack flex={1} alignItems="center" justifyContent="center">
@@ -90,19 +108,21 @@ const BibleAudioFooter = ({
             leftIcon={
               <Avatar
                 size="sm"
-                src={`/images/people/${router.query.slug?.[1]}.svg`}
+                src={`/images/people/${person}.${
+                  version === 'cloned' ? 'jpg' : 'svg'
+                }`}
                 backgroundColor="gray.100"
               />
             }
           >
-            {router.query.slug?.[1]}
+            {person}
           </MenuButton>
           <MenuList minWidth="240px" maxH={400} overflow="auto">
             {audioContent.map((v) => (
               <MenuGroup
                 key={v.version}
                 defaultValue={v.version}
-                title={v.version === 'esv' ? '🇺🇸 English' : '🇫🇷 Français'}
+                title={getGroupTitle(v.version)}
                 borderBottomWidth={1}
                 borderBottomColor="gray.100"
                 paddingY="2"
@@ -116,7 +136,9 @@ const BibleAudioFooter = ({
                     icon={
                       <Avatar
                         size="md"
-                        src={`/images/people/${p.name}.svg`}
+                        src={`/images/people/${p.name}.${
+                          v.version === 'cloned' ? 'jpg' : 'svg'
+                        }`}
                         backgroundColor="gray.100"
                       />
                     }

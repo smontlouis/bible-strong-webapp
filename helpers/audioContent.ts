@@ -51,4 +51,21 @@ export const audioContent = [
       },
     ],
   },
+  {
+    version: 'cloned',
+    people: [
+      {
+        name: 'Doug Batchelor',
+      },
+      {
+        name: 'Duane McKey',
+      },
+      {
+        name: 'Randy Skeet',
+      },
+      {
+        name: 'Ted Wilson',
+      },
+    ],
+  },
 ]
