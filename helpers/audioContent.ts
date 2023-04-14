@@ -21,7 +21,7 @@ export const audioContent = [
         name: 'Barrack Obama',
       },
       {
-        name: 'Snoop Dog',
+        name: 'Snoop Dogg',
       },
     ],
   },

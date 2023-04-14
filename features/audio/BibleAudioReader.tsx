@@ -80,10 +80,12 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
         ],
         onend: onAudioEnded,
         format: 'mp3',
+        html5: true,
       })
 
       player.current = sound
     }
+    player.current?.rate(2)
     player.current?.play()
     setIsPlaying(true)
 
@@ -255,7 +257,7 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
         ref={containerRef}
         position="relative"
         lineHeight={2.2}
-        paddingBottom="24"
+        paddingBottom="6"
       >
         {jsonData.map((data, index) => (
           <Text

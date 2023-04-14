@@ -1,6 +1,8 @@
 import {
+  Avatar,
   Box,
   Button,
+  Flex,
   HStack,
   IconButton,
   Menu,
@@ -10,7 +12,13 @@ import {
   MenuList,
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { FaPause, FaPlay, FaStepBackward, FaStepForward } from 'react-icons/fa'
+import {
+  FaChevronDown,
+  FaPause,
+  FaPlay,
+  FaStepBackward,
+  FaStepForward,
+} from 'react-icons/fa'
 import { audioContent } from '../../helpers/audioContent'
 
 export interface BibleAudioFooterProps {
@@ -33,24 +41,21 @@ const BibleAudioFooter = ({
   const router = useRouter()
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
+    <Flex
       justifyContent="center"
       alignItems="center"
       mt={6}
-      pos="fixed"
-      bottom={0}
-      left={0}
-      right={0}
-      zIndex="1000"
+      pos="sticky"
+      bottom="6"
       background="white"
-      borderTopWidth={1}
-      borderTopColor="gray.200"
+      borderWidth={1}
+      borderColor="gray.200"
+      borderRadius="2xl"
       paddingY="6"
       gap="4"
     >
-      <HStack alignItems="center" justifyContent="center">
+      <Box flex={1} />
+      <HStack flex={1} alignItems="center" justifyContent="center">
         <IconButton
           onClick={() => goToPrev()}
           colorScheme="blue"
@@ -75,31 +80,57 @@ const BibleAudioFooter = ({
           isDisabled={!canGoNext}
         />
       </HStack>
-      <Menu>
-        <MenuButton as={Button} colorScheme="blue">
-          {router.query.slug?.[1]}
-        </MenuButton>
-        <MenuList minWidth="240px">
-          {audioContent.map((v) => (
-            <MenuGroup
-              key={v.version}
-              defaultValue={v.version}
-              title={v.version}
-            >
-              {v.people.map((p) => (
-                <MenuItem
-                  key={p.name}
-                  value={p.name}
-                  onClick={() => router.push(`/audio/${v.version}/${p.name}`)}
-                >
-                  {p.name}
-                </MenuItem>
-              ))}
-            </MenuGroup>
-          ))}
-        </MenuList>
-      </Menu>
-    </Box>
+      <Box flex={1}>
+        <Menu placement="top" autoSelect={false}>
+          <MenuButton
+            as={Button}
+            colorScheme="blue"
+            rightIcon={<FaChevronDown />}
+            variant="ghost"
+            leftIcon={
+              <Avatar
+                size="sm"
+                src={`/images/people/${router.query.slug?.[1]}.svg`}
+                backgroundColor="gray.100"
+              />
+            }
+          >
+            {router.query.slug?.[1]}
+          </MenuButton>
+          <MenuList minWidth="240px" maxH={400} overflow="auto">
+            {audioContent.map((v) => (
+              <MenuGroup
+                key={v.version}
+                defaultValue={v.version}
+                title={v.version === 'esv' ? '🇺🇸 English' : '🇫🇷 Français'}
+                borderBottomWidth={1}
+                borderBottomColor="gray.100"
+                paddingY="2"
+                textTransform="uppercase"
+                color="gray.500"
+              >
+                {v.people.map((p) => (
+                  <MenuItem
+                    key={p.name}
+                    value={p.name}
+                    icon={
+                      <Avatar
+                        size="md"
+                        src={`/images/people/${p.name}.svg`}
+                        backgroundColor="gray.100"
+                      />
+                    }
+                    onClick={() => router.push(`/audio/${v.version}/${p.name}`)}
+                  >
+                    {p.name}
+                  </MenuItem>
+                ))}
+              </MenuGroup>
+            ))}
+          </MenuList>
+        </Menu>
+      </Box>
+    </Flex>
   )
 }
 
