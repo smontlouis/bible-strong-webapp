@@ -85,7 +85,7 @@ const BibleAudioReader = ({ version, person }: BibleAudioReaderProps) => {
 
       player.current = sound
     }
-    player.current?.rate(2)
+    player.current?.rate(1)
     player.current?.play()
     setIsPlaying(true)
 
