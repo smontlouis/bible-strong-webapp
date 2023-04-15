@@ -8,6 +8,15 @@ const nextConfig = {
   env: {
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
   },
+  async redirects() {
+    return [
+      {
+        source: '/audio',
+        destination: '/audio/esv/Amy',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = withPlugins([
