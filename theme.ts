@@ -51,7 +51,7 @@ export const theme = extendTheme({
     color5: '#95afc0',
   },
   fonts: {
-    normal: 'Pulp-Display, sans-serif',
+    normal: 'Inter, sans-serif',
     text: '"Literata", serif',
   },
   media: {

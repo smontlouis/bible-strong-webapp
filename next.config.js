@@ -1,10 +1,10 @@
-const withPlugins = require('next-compose-plugins')
-const svg = require('next-react-svg')
-const images = require('next-images')
+const withMDX = require('@next/mdx')()
 
-const path = require('path')
-
+/**
+ * @type {import('next').NextConfig}
+ */
 const nextConfig = {
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   env: {
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,
   },
@@ -17,20 +17,37 @@ const nextConfig = {
       },
     ]
   },
+  webpack(config) {
+    config.module.rules.push({
+      test: /\.svg$/,
+      use: [
+        {
+          loader: '@svgr/webpack',
+          options: {
+            svgoConfig: {
+              plugins: [
+                {
+                  name: 'preset-default',
+                  params: {
+                    overrides: {
+                      // disable a default plugin
+                      removeViewBox: false,
+
+                      // customize the params of a default plugin
+                      inlineStyles: {
+                        onlyMatchedOnce: false,
+                      },
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      ],
+    })
+    return config
+  },
 }
 
-module.exports = withPlugins([
-  [
-    svg,
-    {
-      include: path.resolve(__dirname, 'public/images/svg'),
-    },
-  ],
-  [
-    images,
-    {
-      exclude: path.resolve(__dirname, 'public/images/svg'),
-    },
-  ],
-  nextConfig,
-])
+module.exports = withMDX(nextConfig)

@@ -42,10 +42,6 @@ const App = ({ Component, pageProps }: Props) => {
             content="initial-scale=1.0, width=device-width"
           />
           <link rel="icon" href="/images/icon.png" />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Literata&display=swap"
-            rel="stylesheet"
-          />
         </Head>
         <style jsx global>{`
           @font-face {

@@ -1,4 +1,8 @@
-import { Box, Flex, HStack, Link, Text } from '@chakra-ui/react'
+import { Link } from '@chakra-ui/next-js'
+import { Box, Flex, HStack, Text } from '@chakra-ui/react'
+import NextLink from 'next/link'
+
+import { FaGithub } from 'react-icons/fa'
 import Logo from '../public/images/svg/logo-full.svg'
 
 export default function Home() {
@@ -32,20 +36,20 @@ export default function Home() {
         <Flex alignItems="center" mt="l">
           <Box
             as="a"
-            width={153}
-            height="45px"
+            width={160}
+            height="50px"
             href="https://apps.apple.com/fr/app/bible-strong/id1454738221?mt=8"
             style={{
               display: 'inline-block',
               overflow: 'hidden',
               background:
-                'url(https://linkmaker.itunes.apple.com/fr-fr/badge-lrg.svg?releaseDate=2019-07-03&kind=iossoftware&bubble=ios_apps) no-repeat',
+                'url(https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/fr-fr?size=250x83&amp;releaseDate=1562112000) no-repeat',
               backgroundSize: 'contain',
             }}
           />
           <Box
             width={165}
-            height="60px"
+            height="63px"
             as="a"
             href="https://play.google.com/store/apps/details?id=com.smontlouis.biblestrong&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
           >
@@ -66,11 +70,15 @@ export default function Home() {
         transform="translate(-50%)"
         p="m"
       >
-        <Link href="/rice.txt" color="grey">
-          Soutenir par virement
+        <Link as={NextLink} href="/give" color="grey">
+          Soutenir
         </Link>
-        <Link href="https://www.paypal.me/smontlouis" color="grey">
-          Soutenir sur Paypal
+        <Link
+          href="https://github.com/smontlouis/bible-strong"
+          color="grey"
+          isExternal
+        >
+          <FaGithub style={{ display: 'inline-block' }} /> Github
         </Link>
       </HStack>
     </Flex>
