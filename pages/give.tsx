@@ -15,7 +15,7 @@ import { DonationStep } from '../features/give/DonationStep'
 import { RadioButton } from '../features/give/RadioButton'
 import GiveFR from '../features/give/give-fr.mdx'
 import GiveEN from '../features/give/give-en.mdx'
-import { useCurrentLocale } from '../locales'
+import { useCurrentLocale, useI18n } from '../locales'
 
 type DonationMode = 'one-time' | 'monthly'
 
@@ -97,6 +97,7 @@ export default function GiveLayout({
   }, [donationMode, amount, freeAmount])
 
   const locale = useCurrentLocale()
+  const t = useI18n()
 
   return (
     <Flex flexDirection={{ base: 'column', lg: 'row' }}>
@@ -122,7 +123,7 @@ export default function GiveLayout({
             <NextLink href="/">
               <Box as={Logo} width="240px" height="52px" />
             </NextLink>
-            <DonationStep label="Préférez-vous faire un don ponctuel ou mensuel ?">
+            <DonationStep label={t('donate.step1')}>
               <ButtonGroup
                 isAttached
                 size="md"
@@ -143,17 +144,17 @@ export default function GiveLayout({
                   {...donationModeRadioGroup.getRadioProps({
                     value: 'one-time',
                   })}
-                  label="Ponctuel"
+                  label={t('one-time')}
                 />
                 <RadioButton
                   {...donationModeRadioGroup.getRadioProps({
                     value: 'monthly',
                   })}
-                  label="Mensuel"
+                  label={t('monthly')}
                 />
               </ButtonGroup>
             </DonationStep>
-            <DonationStep label="Choisissez le montant qui vous convient:">
+            <DonationStep label={t('donate.step2')}>
               <Stack direction={{ base: 'column', lg: 'row' }}>
                 <ButtonGroup
                   isAttached
@@ -176,7 +177,7 @@ export default function GiveLayout({
                     colorScheme="blue"
                     size="md"
                     type="number"
-                    placeholder="Libre"
+                    placeholder={t('free')}
                     width="120px"
                     fontWeight="semibold"
                     onFocus={() => setAmount('')}
@@ -188,7 +189,7 @@ export default function GiveLayout({
             </DonationStep>
             {donationMode === 'one-time' && (
               <Button as="a" colorScheme="blue" size="md" href={donationLink}>
-                Contribuer
+                {t('donate')}
               </Button>
             )}
             {Boolean(donationMode === 'monthly' && amount) && (
