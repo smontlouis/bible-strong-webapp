@@ -4,6 +4,10 @@ const withMDX = require('@next/mdx')()
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  i18n: {
+    locales: ['en', 'fr'],
+    defaultLocale: 'en',
+  },
   pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   env: {
     FIREBASE_PRIVATE_KEY: process.env.FIREBASE_PRIVATE_KEY,

@@ -1,16 +1,16 @@
-import { AppProps } from 'next/app'
 import { ChakraProvider } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-
-import { theme } from '../theme'
+import { NextComponentType, NextPageContext } from 'next'
+import { AppProps } from 'next/app'
 import Head from 'next/head'
 import { PropsWithChildren } from 'react'
-import { NextComponentType, NextPageContext } from 'next'
+import { theme } from '../theme'
 
+import '../lib/firebase-ui-auth.css'
 import '../lib/quill/quill.css'
 import '../lib/quill/strong.css'
 import '../lib/quill/verse.css'
-import '../lib/firebase-ui-auth.css'
+import { I18nProvider } from '../locales'
 
 const queryClient = new QueryClient()
 
@@ -127,9 +127,11 @@ const App = ({ Component, pageProps }: Props) => {
             }
           }
         `}</style>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <I18nProvider locale={pageProps.locale}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </I18nProvider>
       </ChakraProvider>
     </QueryClientProvider>
   )
