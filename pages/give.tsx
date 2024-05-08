@@ -210,7 +210,6 @@ export default function GiveLayout({
           py={{ base: '10', lg: '20' }}
           gap="3"
           maxWidth={380}
-          opacity={0}
         >
           {locale === 'fr' ? <GiveFR /> : <GiveEN />}
         </Stack>
