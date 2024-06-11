@@ -43,14 +43,14 @@ export default function Page() {
       }}
     >
       <Head>
-        <title>Suppresion de vos données - Bible Strong App</title>
+        <title>How to delete data ? </title>
       </Head>
       <TextContainer>
-        <h1>Suppression de données</h1>
+        <h1>How to delete data ? </h1>
         <p>
-          Si vous souhaitez supprimer vos données, merci d'envoyer un mail à
-          s.montlouis.calixte@gmail avec pour object "Suppression de données"
-          ainsi que votre addresse email. Les données seront effacées sous 24h.
+          If you want to delete your data, please go to Bible Strong App, in the
+          "More" menu and click on "delete my account" at the bottom of the
+          page.
         </p>
       </TextContainer>
     </div>
