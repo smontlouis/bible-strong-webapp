@@ -1,7 +1,10 @@
+"use client"
+
 import { FormEvent, FormEventHandler, useRef } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 
 import { app } from '../../lib/firebase-app'
+import styles from "./page.module.css";
 
 export default function Login() {
     const email_input = useRef<HTMLInputElement>(null)
@@ -29,14 +32,16 @@ export default function Login() {
                 const error_message = error.message;
 
                 console.error(error);
-            })
+            });
     }
 
     return (
-        <main>
-            <form onSubmit={submit}>
-                <input ref={email_input} type="email" name="email" />
-                <input ref={password_input} type="password" name="password" />
+        <main className={styles.main}>
+            <h1>Bible Strong</h1>
+            <form className={styles.form} onSubmit={submit}>
+                <input className={styles.input} ref={email_input} type="email" name="email" />
+                <input className={styles.input} ref={password_input} type="password" name="password" />
+                <button className={styles.input} type="submit">Se connecter</button>
             </form>
         </main>
     )
