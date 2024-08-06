@@ -1,0 +1,23 @@
+{
+  "logout": "Se déconnecter",
+  "bible": {
+    "reference-not-found": "Ce verset n'existe pas"
+  },
+  "browser": {
+    "new-tab": "Nouvel onglet",
+    "bible": "Bible",
+    "studies": "Études",
+    "lexique": "Lexique",
+    "dictionnary": "Dictionnaire",
+    "nave": "Nave",
+    "close-tab": "Fermer l'onglet"
+  },
+  "home": {
+    "hello": "Bienvenue,",
+    "welcome_1": "Bienvenue sur la version bêta de Bible Strong Web. Pour l'instant, seule la fonctionnalité études est disponible. Elle est totalement accessible pour les utilisateurs sponsors et restreinte à une seule étude pour les autres utilisateurs.",
+    "welcome_2": "Comme à chaque fois, la fonctionnalité sera disponible au grand public dans les mois à venir. Si vous souhaitez soutenir mon travail, n'hésitez pas à devenir sponsor ;) sur mobile, par",
+    "welcome_3": "Bonne étude,"
+  },
+  "all": "Tout.",
+  "in-one": "en un."
+}
