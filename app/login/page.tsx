@@ -3,8 +3,7 @@
 import { useEffect } from 'react';
 
 import LoginWidget from '@/features/auth/LoginWidget';
-
-import { firebaseapp, ui_config } from '../../lib/firebase-app';
+import { firebaseapp, ui_config } from '@/lib/firebase-app';
 
 export default function LoginPage() {
     return (
