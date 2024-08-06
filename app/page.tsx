@@ -28,7 +28,7 @@ export default function Home() {
                             display: 'inline-block',
                             overflow: 'hidden',
                             background:
-                                'url(https://linkmaker.itunes.apple.com/fr-fr/badge-lrg.svg?releaseDate=2019-07-03&kind=iossoftware&bubble=ios_apps) no-repeat',
+                                'url(https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/fr-fr?size=800x100&amp;releaseDate=1562112000) no-repeat',
                             backgroundSize: 'contain',
                         }}
                     />
