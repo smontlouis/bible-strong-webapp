@@ -19,5 +19,5 @@ export const ui_config = {
     ],
 
     tosUrl: '<your-tos-url>',
-    privacyPolicyUrl: '<your-privacy-policy-url>',
+    privacyPolicyUrl: '/politique-de-confidentialite',
 }
