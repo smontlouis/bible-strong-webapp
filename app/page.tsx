@@ -1,95 +1,72 @@
-import Image from "next/image";
+import React from 'react';
+import NextLink from 'next/link';
+import { Box, Button, Flex, HStack, Link, Text, Image } from '@chakra-ui/react';
 import styles from "./page.module.css";
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    return (
+        <main className={styles.main}>
+            <Image src='/images/logo-full.svg' width="240px" pos="absolute" top={0} left="20px" />
+            <Box>
+                <Text fontSize={60} variant="bold">
+                    {'all'}
+                    <br />
+                    {'in-one'}
+                </Text>
+                <Text mt="l" maxW="400px">
+                    BibleStrong met à disposition des outils efficaces d'étude de la Bible
+                    pour tous ceux qui souhaitent développer et affermir une foi réfléchie
+                    en Dieu.
+                </Text>
+                <Flex alignItems="center" mt="l">
+                    <Box
+                        as="a"
+                        width={153}
+                        height="45px"
+                        href="https://apps.apple.com/fr/app/bible-strong/id1454738221?mt=8"
+                        style={{
+                            display: 'inline-block',
+                            overflow: 'hidden',
+                            background:
+                                'url(https://linkmaker.itunes.apple.com/fr-fr/badge-lrg.svg?releaseDate=2019-07-03&kind=iossoftware&bubble=ios_apps) no-repeat',
+                            backgroundSize: 'contain',
+                        }}
+                    />
+                    <Box
+                        width={165}
+                        height="60px"
+                        as="a"
+                        href="https://play.google.com/store/apps/details?id=com.smontlouis.biblestrong&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1"
+                    >
+                        <img
+                            alt="Disponible sur Google Play"
+                            src="https://play.google.com/intl/en_us/badges/images/generic/fr_badge_web_generic.png"
+                            width={165}
+                            style={{ marginBottom: 0 }}
+                        />
+                    </Box>
+                </Flex>
+                <NextLink passHref href="/browser">
+                    <Button w="305px" mt="m">
+                        Version web (bêta)
+                    </Button>
+                </NextLink>
+            </Box>
+            <HStack
+                spacing="m"
+                pos="absolute"
+                bottom={0}
+                left="50%"
+                transform="translate(-50%)"
+                p="m"
+            >
+                <Link href="https://fr.tipeee.com/smontlouis" color="grey">
+                    Soutenir sur Tipeee
+                </Link>
+                <Link href="https://www.paypal.me/smontlouis" color="grey">
+                    Soutenir sur Paypal
+                </Link>
+            </HStack>
+        </main>
+    );
 }
