@@ -1,23 +1,23 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebaseui/dist/firebaseui.css';
 
 import config from '../config'
 
-export const app = initializeApp(config.firebase);
-export const firestore = getFirestore(app)
+export const firebaseapp = firebase.apps.length ? firebase.app() : firebase.initializeApp(config.firebase);
 
-// const auth = getAuth(app)
+// export const auth = firebase.auth()
+// export const firestore = firebase.firestore()
 
-// export const uiConfig = {
-//     signInSuccessUrl: 'browser',
-//     signInOptions: [
-//         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-//         firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-//         firebase.auth.FacebookAuthProvider.PROVIDER_ID,
-//         'apple.com',
-//     ],
+export const ui_config = {
+    signInSuccessUrl: 'browser',
+    signInOptions: [
+        firebase.auth.EmailAuthProvider.PROVIDER_ID,
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        'apple.com',
+    ],
 
-//     tosUrl: '<your-tos-url>',
-//     privacyPolicyUrl: '<your-privacy-policy-url>',
-// }
+    tosUrl: '<your-tos-url>',
+    privacyPolicyUrl: '<your-privacy-policy-url>',
+}
