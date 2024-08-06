@@ -18,6 +18,6 @@ export const ui_config = {
         'apple.com',
     ],
 
-    tosUrl: '<your-tos-url>',
+    tosUrl: '/eula',
     privacyPolicyUrl: '/politique-de-confidentialite',
 }
