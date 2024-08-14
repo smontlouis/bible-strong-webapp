@@ -1,10 +1,11 @@
 import React from 'react';
-import Browser from './browser';
+// import Browser from './browser';
 
 const AppPage = () => {
     return (
         <main>
-            <Browser />
+            {/* <Browser /> */}
+            
         </main>
     )
 };

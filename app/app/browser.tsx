@@ -3,7 +3,7 @@
 import React, { useCallback } from 'react';
 import { Box, Flex, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react';
 import { DragDropContext, DragStart, Droppable, DropResult } from 'react-beautiful-dnd';
-import Layout from './layout';
+import Layout from './layout.tsx';
 import { AnimatePresence } from 'framer-motion';
 import { FiPlus } from 'react-icons/fi';
 import useBrowserStore, { TabItem } from './browser.store';
