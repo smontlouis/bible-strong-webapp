@@ -7,7 +7,7 @@ import { firebase_app } from '@/lib/firebase-app';
 
 import './page.scss';
 
-type Verse = {
+type Verse = { // firebase verse object
     id: string;
     book: number;
     chapter: number;
@@ -15,11 +15,22 @@ type Verse = {
     content: string;
 };
 
+type Index = { // where the user wants to navigates
+    book: number;
+    chapter: number;
+    verse: number;
+};
+
 function renderChapter(chapter: Verse[]) {
-    return chapter.map((v, index) => <p key={index}>{v.content}</p>);
+    return chapter.map((v, index) => {
+        return (
+            <span key={index}>{v.verse}. {v.content}</span>
+        )
+    });
 }
 
 const AppPage = () => {
+    const [index, setIndex] = useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = useState<Verse[]>([]);
 
     const query_chapter = async () => {
@@ -27,13 +38,13 @@ const AppPage = () => {
             let verses: Verse[] = [];
 
             const db = getFirestore(firebase_app);
-            const q = query(collection(db, 'bible-neg79'), where('book', '==', 1), where('chapter', '==', 1));
+            const q = query(collection(db, 'bible-neg79'), where('book', '==', index.book), where('chapter', '==', index.chapter));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 verses.push(doc.data() as Verse);
             });
 
-            setChapter(verses);
+            setChapter(verses.sort((a, b) => a.verse - b.verse));
         }
         catch (e) {
             console.log(e);
@@ -46,8 +57,9 @@ const AppPage = () => {
 
     return (
         <main>
-            {/* <Browser /> */}
-            <div>{renderChapter(chapter)}</div>
+            <section>
+                <p>{renderChapter(chapter)}</p>
+            </section>
         </main>
     )
 };
