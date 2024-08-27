@@ -1,0 +1,57 @@
+.main {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 400px;
+    width: 100%;
+
+    .input {
+        padding: 0.5rem;
+        font-size: 1.2rem;
+    }
+}
+
+#oauth-div {
+    width: 300px;
+    padding: 1rem 2rem;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    #google-button {
+        width: 100%;
+        padding: 0.25rem 0;
+        border-radius: 5px;
+        display: block;
+
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 500;
+
+        background-color: #EA4335;
+    }
+
+    #facebook-button {
+        width: 100%;
+        padding: 0.25rem 0;
+        border-radius: 5px;
+        display: block;
+
+        color: #fff;
+        font-size: 1.2rem;
+        font-weight: 500;
+
+        background-color: #3B5998;
+    }
+}
