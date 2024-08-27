@@ -1,10 +1,17 @@
+'use client';
+
 import Link from 'next/link';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 
 import { FiGlobe, FiSend, FiHelpCircle, FiGithub, FiFacebook, FiDollarSign, FiShare2 } from 'react-icons/fi';
 import './navbar.layout.scss';
+import { getAuth } from 'firebase/auth';
+import { firebase_app } from '@/lib/firebase-app';
 
 const Layout = ({ children }: PropsWithChildren<{}>) => {
+    const auth = getAuth(firebase_app);
+    const user = auth.currentUser;
+
     return (
         <>
             <header>
@@ -12,7 +19,7 @@ const Layout = ({ children }: PropsWithChildren<{}>) => {
                     <section className='profil'>
                         <article id="user">
                             <img src="/images/avatar-dummy.png" alt="Avatar" />
-                                <h2>Bonjour John Doe</h2>
+                                <h2>Bonjour {user?.displayName}</h2>
                                 <div>
                                 <legend>Verset du jour</legend>
                                 <p>Le Seigneur est fidèle, il vous affermira et vous preservera du malin.</p>
