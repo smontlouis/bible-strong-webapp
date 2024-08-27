@@ -14,7 +14,7 @@ const Layout = ({ children }: PropsWithChildren<{}>) => {
 
     return (
         <>
-            <header>
+            <header id='nav-container'>
                 <nav className='navbar'>
                     <section className='profil'>
                         <article id="user">
