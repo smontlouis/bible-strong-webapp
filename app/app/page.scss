@@ -1,3 +1,32 @@
 main {
-    margin: 0 5rem;
+}
+
+#index-nav {
+    padding: 0.5rem 5rem;
+
+    display: flex;
+    flex-direction: row;
+
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+    section {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+
+        select {
+            padding: 0.5rem 1rem;
+
+            background-color: #fff;
+        }
+    }
+}
+
+#content {
+    margin: 1rem 5rem;
+
+    p.line-break {
+        display: flex;
+        flex-direction: column;
+    }
 }
