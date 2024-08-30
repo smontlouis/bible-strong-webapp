@@ -46,7 +46,7 @@ export default function Home() {
                         />
                     </Box>
                 </Flex>
-                <NextLink passHref href="/browser">
+                <NextLink passHref href="/app">
                     <Button w="305px" mt="m">
                         Version web (bêta)
                     </Button>
