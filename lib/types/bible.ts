@@ -5,3 +5,10 @@ export type Verse = { // firebase verse object
     verse: number;
     content: string;
 };
+
+export type Note = {
+    id: string;
+    date: string;
+    description: string;
+    title: string;
+}

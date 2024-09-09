@@ -6,6 +6,7 @@ main {
 
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
 
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 
@@ -20,13 +21,92 @@ main {
             background-color: #fff;
         }
     }
+
+    #outline-btn {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        align-items: center;
+
+        div {
+            width: 20px;
+            height: 20px;
+
+            border-color: #000;
+            border-width: 1px;
+            border-radius: 3px;
+        }
+    }
+
+    #outline-dialog {
+        position: fixed;
+        top: 4rem;
+        left: 23rem;
+
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+
+        section {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+
+            button {
+                width: 20px;
+                height: 20px;
+
+                border-radius: 3px;
+
+                &#color-none {
+                    background-color: #fff;
+                    border-color: #000;
+                    border-width: 1px;
+                }
+
+                &#color-1 {
+                    background-color: #ff0000;
+                }
+
+                &#color-2 {
+                    background-color: #efff60;
+                }
+
+                &#color-3 {
+                    background-color: #acff25;
+                }
+
+                &#color-4 {
+                    background-color: #2f82ff;
+                }
+
+                &#color-5 {
+                    background-color: #a52ff3;
+                }
+            }
+        }
+    }
 }
 
 #content {
     margin: 1rem 5rem;
 
-    p.line-break {
-        display: flex;
-        flex-direction: column;
+    p {
+        user-select: none;
+
+        span {
+            &:hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
+
+            &.selected {
+                color: #007bff;
+            }
+        }
+
+        &.line-break {
+            display: flex;
+            flex-direction: column;
+        }
     }
 }

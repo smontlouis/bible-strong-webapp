@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { collection, query, where, getDocs, getFirestore } from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
-import { Verse } from '@/lib/types/bible';
+import { Note, Verse } from '@/lib/types/bible';
 
 import './page.scss';
 
 import books_map from '@/lib/types/books.json';
+import ChapterVersesList from './ChapterVersesList';
+import { getAuth } from 'firebase/auth';
 
 type Index = { // where the user wants to navigates
     book: number;
@@ -44,18 +46,13 @@ function renderBooksList() {
     });
 }
 
-function renderChapter(chapter: Verse[]) {
-    return chapter.map((v, index) => {
-        return (
-            <span key={index}>{v.verse}. {v.content}</span>
-        )
-    });
-}
-
 const AppPage = () => {
     const [index, setIndex] = useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = useState<Verse[]>([]);
+    const [notes, setNotes] = useState<Note[]>([]);
     const [style, setStyle] = useState<StyleSettings>({ line_break: false });
+
+    const outline_dialog = useRef<HTMLDialogElement>(null);
 
     const query_chapter = async () => {
         try {
@@ -69,6 +66,17 @@ const AppPage = () => {
             });
 
             setChapter(verses.sort((a, b) => a.verse - b.verse));
+
+            // get user data
+            const auth = getAuth(firebase_app);
+            const user = auth.currentUser;
+            if (!user) return;
+
+            const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
+            const notes_snapshot = await getDocs(query_notes);
+            notes_snapshot.forEach((doc) => {
+                setNotes(doc.data()['bible']['notes'] as Note[]);
+            });
         }
         catch (e) {
             console.log(e);
@@ -76,7 +84,6 @@ const AppPage = () => {
     }
 
     useEffect(() => {
-        console.log(index);
         query_chapter();
     }, [index]);
 
@@ -94,6 +101,14 @@ const AppPage = () => {
         setIndex({ ...index, chapter: Number(e.target.value) });
     }
 
+    const openOutlineDialog = (e: any) => {
+        outline_dialog.current?.show();
+    }
+
+    const onSelectOutlineColor = () => {
+        outline_dialog.current?.close();
+    }
+
     return (
         <main>
             <header id='index-nav'>
@@ -106,6 +121,19 @@ const AppPage = () => {
                     </select>
                 </section>
                 <section>
+                    <button id='outline-btn' onClick={openOutlineDialog}><div />outline</button>
+                    <dialog id='outline-dialog' ref={outline_dialog}>
+                        <section>
+                            <button id='color-none' onClick={onSelectOutlineColor} />
+                            <button id='color-1' onClick={onSelectOutlineColor} />
+                            <button id='color-2' onClick={onSelectOutlineColor} />
+                            <button id='color-3' onClick={onSelectOutlineColor} />
+                            <button id='color-4' onClick={onSelectOutlineColor} />
+                            <button id='color-5' onClick={onSelectOutlineColor} />
+                        </section>
+                    </dialog>
+                </section>
+                <section>
                     <div>
                         <input type='checkbox' name='line-break' onChange={() => setStyle({ line_break: !style.line_break })} />
                         <label>Line Break</label>
@@ -113,7 +141,9 @@ const AppPage = () => {
                 </section>
             </header>
             <section id='content'>
-                <p className={style.line_break ? 'line-break' : ''}>{renderChapter(chapter)}</p>
+                <p className={style.line_break ? 'line-break' : ''}>
+                    <ChapterVersesList chapter={chapter} notes={notes}  />
+                </p>
             </section>
         </main>
     )
