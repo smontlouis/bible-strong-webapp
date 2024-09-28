@@ -20,10 +20,15 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
         setSelected(verse);
     }
 
+    console.log(notes);
+
     return chapter.map((v, index) => {
         const note = notes.find(n => {
             const verses = n.id.split('/');
             const last = verses[verses.length - 1];
+
+            console.log("compare " + last + " " + v.id);
+
             if (last === v.id) {
                 return true;
             }
@@ -34,7 +39,7 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
             <span key={index}
                 className={selected === v.verse ? 'selected' : ''}
                 onClick={(e) => onClickVerse(v.verse)}
-                >{v.verse}. {v.content} {note?.description}</span>
+                >{v.verse}. {v.content} <span>[{note?.description}]</span></span>
         )
     });
 };

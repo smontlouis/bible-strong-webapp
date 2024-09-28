@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { collection, query, where, getDocs, getFirestore } from 'firebase/firestore';
+import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
 import { Note, Verse } from '@/lib/types/bible';
 
@@ -10,7 +10,7 @@ import './page.scss';
 
 import books_map from '@/lib/types/books.json';
 import ChapterVersesList from './ChapterVersesList';
-import { getAuth } from 'firebase/auth';
+import { getAuth, User } from 'firebase/auth';
 
 type Index = { // where the user wants to navigates
     book: number;
@@ -72,10 +72,29 @@ const AppPage = () => {
             const user = auth.currentUser;
             if (!user) return;
 
+            query_notes(db, user);
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
+    const query_notes = async (db: Firestore, user: User) => {
+        try {
             const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
             const notes_snapshot = await getDocs(query_notes);
             notes_snapshot.forEach((doc) => {
-                setNotes(doc.data()['bible']['notes'] as Note[]);
+                const object_notes = doc.data()['bible']['notes'] as { [key: string]: Note };
+                let buffer: Note[] = [];
+                for (let [key, value] of Object.entries(object_notes)) {
+                    buffer.push({
+                        id: key,
+                        description: value.description,
+                        date: value.date,
+                        title: value.title
+                    });
+                }
+                setNotes(buffer);
             });
         }
         catch (e) {
