@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { redirect } from 'next/navigation';
 
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
@@ -103,6 +104,11 @@ const AppPage = () => {
     }
 
     useEffect(() => {
+        const auth = getAuth(firebase_app);
+        const user = auth.currentUser;
+        if (!user) 
+            return redirect('/login');
+
         query_chapter();
     }, [index]);
 
