@@ -16,7 +16,6 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
     }, [chapter, notes]);
 
     function onClickVerse(verse: number) {
-        console.log(verse);
         setSelected(verse);
     }
 
@@ -43,7 +42,9 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
         return (
             <article key={index} className={ index % 2 != 0 ? 'verse' : 'verse color' }>
                 <h3 className='verse-number'>{v.verse}</h3>
-                <section className='verse-content'>
+                <section
+                    className={selected === v.verse ? 'verse-content selected' : 'verse-content'}
+                    onClick={(e) => onClickVerse(v.verse)}>
                     <p>{v.content}</p>
                 </section>
                 <p className='note'>{note?.description}</p>

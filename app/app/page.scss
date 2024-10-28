@@ -111,8 +111,11 @@ main {
         &.color {
             background-color: #fafafa;
         }
-        
 
+        &:hover {
+            background-color: #ffedcc;
+        }
+        
         .verse-number {
             width: 3rem;
             text-align: right;
@@ -122,6 +125,10 @@ main {
         .verse-content {
             text-align: left;
             width: 50%;
+
+            &.selected {
+                color: #ff7e67;
+            }
         }
 
         .note {
