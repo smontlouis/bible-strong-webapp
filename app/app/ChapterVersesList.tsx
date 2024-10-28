@@ -39,7 +39,7 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
             <span key={index}
                 className={selected === v.verse ? 'selected' : ''}
                 onClick={(e) => onClickVerse(v.verse)}
-                >{v.verse}. {v.content} <span>[{note?.description}]</span></span>
+                >{v.verse}. {v.content} {note ? <span>[{note?.description}]</span> : null}</span>
         )
     });
 };
