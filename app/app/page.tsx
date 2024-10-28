@@ -166,9 +166,7 @@ const AppPage = () => {
                 </section>
             </header>
             <section id='content'>
-                <p className={style.line_break ? 'line-break' : ''}>
-                    <ChapterVersesList chapter={chapter} notes={notes}  />
-                </p>
+                <ChapterVersesList chapter={chapter} notes={notes} />
             </section>
         </main>
     )
