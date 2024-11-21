@@ -3,7 +3,6 @@ import ChapterVersesList from './ChapterVersesList';
 import books_map from '@/lib/types/books.json';
 import { getAuth, User } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
-import { redirect } from 'next/navigation';
 
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
 import { Note, Verse } from '@/lib/types/bible';
@@ -51,11 +50,6 @@ const BibleExplorer = () => {
     const outline_dialog = React.useRef<HTMLDialogElement>(null);
 
     React.useEffect(() => {
-        const auth = getAuth(firebase_app);
-        const user = auth.currentUser;
-        if (!user) 
-            return redirect('/login');
-
         query_chapter();
     }, [index]);
 
