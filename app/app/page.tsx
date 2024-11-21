@@ -23,16 +23,25 @@ const AppPage = () => {
         });
     }, []);
 
-    return (
-        <main id='navigator'>
-            <section className='tab'>
-                <BibleExplorer />
-            </section>
-            <section className='tab'>
-                <StudiesExplorer />
-            </section>
-        </main>
-    )
+    if (user) {
+        return (
+            <main id='navigator'>
+                <section className='tab'>
+                    <BibleExplorer />
+                </section>
+                <section className='tab'>
+                    <StudiesExplorer />
+                </section>
+            </main>
+        );
+    }
+    else {
+        return(
+            <main id='loader'>
+                <h1>Loading...</h1>
+            </main>
+        )
+    }
 };
 
 export default AppPage;
