@@ -37,8 +37,9 @@ const AppPage = () => {
     }
     else {
         return(
-            <main id='loader'>
-                <h1>Loading...</h1>
+            <main id='loading-page'>
+                <span className='loader'></span>
+                <p>Loading...</p>
             </main>
         )
     }
