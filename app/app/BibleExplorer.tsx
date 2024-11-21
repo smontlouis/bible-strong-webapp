@@ -1,7 +1,7 @@
 import React from 'react';
 import ChapterVersesList from './ChapterVersesList';
 import books_map from '@/lib/types/books.json';
-import { getAuth, User } from 'firebase/auth';
+import * as Auth from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
 
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
@@ -41,7 +41,11 @@ function renderBooksList() {
     });
 }
 
-const BibleExplorer = () => {
+type Props = {
+    user: Auth.User;
+}
+
+const BibleExplorer = ({ user }: Props) => {
     const [index, setIndex] = React.useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = React.useState<Verse[]>([]);
     const [notes, setNotes] = React.useState<Note[]>([]);
@@ -66,11 +70,7 @@ const BibleExplorer = () => {
     
             setChapter(verses.sort((a, b) => a.verse - b.verse));
     
-            // get user data
-            const auth = getAuth(firebase_app);
-            const user = auth.currentUser;
-            if (!user) return;
-    
+            // get user data    
             query_notes(db, user);
         }
         catch (e) {
@@ -78,7 +78,7 @@ const BibleExplorer = () => {
         }
     }
     
-    const query_notes = async (db: Firestore, user: User) => {
+    const query_notes = async (db: Firestore, user: Auth.User) => {
         try {
             const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
             const notes_snapshot = await getDocs(query_notes);

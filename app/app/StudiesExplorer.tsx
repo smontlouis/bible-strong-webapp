@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { getAuth, User } from 'firebase/auth';
+import * as Auth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
 import styles from './studies.module.scss';
@@ -21,7 +21,7 @@ type Study = {
     }
 };
 
-async function query_studies(user: User, setStudies: React.Dispatch<React.SetStateAction<Study[]>>) {
+async function query_studies(user: Auth.User, setStudies: React.Dispatch<React.SetStateAction<Study[]>>) {
     const db = firestore.getFirestore(firebase_app);
     const query = firestore.query(firestore.collection(db, 'studies'), firestore.where('user.id', '==', user.uid));
     const snapshot = await firestore.getDocs(query);
@@ -34,15 +34,14 @@ async function query_studies(user: User, setStudies: React.Dispatch<React.SetSta
     setStudies(buffer);
 }
 
-const StudiesExplorer = () => {
+type Props = {
+    user: Auth.User;
+}
+
+const StudiesExplorer = ({ user }: Props) => {
     const [studies, setStudies] = React.useState<Study[]>([]);
 
     useEffect(() => {
-        const auth = getAuth(firebase_app);
-        const user = auth.currentUser;
-        if (!user) 
-            return;
-
         query_studies(user, setStudies);
     }, []);
 

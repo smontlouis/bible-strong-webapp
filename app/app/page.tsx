@@ -27,10 +27,10 @@ const AppPage = () => {
         return (
             <main id='navigator'>
                 <section className='tab'>
-                    <BibleExplorer />
+                    <BibleExplorer user={user} />
                 </section>
                 <section className='tab'>
-                    <StudiesExplorer />
+                    <StudiesExplorer user={user} />
                 </section>
             </main>
         );
