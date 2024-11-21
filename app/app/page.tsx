@@ -23,7 +23,7 @@ const AppPage = () => {
         });
     }, []);
 
-    if (user) {
+    if (user) { // user is logged in
         return (
             <main id='navigator'>
                 <section className='tab'>
@@ -35,7 +35,7 @@ const AppPage = () => {
             </main>
         );
     }
-    else {
+    else { // loading
         return(
             <main id='loading-page'>
                 <span className='loader'></span>
