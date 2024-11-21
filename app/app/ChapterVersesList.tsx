@@ -30,15 +30,6 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
             return false;
         });
 
-        // return (
-        //     <span key={index}
-        //         className={selected === v.verse ? 'selected' : ''}
-        //         onClick={(e) => onClickVerse(v.verse)}
-        //         >{v.verse}. {v.content} {note ? <span>[{note?.description}]</span> : null}</span>
-        // )
-
-        console.log(index % 2)
-
         return (
             <article key={index} className={ index % 2 != 0 ? 'verse' : 'verse color' }>
                 <h3 className='verse-number'>{v.verse}</h3>
