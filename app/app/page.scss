@@ -1,13 +1,19 @@
-main {
+#navigator {
     height: 100vh;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+
+    .tab {
+        width: 100%;
+        overflow: hidden;
+    }
 }
 
-#index-nav {
+.index-nav {
     padding: 0.5rem 5rem;
     height: 60px;
+    z-index: 1;
 
     display: flex;
     flex-direction: row;
@@ -92,8 +98,9 @@ main {
     }
 }
 
-#content {
-    margin: 1rem 5rem;
+.content {
+    margin: 1rem 0rem;
+    margin-left: 4.5rem;
 
     display: flex;
     flex-direction: column;
@@ -136,5 +143,47 @@ main {
             width: 40%;
             padding-left: 1.5rem;
         }
+    }
+}
+
+.study-explorer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 12px;
+
+    padding: 20px;
+}
+
+.study-card {
+    width: 13em;
+    height: 18em;
+
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+
+    // overflow: hidden;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.19);
+
+    h3 {
+        font-size: 1.2em;
+        font-weight: 500;
+        margin-bottom: 0.5em;
+    }
+
+    p {
+        font-size: 0.9em;
+        margin-bottom: 0.5em;
+
+        // text elipsis
+        display: -webkit-box;
+        max-width: 100%;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 }

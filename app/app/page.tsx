@@ -11,6 +11,7 @@ import './page.scss';
 
 import books_map from '@/lib/types/books.json';
 import ChapterVersesList from './ChapterVersesList';
+import StudiesExplorer from './StudiesExplorer';
 import { getAuth, User } from 'firebase/auth';
 
 type Index = { // where the user wants to navigates
@@ -126,47 +127,25 @@ const AppPage = () => {
         setIndex({ ...index, chapter: Number(e.target.value) });
     }
 
-    const openOutlineDialog = (e: any) => {
-        outline_dialog.current?.show();
-    }
-
-    const onSelectOutlineColor = () => {
-        outline_dialog.current?.close();
-    }
-
     return (
-        <main>
-            <header id='index-nav'>
-                <section>
-                    <select name='book' value={index.book} onChange={onBookChange}>
-                        { renderBooksList() }
-                    </select>
-                    <select name='chapter' value={index.chapter} onChange={onChapterChange}>
-                        { renderChaptersList(index.book) }
-                    </select>
+        <main id='navigator'>
+            <section className='tab'>
+                <header className='index-nav'>
+                    <section>
+                        <select name='book' value={index.book} onChange={onBookChange}>
+                            { renderBooksList() }
+                        </select>
+                        <select name='chapter' value={index.chapter} onChange={onChapterChange}>
+                            { renderChaptersList(index.book) }
+                        </select>
+                    </section>
+                </header>
+                <section className='content'>
+                    <ChapterVersesList chapter={chapter} notes={notes} />
                 </section>
-                <section>
-                    <button id='outline-btn' onClick={openOutlineDialog}><div />outline</button>
-                    <dialog id='outline-dialog' ref={outline_dialog}>
-                        <section>
-                            <button id='color-none' onClick={onSelectOutlineColor} />
-                            <button id='color-1' onClick={onSelectOutlineColor} />
-                            <button id='color-2' onClick={onSelectOutlineColor} />
-                            <button id='color-3' onClick={onSelectOutlineColor} />
-                            <button id='color-4' onClick={onSelectOutlineColor} />
-                            <button id='color-5' onClick={onSelectOutlineColor} />
-                        </section>
-                    </dialog>
-                </section>
-                <section>
-                    <div>
-                        <input type='checkbox' name='line-break' onChange={() => setStyle({ line_break: !style.line_break })} />
-                        <label>Line Break</label>
-                    </div>
-                </section>
-            </header>
-            <section id='content'>
-                <ChapterVersesList chapter={chapter} notes={notes} />
+            </section>
+            <section className='tab'>
+                <StudiesExplorer />
             </section>
         </main>
     )
