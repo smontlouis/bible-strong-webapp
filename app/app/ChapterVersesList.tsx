@@ -47,7 +47,7 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
         });
 
         return (
-            <article key={index} className={ index % 2 != 0 ? 'verse' : 'verse color' }>
+            <article key={index} className={ index % 2 != 0 ? 'verse' : 'verse color' }> 
                 <h3 className='verse-number'>{v.verse}</h3>
                 <section
                     className={selected === v.verse ? 'verse-content selected' : 'verse-content'}
