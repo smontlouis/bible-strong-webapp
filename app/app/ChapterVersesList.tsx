@@ -11,13 +11,29 @@ interface Props {
 
 const ChapterVersesList = ({ chapter, notes }: Props) => {
     const [selected, setSelected] = useState<number>(0);
-    
+
     useEffect(() => {
     }, [chapter, notes]);
 
     function onClickVerse(verse: number) {
         setSelected(verse);
     }
+
+    function computeLineClamp(index: number) {
+        const verseContent = document.getElementById(`verse-${index}`);
+        if (!verseContent) {
+            console.error('Verse content not found');
+            return 'unset';
+        }
+        
+        const verseContentHeight = verseContent.clientHeight;
+        return Math.floor(verseContentHeight / 24);
+    }
+
+    function onClickNote(e: React.MouseEvent<HTMLParagraphElement>, index: number) {
+        const el = e.currentTarget;
+        el.style.webkitLineClamp = el.style.webkitLineClamp !== 'unset' ? 'unset' : computeLineClamp(index).toString();
+    } 
 
     return chapter.map((v, index) => {
         const note = notes.find(n => {
@@ -36,9 +52,12 @@ const ChapterVersesList = ({ chapter, notes }: Props) => {
                 <section
                     className={selected === v.verse ? 'verse-content selected' : 'verse-content'}
                     onClick={(e) => onClickVerse(v.verse)}>
-                    <p>{v.content}</p>
+                    <p id={`verse-${index}`}>{v.content}</p>
                 </section>
-                <p className='note'>{note?.description}</p>
+                <p
+                    className='note' 
+                    style={{ WebkitLineClamp: computeLineClamp(index) }}
+                    onClick={(e) => onClickNote(e, index)}>{note?.description}</p>
             </article>
         )
     });
