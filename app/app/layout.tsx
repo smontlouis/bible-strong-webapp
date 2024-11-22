@@ -36,49 +36,54 @@ const Layout = ({ children }: PropsWithChildren<{}>) => {
         <>
             <header id='nav-container'>
                 <nav className='navbar'>
-                    <section className='profil'>
-                        <img src={photo_url} alt="Avatar" />
+                    <div className='menu'>
                         <article id="user">
+                            <img src={photo_url} alt="Avatar" />
                             <h2>Bonjour {user?.displayName}</h2>
                             <div>
                                 <legend>Verset du jour</legend>
                                 <p>Le Seigneur est fidèle, il vous affermira et vous preservera du malin.</p>
                             </div>
                         </article>
-                    </section>
-                    <section className='settings' id="settings">
-                        <ul>
-                            <li>
-                                <FiHelpCircle size={20} />
-                                <Link href="/">Foire aux questions</Link>
-                            </li>
-                            <li>
-                                <FiSend size={20} />
-                                <Link href="/">Contacter le développeur</Link>
-                            </li>
-                            <li>
-                                <FiGlobe size={20} />
-                                <Link href="/">Changer la langue</Link>
-                            </li>
-                            <li>
-                                <FiDollarSign size={20} />
-                                <Link href="/">Contribuer</Link>
-                            </li>
-                        </ul>
-                    </section>
-                    <section id="about">
-                        <ul>
-                            <li>
-                                <Link href="/"><FiGithub size={20} /></Link>
-                            </li>
-                            <li>
-                                <Link href="/"><FiFacebook size={20} /></Link>
-                            </li>
-                            <li>
-                                <Link href="/"><FiShare2 size={20} /></Link>
-                            </li>
-                        </ul>
-                    </section>
+                    </div>
+                    <div className='links'>
+                        <section className='profil'>
+                            <img src={photo_url} alt="Avatar" />
+                        </section>
+                        <section className='settings' id="settings">
+                            <ul>
+                                <li>
+                                    <FiHelpCircle size={20} />
+                                    <Link href="/">Foire aux questions</Link>
+                                </li>
+                                <li>
+                                    <FiSend size={20} />
+                                    <Link href="/">Contacter le développeur</Link>
+                                </li>
+                                <li>
+                                    <FiGlobe size={20} />
+                                    <Link href="/">Changer la langue</Link>
+                                </li>
+                                <li>
+                                    <FiDollarSign size={20} />
+                                    <Link href="/">Contribuer</Link>
+                                </li>
+                            </ul>
+                        </section>
+                        <section id="about">
+                            <ul>
+                                <li>
+                                    <Link href="/"><FiGithub size={20} /></Link>
+                                </li>
+                                <li>
+                                    <Link href="/"><FiFacebook size={20} /></Link>
+                                </li>
+                                <li>
+                                    <Link href="/"><FiShare2 size={20} /></Link>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
                 </nav>
             </header>
             {children}
