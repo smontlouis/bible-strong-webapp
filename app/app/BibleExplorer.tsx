@@ -117,6 +117,9 @@ const BibleExplorer = ({ user }: Props) => {
 
     return (
         <>
+            <section className='bible-content'>
+                <ChapterVersesList chapter={chapter} notes={notes} />
+            </section>
             <header className='index-nav'>
                 <section>
                     <select name='book' value={index.book} onChange={onBookChange}>
@@ -127,9 +130,6 @@ const BibleExplorer = ({ user }: Props) => {
                     </select>
                 </section>
             </header>
-            <section className='content'>
-                <ChapterVersesList chapter={chapter} notes={notes} />
-            </section>
         </>
     )
 };

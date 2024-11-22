@@ -47,9 +47,6 @@ const StudiesExplorer = ({ user }: Props) => {
 
     return (
         <>
-            <header className='index-nav'>
-                <h2>Studies</h2>
-            </header>
             <section className='study-explorer'>
                 {studies.map((study) => (
                     <article key={study.id} className='study-card'>
@@ -58,6 +55,9 @@ const StudiesExplorer = ({ user }: Props) => {
                     </article>
                 ))}
             </section>
+            <header className='index-nav'>
+                <h2>Studies</h2>
+            </header>
         </>
     );
 };
