@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
 import { FiGlobe, FiSend, FiHelpCircle, FiGithub, FiFacebook, FiDollarSign, FiShare2 } from 'react-icons/fi';
+import { TiThMenuOutline } from "react-icons/ti"
 import './navbar.layout.scss';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
@@ -49,6 +50,7 @@ const Layout = ({ children }: PropsWithChildren<{}>) => {
                     <div className='links'>
                         <section className='profil'>
                             <img src={photo_url} alt="Avatar" />
+                            <TiThMenuOutline size={20} />
                         </section>
                         <section className='settings' id="settings">
                             <ul>
