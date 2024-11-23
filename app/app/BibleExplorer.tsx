@@ -105,11 +105,11 @@ const BibleExplorer = ({ user }: Props) => {
                         highlights: value.highlights
                     });
                 }
-                // setTags(buffer_tags);
+                setTags(buffer_tags);
             });
         }
         catch (e) {
-            console.log(e);
+            console.error(e);
         }
     }
 

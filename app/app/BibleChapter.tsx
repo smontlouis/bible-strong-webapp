@@ -68,6 +68,18 @@ const BibleChapter = ({ user, chapter, notes, tags }: Props) => {
         });     
     }, [chapter, notes]);
 
+    useEffect(() => {
+        // render tags
+        tags.forEach((tag) => {
+           console.log(tag);
+           tag.highlights.forEach((highlight) => { // TODO : use regex to find if it corresponds to the current book and chapter
+                // if (highlight.find) {
+                //     return;
+                // }
+           });
+        });
+    }, [tags]);
+
     function onClickVerse(verse: number) {
         setSelected(verse);
     }
