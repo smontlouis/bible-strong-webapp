@@ -12,3 +12,14 @@ export type Note = {
     description: string;
     title: string;
 }
+
+export type TagHighlight = {
+    [key: string]: boolean;
+}
+
+export type Tag = {
+    id: string;
+    date: string;
+    name: string;
+    highlights: TagHighlight[];
+}
