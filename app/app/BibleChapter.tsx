@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import * as Auth from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
@@ -10,77 +10,76 @@ import { Note, Tag, Verse } from '@/lib/types/bible';
 interface Props {
     user: Auth.User;
     chapter: Verse[];
+    notes: Note[];
 }
 
-// TODO : render notes after the verse. 
-// Maybe by storing each article in a ref map and then render the notes & give each element a unique id.
-// Then render the notes in a separate list.
-// Look for a way to render after initial render.
-const BibleChapter = ({ user, chapter }: Props) => {
+/**
+ * Computes the number of lines that can be displayed within a container element
+ * based on the height of the first paragraph element inside the container.
+ *
+ * @param {HTMLElement} root - The root element containing the container with class 'verse-content'.
+ * @returns {string} - The number of lines that can be displayed, or 'unset' if the verse content is not found.
+ */
+function computeLineClamp(root: HTMLElement): string {    
+    const container = root.getElementsByClassName('verse-content')[0] as HTMLElement;
+    const verseContent = container.firstElementChild as HTMLParagraphElement;
+    if (!verseContent) {
+        console.error('Verse content not found');
+        return 'unset';
+    }
+    
+    const verseContentHeight = verseContent.clientHeight;
+    return Math.floor(verseContentHeight / 24).toString();
+}
+
+ /**
+ * Toggles the `webkitLineClamp` style between 'unset' and
+ * the computed line clamp value based on the height of the verse content.
+ *
+ * @param e - The mouse event triggered by clicking on the note element.
+ * @returns void
+ */
+ function onClickNote(e: React.MouseEvent<HTMLParagraphElement>) {
+    const el = e.currentTarget;
+    const root = el.parentElement;
+    if (!root) {
+        console.error('Parent not found');
+        return;
+    }
+
+    el.style.webkitLineClamp = el.style.webkitLineClamp !== 'unset' ? 'unset' : computeLineClamp(root);
+}
+
+const BibleChapter = ({ user, chapter, notes }: Props) => {
     const [selected, setSelected] = useState<number>(0);
-    const [notes, setNotes] = React.useState<Note[]>([]);
-    const [tags, setTags] = React.useState<Tag[]>([]);
+    // const [tags, setTags] = React.useState<Tag[]>([]);
+    const verseRefs = React.useRef<HTMLElement[]>([]);
 
     useEffect(() => {
-        const db = getFirestore(firebase_app);
+        verseRefs.current.forEach((node) => {
+            const note_node = node.getElementsByClassName('note')[0] as HTMLElement | null;
+            if (!note_node) {
+                console.error('Note node not found');
+                return;
+            }
 
-        query_notes(db, user); // TODO : move this into ChapterVersesList
+            const lineClamp = computeLineClamp(node);
+            note_node.style.webkitLineClamp = lineClamp;
+        });     
     }, [chapter, notes]);
-
-    const query_notes = async (db: Firestore, user: Auth.User) => {
-        try {
-            const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
-            const notes_snapshot = await getDocs(query_notes);
-            notes_snapshot.forEach((doc) => {
-                const object_notes = doc.data()['bible']['notes'] as { [key: string]: Note };
-                let buffer: Note[] = [];
-                for (let [key, value] of Object.entries(object_notes)) {
-                    buffer.push({
-                        id: key,
-                        description: value.description,
-                        date: value.date,
-                        title: value.title
-                    });
-                }
-                setNotes(buffer);
-
-                const object_tags = doc.data()['bible']['tags'] as { [key: string]: Tag };
-                let buffer_tags: Tag[] = [];
-                for (let [key, value] of Object.entries(object_tags)) {
-                    buffer_tags.push({
-                        id: key,
-                        date: value.date,
-                        name: value.name,
-                        highlights: value.highlights
-                    });
-                }
-                // setTags(buffer_tags);
-            });
-        }
-        catch (e) {
-            console.log(e);
-        }
-    }
 
     function onClickVerse(verse: number) {
         setSelected(verse);
     }
 
-    function computeLineClamp(index: number) {
-        const verseContent = document.getElementById(`verse-${index}`);
-        if (!verseContent) {
-            console.error('Verse content not found');
-            return 'unset';
+    function addVerseRef(node: HTMLElement | null) {
+        if (!node) {
+            console.error('Node not found');
+            return;
         }
-        
-        const verseContentHeight = verseContent.clientHeight;
-        return Math.floor(verseContentHeight / 24);
-    }
 
-    function onClickNote(e: React.MouseEvent<HTMLParagraphElement>, index: number) {
-        const el = e.currentTarget;
-        el.style.webkitLineClamp = el.style.webkitLineClamp !== 'unset' ? 'unset' : computeLineClamp(index).toString();
-    } 
+        verseRefs.current.push(node);
+    };
 
     return chapter.map((v, index) => {
         const note = notes.find(n => {
@@ -94,7 +93,9 @@ const BibleChapter = ({ user, chapter }: Props) => {
         });
 
         return (
-            <article key={index} className={ index % 2 != 0 ? 'verse' : 'verse color' }> 
+            <article key={index} 
+                ref={addVerseRef} 
+                className={ index % 2 != 0 ? 'verse' : 'verse color' }> 
                 <h3 className='verse-number'>{v.verse}</h3>
                 <section
                     className={selected === v.verse ? 'verse-content selected' : 'verse-content'}
@@ -102,9 +103,8 @@ const BibleChapter = ({ user, chapter }: Props) => {
                     <p id={`verse-${index}`}>{v.content}</p>
                 </section>
                 <p
-                    className='note' 
-                    style={{ WebkitLineClamp: computeLineClamp(index) }}
-                    onClick={(e) => onClickNote(e, index)}>{note?.description}</p>
+                    className='note'
+                    onClick={onClickNote}>{note?.description}</p>
             </article>
         )
     });

@@ -49,18 +49,21 @@ const BibleExplorer = ({ user }: Props) => {
     const [index, setIndex] = React.useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = React.useState<Verse[]>([]);
     const [style, setStyle] = React.useState<StyleSettings>({ line_break: false });
+    const [notes, setNotes] = React.useState<Note[]>([]);
     
     const outline_dialog = React.useRef<HTMLDialogElement>(null);
 
     React.useEffect(() => {
-        query_chapter();
+        const db = getFirestore(firebase_app);
+
+        query_chapter(db);
+        query_notes(db, user); // TODO : move this into ChapterVersesList
     }, [index]);
 
-    const query_chapter = async () => {
+    const query_chapter = async (db: Firestore) => {
         try {
             let verses: Verse[] = [];
     
-            const db = getFirestore(firebase_app);
             const q = query(collection(db, 'bible-neg79'), where('book', '==', index.book), where('chapter', '==', index.chapter));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -73,6 +76,42 @@ const BibleExplorer = ({ user }: Props) => {
             console.log(e);
         }
     }
+
+    const query_notes = async (db: Firestore, user: Auth.User) => {
+        try {
+            const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
+            const notes_snapshot = await getDocs(query_notes);
+            notes_snapshot.forEach((doc) => {
+                const object_notes = doc.data()['bible']['notes'] as { [key: string]: Note };
+                let buffer: Note[] = [];
+                for (let [key, value] of Object.entries(object_notes)) {
+                    buffer.push({
+                        id: key,
+                        description: value.description,
+                        date: value.date,
+                        title: value.title
+                    });
+                }
+                setNotes(buffer);
+
+                const object_tags = doc.data()['bible']['tags'] as { [key: string]: Tag };
+                let buffer_tags: Tag[] = [];
+                for (let [key, value] of Object.entries(object_tags)) {
+                    buffer_tags.push({
+                        id: key,
+                        date: value.date,
+                        name: value.name,
+                        highlights: value.highlights
+                    });
+                }
+                // setTags(buffer_tags);
+            });
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
 
     const onBookChange = (e: any) => {
         const book = Number(e.target.value);
@@ -91,7 +130,7 @@ const BibleExplorer = ({ user }: Props) => {
     return (
         <>
             <section className='bible-content'>
-                <BibleChapter user={user} chapter={chapter} />
+                <BibleChapter user={user} chapter={chapter} notes={notes} />
             </section>
             <header className='index-nav'>
                 <section>
