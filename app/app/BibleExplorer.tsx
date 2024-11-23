@@ -1,11 +1,11 @@
 import React from 'react';
-import ChapterVersesList from './ChapterVersesList';
+import ChapterVersesList from './BibleChapter';
 import books_map from '@/lib/types/books.json';
 import * as Auth from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
 
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
-import { Note, Verse } from '@/lib/types/bible';
+import { Note, Tag, Verse } from '@/lib/types/bible';
 
 type Index = { // where the user wants to navigates
     book: number;
@@ -49,6 +49,7 @@ const BibleExplorer = ({ user }: Props) => {
     const [index, setIndex] = React.useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = React.useState<Verse[]>([]);
     const [notes, setNotes] = React.useState<Note[]>([]);
+    const [tags, setTags] = React.useState<Tag[]>([]);
     const [style, setStyle] = React.useState<StyleSettings>({ line_break: false });
     
     const outline_dialog = React.useRef<HTMLDialogElement>(null);
@@ -71,13 +72,14 @@ const BibleExplorer = ({ user }: Props) => {
             setChapter(verses.sort((a, b) => a.verse - b.verse));
     
             // get user data    
-            query_notes(db, user);
+            query_notes(db, user); // TODO : move this into ChapterVersesList
         }
         catch (e) {
             console.log(e);
         }
     }
     
+    // TODO : move this into ChapterVersesList
     const query_notes = async (db: Firestore, user: Auth.User) => {
         try {
             const query_notes = query(collection(db, 'users'), where('id', '==', user.uid));
@@ -94,6 +96,18 @@ const BibleExplorer = ({ user }: Props) => {
                     });
                 }
                 setNotes(buffer);
+
+                const object_tags = doc.data()['bible']['tags'] as { [key: string]: Tag };
+                let buffer_tags: Tag[] = [];
+                for (let [key, value] of Object.entries(object_tags)) {
+                    buffer_tags.push({
+                        id: key,
+                        date: value.date,
+                        name: value.name,
+                        highlights: value.highlights
+                    });
+                }
+                // setTags(buffer_tags);
             });
         }
         catch (e) {

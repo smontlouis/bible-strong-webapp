@@ -9,6 +9,10 @@ interface Props {
     notes: Note[];
 }
 
+// TODO : render notes after the verse. 
+// Maybe by storing each article in a ref map and then render the notes & give each element a unique id.
+// Then render the notes in a separate list.
+// Look for a way to render after initial render.
 const ChapterVersesList = ({ chapter, notes }: Props) => {
     const [selected, setSelected] = useState<number>(0);
 
