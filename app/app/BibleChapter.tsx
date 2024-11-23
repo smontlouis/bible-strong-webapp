@@ -11,6 +11,7 @@ interface Props {
     user: Auth.User;
     chapter: Verse[];
     notes: Note[];
+    tags: Tag[];
 }
 
 /**
@@ -50,9 +51,8 @@ function computeLineClamp(root: HTMLElement): string {
     el.style.webkitLineClamp = el.style.webkitLineClamp !== 'unset' ? 'unset' : computeLineClamp(root);
 }
 
-const BibleChapter = ({ user, chapter, notes }: Props) => {
+const BibleChapter = ({ user, chapter, notes, tags }: Props) => {
     const [selected, setSelected] = useState<number>(0);
-    // const [tags, setTags] = React.useState<Tag[]>([]);
     const verseRefs = React.useRef<HTMLElement[]>([]);
 
     useEffect(() => {

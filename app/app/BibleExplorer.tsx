@@ -50,6 +50,7 @@ const BibleExplorer = ({ user }: Props) => {
     const [chapter, setChapter] = React.useState<Verse[]>([]);
     const [style, setStyle] = React.useState<StyleSettings>({ line_break: false });
     const [notes, setNotes] = React.useState<Note[]>([]);
+    const [tags, setTags] = React.useState<Tag[]>([]);
     
     const outline_dialog = React.useRef<HTMLDialogElement>(null);
 
@@ -130,7 +131,7 @@ const BibleExplorer = ({ user }: Props) => {
     return (
         <>
             <section className='bible-content'>
-                <BibleChapter user={user} chapter={chapter} notes={notes} />
+                <BibleChapter user={user} chapter={chapter} notes={notes} tags={tags} />
             </section>
             <header className='index-nav'>
                 <section>
