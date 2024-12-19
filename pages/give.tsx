@@ -10,11 +10,15 @@ import {
 import NextLink from 'next/link'
 import Script from 'next/script'
 import { useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
 import Logo from '../public/images/svg/logo-full.svg'
+import LogoAudibible from '../public/images/svg/logo-full-audibible.svg'
 import { DonationStep } from '../features/give/DonationStep'
 import { RadioButton } from '../features/give/RadioButton'
 import GiveFR from '../features/give/give-fr.mdx'
 import GiveEN from '../features/give/give-en.mdx'
+import GiveFRAudibible from '../features/give/give-fr-audibible.mdx'
+import GiveENAudibible from '../features/give/give-en-audibible.mdx'
 import { useCurrentLocale, useI18n } from '../locales'
 
 type DonationMode = 'one-time' | 'monthly'
@@ -67,6 +71,9 @@ export default function GiveLayout({
 }: {
   children: React.ReactNode
 }) {
+  const router = useRouter()
+  const isAudibible = router.query.p === 'audibible'
+
   const [donationMode, setDonationMode] = useState<DonationMode>('one-time')
 
   const donationModeRadioGroup = useRadioGroup({
@@ -120,8 +127,12 @@ export default function GiveLayout({
               counterReset: 'donation-steps',
             }}
           >
-            <NextLink href="/">
-              <Box as={Logo} width="240px" height="52px" />
+            <NextLink href={isAudibible ? 'https://audibible.app' : '/'}>
+              <Box
+                as={isAudibible ? LogoAudibible : Logo}
+                width="240px"
+                height="52px"
+              />
             </NextLink>
             <DonationStep label={t('donate.step1')}>
               <ButtonGroup
@@ -211,7 +222,17 @@ export default function GiveLayout({
           gap="3"
           maxWidth={380}
         >
-          {locale === 'fr' ? <GiveFR /> : <GiveEN />}
+          {locale === 'fr' ? (
+            isAudibible ? (
+              <GiveFRAudibible />
+            ) : (
+              <GiveFR />
+            )
+          ) : isAudibible ? (
+            <GiveENAudibible />
+          ) : (
+            <GiveEN />
+          )}
         </Stack>
       </Stack>
       <Script src="https://js.stripe.com/v3/buy-button.js" />
