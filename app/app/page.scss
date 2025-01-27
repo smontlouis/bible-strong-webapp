@@ -196,6 +196,17 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+
+        .tag {
+            background-color: #008cff;
+            margin: 0 0.2rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 10rem;
+
+            font-size: small;
+            color: #fff;
+
+        }
     }
 }
 

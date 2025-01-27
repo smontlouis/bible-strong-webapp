@@ -78,13 +78,13 @@ const BibleChapter = ({ user, index, chapter, notes, tags }: Props) => {
 
     useEffect(() => {
         // render tags
-        tags.forEach((tag) => {
-            if (tag.highlights) {
-                const regex = `^${index.book}-${index.chapter}-\d+$`;
-                const matching = Object.keys(tag.highlights).filter(key => key.match(regex));
-                console.log(matching);
-            }
-        });
+        // tags.forEach((tag) => {
+        //     if (tag.highlights) {
+        //         const regex = `^${index.book}-${index.chapter}-\d+$`;
+        //         const matching = Object.keys(tag.highlights).filter(key => key.match(regex));
+        //         console.log(matching);
+        //     }
+        // });
     }, [tags]);
 
     function onClickVerse(verse: number) {
@@ -100,7 +100,7 @@ const BibleChapter = ({ user, index, chapter, notes, tags }: Props) => {
         verseRefs.current.push(node);
     };
 
-    return chapter.map((v, index) => {
+    return chapter.map((v, i) => {
         const note = notes.find(n => {
             const verses = n.id.split('/');
             const last = verses[verses.length - 1];
@@ -111,15 +111,25 @@ const BibleChapter = ({ user, index, chapter, notes, tags }: Props) => {
             return false;
         });
 
+        const tag_match = tags.filter(t => {
+            if (t.highlights === undefined) return false;
+
+            const matching = Object.keys(t.highlights).filter(key => key === v.id);
+            return matching.length > 0;
+        });
+
         return (
-            <article key={index} 
+            <article key={i} 
                 ref={addVerseRef} 
-                className={ index % 2 != 0 ? 'verse' : 'verse color' }> 
+                className={ i % 2 != 0 ? 'verse' : 'verse color' }> 
                 <h3 className='verse-number'>{v.verse}</h3>
                 <section
                     className={selected === v.verse ? 'verse-content selected' : 'verse-content'}
                     onClick={(e) => onClickVerse(v.verse)}>
-                    <p id={`verse-${index}`}>{v.content}</p>
+                    <p id={`verse-${i}`}>{v.content}</p>
+                    {tag_match.map((tag, i) => (
+                        <span key={i} className='tag'>{tag.name}</span>
+                    ))}
                 </section>
                 <p
                     className='note'
