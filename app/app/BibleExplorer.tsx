@@ -131,7 +131,7 @@ const BibleExplorer = ({ user }: Props) => {
     return (
         <>
             <section className='bible-content'>
-                <BibleChapter user={user} chapter={chapter} notes={notes} tags={tags} />
+                <BibleChapter user={user} index={index} chapter={chapter} notes={notes} tags={tags} />
             </section>
             <header className='index-nav'>
                 <section>

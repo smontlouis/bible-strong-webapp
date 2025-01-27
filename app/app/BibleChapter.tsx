@@ -7,8 +7,15 @@ import { collection, query, where, getDocs, getFirestore, Firestore } from 'fire
 
 import { Note, Tag, Verse } from '@/lib/types/bible';
 
+type Index = { // where the user wants to navigates
+    book: number;
+    chapter: number;
+    verse: number;
+};
+
 interface Props {
     user: Auth.User;
+    index: Index;
     chapter: Verse[];
     notes: Note[];
     tags: Tag[];
@@ -51,9 +58,10 @@ function computeLineClamp(root: HTMLElement): string {
     el.style.webkitLineClamp = el.style.webkitLineClamp !== 'unset' ? 'unset' : computeLineClamp(root);
 }
 
-const BibleChapter = ({ user, chapter, notes, tags }: Props) => {
+const BibleChapter = ({ user, index, chapter, notes, tags }: Props) => {
     const [selected, setSelected] = useState<number>(0);
     const verseRefs = React.useRef<HTMLElement[]>([]);
+    const [_tags, setTags] = useState<Tag[]>([]);
 
     useEffect(() => {
         verseRefs.current.forEach((node) => {
@@ -71,12 +79,11 @@ const BibleChapter = ({ user, chapter, notes, tags }: Props) => {
     useEffect(() => {
         // render tags
         tags.forEach((tag) => {
-           console.log(tag);
-        //    tag.highlights.forEach((highlight) => { // TODO : use regex to find if it corresponds to the current book and chapter
-        //         // if (highlight.find) {
-        //         //     return;
-        //         // }
-        //    });
+            if (tag.highlights) {
+                const regex = `^${index.book}-${index.chapter}-\d+$`;
+                const matching = Object.keys(tag.highlights).filter(key => key.match(regex));
+                console.log(matching);
+            }
         });
     }, [tags]);
 
