@@ -62,7 +62,9 @@ const StudiesExplorer = ({ user }: Props) => {
                     ))}
                 </section>
                 <header className='index-nav'>
-                    <h2>Studies</h2>
+                    <section>
+                        <h2>Studies</h2>
+                    </section>
                 </header>
             </>
         );
