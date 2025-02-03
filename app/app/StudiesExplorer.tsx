@@ -6,21 +6,8 @@ import * as firestore from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
 import styles from './studies.module.scss';
 import StudyEditor from './StudyEditor';
-
-type Study = {
-    id: string;
-    title: string;
-    modified_at: number;
-    created_at: number;
-    user: {
-        id: string;
-        displayName: string;
-        photoUrl: string;
-    },
-    content: {
-        ops: any[];
-    }
-};
+import { FiArrowLeft } from "react-icons/fi";
+import { Study } from '@/lib/types/bible';
 
 async function query_studies(user: Auth.User, setStudies: React.Dispatch<React.SetStateAction<Study[]>>) {
     const db = firestore.getFirestore(firebase_app);
@@ -47,24 +34,40 @@ const StudiesExplorer = ({ user }: Props) => {
         query_studies(user, setStudies);
     }, []);
 
-    return (
-        <>
-            <section className='study-explorer'>
-                {studies.map((study) => (
-                    <article key={study.id} className='study-card' onClick={() => setCurrent(study)}>
-                        <h3>{study.title}</h3>
-                        <p>{study.content.ops[0].insert}</p>
-                    </article>
-                ))}
-            </section>
-            <section className='study-content'>
-                { current && <StudyEditor study={current} /> }
-            </section>
-            <header className='index-nav'>
-                <h2>Studies</h2>
-            </header>
-        </>
-    );
+    if (current) {
+        return (
+            <>
+                <StudyEditor study={current} />
+                <header className='index-nav'>
+                    <section>
+                        <button onClick={() => setCurrent(null)}><FiArrowLeft size={28} /></button>
+                        <label>go back</label>
+                    </section>
+                    <section>
+                        <h2>{ current.title }</h2>
+                    </section>
+                </header>
+            </>
+        );
+    }
+    else {
+        return (
+            <>
+                <section className='study-explorer'>
+                    {studies.map((study) => (
+                        <article key={study.id} className='study-card' onClick={() => setCurrent(study)}>
+                            <h3>{study.title}</h3>
+                            <p>{study.content.ops[0].insert}</p>
+                        </article>
+                    ))}
+                </section>
+                <header className='index-nav'>
+                    <h2>Studies</h2>
+                </header>
+            </>
+        );
+    }
+    
 };
 
 export default StudiesExplorer;

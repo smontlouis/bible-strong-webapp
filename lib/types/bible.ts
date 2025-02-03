@@ -23,3 +23,18 @@ export type Tag = {
     name: string;
     highlights: TagHighlight[];
 }
+
+export type Study = {
+    id: string;
+    title: string;
+    modified_at: number;
+    created_at: number;
+    user: {
+        id: string;
+        displayName: string;
+        photoUrl: string;
+    },
+    content: {
+        ops: any[];
+    }
+};

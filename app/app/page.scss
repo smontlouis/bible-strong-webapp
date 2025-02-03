@@ -71,6 +71,7 @@
     section {
         display: flex;
         flex-direction: row;
+        align-items: center;
         gap: 1rem;
 
         select {
@@ -78,6 +79,10 @@
 
             background-color: #fff;
         }
+    }
+
+    h2 {
+        font-size: 1.2rem;
     }
 
     #outline-btn {
@@ -220,6 +225,17 @@
     gap: 12px;
 
     padding: 20px;
+}
+
+.study-editor {
+    height: 100%;
+    .ql-container.ql-snow {
+        border-bottom: none;
+    }
+
+    .ql-container {
+        height: calc(100% - 45px);
+    }
 }
 
 .study-card {

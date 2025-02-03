@@ -1,23 +1,8 @@
 import React, { useEffect } from 'react';
-
-import dynamic from 'next/dynamic';
-import 'react-quill-new/dist/quill.snow.css';
 import ReactQuill, { Quill } from 'react-quill-new';
+import { Study } from '@/lib/types/bible';
 
-type Study = {
-    id: string;
-    title: string;
-    modified_at: number;
-    created_at: number;
-    user: {
-        id: string;
-        displayName: string;
-        photoUrl: string;
-    },
-    content: {
-        ops: any[];
-    }
-};
+import 'react-quill-new/dist/quill.snow.css';
 
 type Props = {
     study: Study;
@@ -31,7 +16,7 @@ const StudyEditor = ({ study }: Props) => {
     }, [study]);
 
     return (
-        <ReactQuill theme="snow" value={value} onChange={setValue} />
+        <ReactQuill className='study-editor' theme="snow" value={value} onChange={setValue} />
     );
 }
 
