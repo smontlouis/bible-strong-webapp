@@ -14,13 +14,13 @@ import { Tab } from '@/lib/types/bible';
 
 type Props = {
     tab?: Tab;
-    setTab: (tab: Tab) => void;
+    setTab: (tab?: Tab) => void;
     user: Auth.User;
 }
 
 const TabNavigator = ({ tab, setTab, user }: Props) => {
     if (tab === Tab.Bible) {
-        return <BibleExplorer user={user} />;
+        return <BibleExplorer user={user} setTab={setTab} />;
     }
     else if (tab === Tab.Studies) {
         return <StudiesExplorer user={user} />;
@@ -52,7 +52,7 @@ const AppPage = () => {
         return (
             <main id='navigator'>
                 <section className='tab'>
-                    <BibleExplorer user={user} />
+                    <BibleExplorer user={user} setTab={setTab} />
                 </section>
                 <section className='tab'>
                     <TabNavigator tab={tab} setTab={setTab} user={user} />

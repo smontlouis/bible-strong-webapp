@@ -3,9 +3,10 @@ import BibleChapter from './BibleChapter';
 import books_map from '@/lib/types/books.json';
 import * as Auth from 'firebase/auth';
 import { firebase_app } from '@/lib/firebase-app';
+import { FiHome } from "react-icons/fi";
 
 import { collection, query, where, getDocs, getFirestore, Firestore } from 'firebase/firestore';
-import { Note, Tag, Verse } from '@/lib/types/bible';
+import { Note, Tab, Tag, Verse } from '@/lib/types/bible';
 
 type Index = { // where the user wants to navigates
     book: number;
@@ -43,9 +44,10 @@ function renderBooksList() {
 
 type Props = {
     user: Auth.User;
+    setTab: (tab?: Tab) => void;
 }
 
-const BibleExplorer = ({ user }: Props) => {
+const BibleExplorer = ({ user, setTab }: Props) => {
     const [index, setIndex] = React.useState<Index>({ book: 1, chapter: 1, verse: 1 }); // set default index
     const [chapter, setChapter] = React.useState<Verse[]>([]);
     const [style, setStyle] = React.useState<StyleSettings>({ line_break: false });
@@ -141,6 +143,9 @@ const BibleExplorer = ({ user }: Props) => {
                     <select name='chapter' value={index.chapter} onChange={onChapterChange}>
                         { renderChaptersList(index.book) }
                     </select>
+                </section>
+                <section>
+                    <button onClick={() => setTab(undefined)}><FiHome size={26} /></button>
                 </section>
             </header>
         </>
