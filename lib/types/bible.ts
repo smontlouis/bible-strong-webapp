@@ -38,3 +38,8 @@ export type Study = {
         ops: any[];
     }
 };
+
+export enum Tab {
+    Bible,
+    Studies
+}
