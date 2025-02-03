@@ -5,6 +5,7 @@ import * as Auth from 'firebase/auth';
 import * as firestore from 'firebase/firestore';
 import { firebase_app } from '@/lib/firebase-app';
 import styles from './studies.module.scss';
+import StudyEditor from './StudyEditor';
 
 type Study = {
     id: string;
@@ -40,6 +41,7 @@ type Props = {
 
 const StudiesExplorer = ({ user }: Props) => {
     const [studies, setStudies] = React.useState<Study[]>([]);
+    const [current, setCurrent] = React.useState<Study | null>(null);
 
     useEffect(() => {
         query_studies(user, setStudies);
@@ -49,11 +51,14 @@ const StudiesExplorer = ({ user }: Props) => {
         <>
             <section className='study-explorer'>
                 {studies.map((study) => (
-                    <article key={study.id} className='study-card'>
+                    <article key={study.id} className='study-card' onClick={() => setCurrent(study)}>
                         <h3>{study.title}</h3>
                         <p>{study.content.ops[0].insert}</p>
                     </article>
                 ))}
+            </section>
+            <section className='study-content'>
+                { current && <StudyEditor study={current} /> }
             </section>
             <header className='index-nav'>
                 <h2>Studies</h2>
