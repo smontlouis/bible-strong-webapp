@@ -20,13 +20,25 @@ type Props = {
 
 const TabNavigator = ({ tab, setTab, user }: Props) => {
     if (tab === Tab.Bible) {
-        return <BibleExplorer user={user} setTab={setTab} />;
+        return (
+            <section className='tab'>
+                <BibleExplorer user={user} setTab={setTab} />
+            </section>
+        );
     }
     else if (tab === Tab.Studies) {
-        return <StudiesExplorer user={user} />;
+        return (
+            <section className='tab'>
+                <StudiesExplorer user={user} />
+            </section>
+        );
     }
     else {
-        return <Home setTab={setTab} />;
+        return (
+            <section className='tab'>
+                <Home setTab={setTab} />
+            </section>
+        );
     }
 };
 
@@ -35,6 +47,7 @@ const AppPage = () => {
     
     const [user, setUser] = React.useState<Auth.User | null>(null);
     const [tab, setTab] = React.useState<Tab | undefined>(undefined);
+    const [tabs, setTabs] = React.useState<boolean[]>([true, false]);
 
     React.useEffect(() => {
         const auth = Auth.getAuth(firebase_app);
@@ -49,14 +62,18 @@ const AppPage = () => {
     }, []);
 
     if (user) { // user is logged in
+        const workspace = tabs.map((active) => {
+            if (active) {
+                return <TabNavigator tab={tab} setTab={setTab} user={user} />;
+            }
+            else {
+                return null;
+            }
+        });
+
         return (
             <main id='navigator'>
-                <section className='tab'>
-                    <BibleExplorer user={user} setTab={setTab} />
-                </section>
-                <section className='tab'>
-                    <TabNavigator tab={tab} setTab={setTab} user={user} />
-                </section>
+                {workspace}
             </main>
         );
     }

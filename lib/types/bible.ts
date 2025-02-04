@@ -40,6 +40,7 @@ export type Study = {
 };
 
 export enum Tab {
+    Home,
     Bible,
     Studies
 }
