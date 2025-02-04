@@ -62,9 +62,9 @@ const AppPage = () => {
     }, []);
 
     if (user) { // user is logged in
-        const workspace = tabs.map((active) => {
+        const workspace = tabs.map((active, i) => {
             if (active) {
-                return <TabNavigator tab={tab} setTab={setTab} user={user} />;
+                return <TabNavigator key={i} tab={tab} setTab={setTab} user={user} />;
             }
             else {
                 return null;

@@ -21,17 +21,14 @@ const Layout = ({ children }: PropsWithChildren<{}>) => {
             setPhotoUrl(user.photoURL || '/images/avatar-dummy.png');
             setDisplayName(user.displayName || '');
         }
-    }, []);
 
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            setPhotoUrl(user.photoURL || '/images/avatar-dummy.png');
-            setDisplayName(user.displayName || '');
-        }
-        else {
-            // User is signed out
-        }
-    });
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setPhotoUrl(user.photoURL || '/images/avatar-dummy.png');
+                setDisplayName(user.displayName || '');
+            }
+        });
+    }, []);
 
     return (
         <>
