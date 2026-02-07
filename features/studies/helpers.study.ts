@@ -86,8 +86,12 @@ export const getServerStudyProps: GetServerSideProps = async ({ params }) => {
           }
         }
         if (op.attributes?.['inline-verse']) {
-          const verses: string[] = op.attributes['inline-verse'].verses
+          let verses: string[] = op.attributes['inline-verse'].verses
           const title: string = op.attributes['inline-verse'].title
+
+          try {
+            verses = JSON.parse(verses as unknown as string)
+          } catch {}
 
           const result = await Promise.all(
             verses.map(async (verse) => {
